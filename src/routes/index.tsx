@@ -1,0 +1,327 @@
+import React, { Suspense, lazy } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { RouteTransition } from './RouteTransition';
+import { ProtectedRoute } from './ProtectedRoute';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+
+// Eagerly load critical routes
+import ComingSoon from '@/pages/ComingSoon';
+import Login from '@/pages/Login';
+import Register from '@/pages/Register';
+
+// Lazy load other routes
+const Home = lazy(() => import('@/pages/Home'));
+const CharityBrowser = lazy(() => import('@/pages/CharityBrowser'));
+const GlobalWaterFoundation = lazy(() => import('@/pages/charities/GlobalWaterFoundation'));
+const EducationForAll = lazy(() => import('@/pages/charities/EducationForAll'));
+const ClimateActionNow = lazy(() => import('@/pages/charities/ClimateActionNow'));
+const EnvironmentPortfolioDetail = lazy(() => import('@/pages/portfolio/EnvironmentPortfolioDetail'));
+const EducationPortfolioDetail = lazy(() => import('@/pages/portfolio/EducationPortfolioDetail'));
+const PovertyPortfolioDetail = lazy(() => import('@/pages/portfolio/PovertyPortfolioDetail'));
+const ContributionTracker = lazy(() => import('@/pages/ContributionTracker'));
+const VolunteerOpportunities = lazy(() => import('@/pages/VolunteerOpportunities'));
+const About = lazy(() => import('@/pages/About').then(m => ({ default: m.About })));
+const Legal = lazy(() => import('@/pages/Legal').then(m => ({ default: m.Legal })));
+const Privacy = lazy(() => import('@/pages/Privacy').then(m => ({ default: m.Privacy })));
+const Governance = lazy(() => import('@/pages/Governance').then(m => ({ default: m.Governance })));
+const GiveDashboard = lazy(() => import('@/pages/GiveDashboard').then(m => ({ default: m.GiveDashboard })));
+const CharityPortal = lazy(() => import('@/pages/CharityPortal').then(m => ({ default: m.CharityPortal })));
+const CreateOpportunity = lazy(() => import('@/pages/charity/CreateOpportunity'));
+const TestPage = lazy(() => import('@/pages/TestPage'));
+const NotFound = lazy(() => import('@/pages/NotFound'));
+const VerifyContribution = lazy(() => import('@/pages/volunteer/VerifyContribution'));
+
+// Lazy load cause pages
+const CleanWaterInitiative = lazy(() => import('@/pages/causes/CleanWaterInitiative'));
+const EducationAccessProgram = lazy(() => import('@/pages/causes/EducationAccessProgram'));
+const ReforestationProject = lazy(() => import('@/pages/causes/ReforestationProject'));
+
+const LoadingFallback = () => (
+  <div className="flex min-h-screen items-center justify-center">
+    <LoadingSpinner size="lg" />
+  </div>
+);
+
+export function AppRoutes() {
+  const { user } = useAuth();
+
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <RouteTransition>
+              <ComingSoon />
+            </RouteTransition>
+          }
+        />
+
+        {/* Cause Routes */}
+        <Route
+          path="/causes/clean-water-initiative"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <CleanWaterInitiative />
+              </Suspense>
+            </RouteTransition>
+          }
+        />
+        <Route
+          path="/causes/education-access-program"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <EducationAccessProgram />
+              </Suspense>
+            </RouteTransition>
+          }
+        />
+        <Route
+          path="/causes/reforestation-project"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <ReforestationProject />
+              </Suspense>
+            </RouteTransition>
+          }
+        />
+
+        {/* Charity Routes */}
+        <Route
+          path="/charity/global-water-foundation"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <GlobalWaterFoundation />
+              </Suspense>
+            </RouteTransition>
+          }
+        />
+        <Route
+          path="/charity/education-for-all"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <EducationForAll />
+              </Suspense>
+            </RouteTransition>
+          }
+        />
+        <Route
+          path="/charity/climate-action-now"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <ClimateActionNow />
+              </Suspense>
+            </RouteTransition>
+          }
+        />
+
+        {/* Portfolio Routes */}
+        <Route
+          path="/portfolio/environmental"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <EnvironmentPortfolioDetail />
+              </Suspense>
+            </RouteTransition>
+          }
+        />
+        <Route
+          path="/portfolio/education"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <EducationPortfolioDetail />
+              </Suspense>
+            </RouteTransition>
+          }
+        />
+        <Route
+          path="/portfolio/poverty"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <PovertyPortfolioDetail />
+              </Suspense>
+            </RouteTransition>
+          }
+        />
+        <Route
+          path="/portfolio/poverty-relief"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <PovertyPortfolioDetail />
+              </Suspense>
+            </RouteTransition>
+          }
+        />
+
+        {/* Volunteer Verification Routes */}
+        <Route
+          path="/verify/:hash"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <VerifyContribution />
+              </Suspense>
+            </RouteTransition>
+          }
+        />
+
+        {/* Charity Management Routes */}
+        <Route
+          path="/charity-portal/create-opportunity"
+          element={
+            <ProtectedRoute requiredRoles={['charity']}>
+              <RouteTransition>
+                <Suspense fallback={<LoadingFallback />}>
+                  <CreateOpportunity />
+                </Suspense>
+              </RouteTransition>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Other Routes */}
+        <Route
+          path="/privacy"
+          element={
+            <RouteTransition>
+              <Privacy />
+            </RouteTransition>
+          }
+        />
+        <Route
+          path="/app"
+          element={
+            <RouteTransition>
+              <Home />
+            </RouteTransition>
+          }
+        />
+        <Route
+          path="/give-dashboard/*"
+          element={
+            <ProtectedRoute>
+              <RouteTransition>
+                <Suspense fallback={<LoadingFallback />}>
+                  <GiveDashboard />
+                </Suspense>
+              </RouteTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/donor-portal"
+          element={
+            <ProtectedRoute requiredRoles={['donor']}>
+              <RouteTransition>
+                <Suspense fallback={<LoadingFallback />}>
+                  <Navigate to="/give-dashboard" replace />
+                </Suspense>
+              </RouteTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/charity-portal/*"
+          element={
+            <ProtectedRoute requiredRoles={['charity']}>
+              <RouteTransition>
+                <Suspense fallback={<LoadingFallback />}>
+                  <CharityPortal />
+                </Suspense>
+              </RouteTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/browse"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <CharityBrowser />
+              </Suspense>
+            </RouteTransition>
+          }
+        />
+        <Route
+          path="/opportunities"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <VolunteerOpportunities />
+              </Suspense>
+            </RouteTransition>
+          }
+        />
+        <Route
+          path="/contributions"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <ContributionTracker />
+              </Suspense>
+            </RouteTransition>
+          }
+        />
+        <Route
+          path="/governance"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <Governance />
+              </Suspense>
+            </RouteTransition>
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <About />
+              </Suspense>
+            </RouteTransition>
+          }
+        />
+        <Route
+          path="/docs"
+          element={
+            <Navigate to="https://give-protocol.gitbook.io" replace />
+          }
+        />
+        <Route
+          path="/legal"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <Legal />
+              </Suspense>
+            </RouteTransition>
+          }
+        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route
+          path="*"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <NotFound />
+              </Suspense>
+            </RouteTransition>
+          }
+        />
+      </Routes>
+    </Suspense>
+  );
+}
