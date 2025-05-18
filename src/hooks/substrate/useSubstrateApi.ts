@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { NETWORK_ENDPOINTS, DEFAULT_NETWORK } from '@/config/contracts';
 import { Logger } from '@/utils/logger';
 
+// Use a singleton pattern for the API instance
 let api: ApiPromise | null = null;
 const RECONNECT_TIMEOUT = 5000; // 5 seconds
 const MAX_RETRIES = 3;
@@ -10,13 +11,15 @@ const MAX_RETRIES = 3;
 export function useSubstrateApi() {
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [isInitializing, setIsInitializing] = useState(false); // Changed to false to prevent auto-initialization
+  const [isInitializing, setIsInitializing] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
 
   const connect = useCallback(async () => {
     try {
       setIsInitializing(true);
+      setError(null);
       
+      // Disconnect existing API instance if it exists
       if (api) {
         await api.disconnect();
         api = null;
@@ -29,6 +32,7 @@ export function useSubstrateApi() {
       provider.on('error', (error) => {
         Logger.error('WebSocket error:', { error, endpoint });
         setError(new Error('Failed to connect to network'));
+        setIsConnected(false);
       });
 
       provider.on('disconnected', () => {
@@ -38,7 +42,7 @@ export function useSubstrateApi() {
         // Attempt reconnection if within retry limit
         if (retryCount < MAX_RETRIES) {
           setRetryCount(prev => prev + 1);
-          setTimeout(() => connect(), RECONNECT_TIMEOUT);
+          setTimeout(() => connect(), RECONNECT_TIMEOUT * Math.pow(2, retryCount));
         } else {
           setError(new Error('Failed to maintain connection after multiple attempts'));
         }
@@ -48,14 +52,17 @@ export function useSubstrateApi() {
         setRetryCount(0); // Reset retry count on successful connection
         setIsConnected(true);
         setError(null);
+        Logger.info('Connected to network', { endpoint });
       });
 
+      // Create API instance
       api = await ApiPromise.create({ 
         provider,
         throwOnConnect: true,
         noInitWarn: true
       });
 
+      // Wait for API to be ready
       await api.isReady;
       
       Logger.info('Connected to network', { 
@@ -73,20 +80,18 @@ export function useSubstrateApi() {
       // Attempt reconnection if within retry limit
       if (retryCount < MAX_RETRIES) {
         setRetryCount(prev => prev + 1);
-        setTimeout(() => connect(), RECONNECT_TIMEOUT);
+        setTimeout(() => connect(), RECONNECT_TIMEOUT * Math.pow(2, retryCount));
       }
     } finally {
       setIsInitializing(false);
     }
   }, [retryCount]);
 
-  // Removed the auto-connect useEffect
-
   return { 
     api, 
     isConnected, 
     error,
     isInitializing,
-    connect // Expose connect function but don't call it automatically
+    connect
   };
 }

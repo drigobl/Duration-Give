@@ -1,3 +1,5 @@
+import { Logger } from './logger';
+
 // Update formatBalance to handle BigInt without literals
 export const formatBalance = (balance: string | number | bigint): string => {
   try {
@@ -12,18 +14,19 @@ export const formatBalance = (balance: string | number | bigint): string => {
     
     // Convert to BigInt safely
     const value = BigInt(balanceStr);
-    const divisor = BigInt('1000000000000'); // 1e12 for DOT conversion
+    const divisor = BigInt(10) ** BigInt(12); // 1e12 for DOT conversion
     const whole = value / divisor;
     const fraction = value % divisor;
     
     return `${whole}.${fraction.toString().padStart(12, '0')}`;
   } catch (error) {
-    console.error('Error formatting balance:', error);
+    Logger.error('Error formatting balance:', { error });
     return '0.00';
   }
 };
 
 export const shortenAddress = (address: string): string => {
+  if (!address || address.length < 10) return address || '';
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 };
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Contract } from 'ethers';
+import { Contract, ContractInterface } from 'ethers';
 import { useWeb3 } from '@/contexts/Web3Context';
 import { Logger } from '@/utils/logger';
 import { getContractAddress } from '@/config/contracts';
@@ -57,7 +57,8 @@ export function useContract(contractType: ContractType, config: ContractConfig =
         throw new Error(`Invalid ABI for ${contractType} contract`);
       }
 
-      const contract = new Contract(address, abi, provider);
+      // Create contract instance with proper typing
+      const contract = new Contract(address, abi as ContractInterface, provider);
       
       // Check if contract is deployed - but don't throw if not in development
       const code = await provider.getCode(address);
@@ -96,7 +97,8 @@ export function useContract(contractType: ContractType, config: ContractConfig =
         setTimeout(() => {
           const fallbackRPC = config.fallbackRPCs?.[retryCount] || DEFAULT_CONFIG.fallbackRPCs![retryCount];
           if (fallbackRPC && provider) {
-            provider.url = fallbackRPC;
+            // Note: This approach needs to be updated as provider.url is not directly accessible in ethers v6
+            // This is a placeholder for the actual implementation
             initializeContract();
           }
         }, delay);
@@ -116,11 +118,12 @@ export function useContract(contractType: ContractType, config: ContractConfig =
 
     try {
       // Estimate gas to validate transaction
-      const gasEstimate = await contract.estimateGas[method](...args);
+      // Note: In ethers v6, the syntax for estimating gas has changed
+      const gasEstimate = await contract.getFunction(method).estimateGas(...args);
       
       // Check if gas estimate is reasonable
-      const maxGas = 1000000; // 1M gas units
-      if (gasEstimate.gt(maxGas)) {
+      const maxGas = 1000000n; // 1M gas units
+      if (gasEstimate > maxGas) {
         throw new Error('Transaction would require too much gas');
       }
 

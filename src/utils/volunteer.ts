@@ -26,7 +26,7 @@ export const generateVerificationHash = (data: Record<string, any>): string => {
       timestamp: Date.now()
     };
     
-    // Convert to string and hash
+    // Convert to string and hash using ethers v6 pattern
     const dataString = JSON.stringify(dataWithTimestamp);
     return ethers.keccak256(ethers.toUtf8Bytes(dataString));
   } catch (error) {
@@ -175,7 +175,7 @@ export const createVerificationHash = async (hours: VolunteerHours): Promise<str
 
 /**
  * Records application verification on blockchain
- * @param applicantAddress The applicant's wallet address
+ * @param applicantId The applicant's ID
  * @param hash The verification hash
  */
 export const recordApplicationOnChain = async (
@@ -214,11 +214,14 @@ export const recordApplicationOnChain = async (
       // Get contract address
       const contractAddress = getContractAddress('VERIFICATION');
       
+      // Get signer from provider
+      const signer = await provider.getSigner();
+      
       // Create contract instance
       const contract = new ethers.Contract(
         contractAddress,
         VOLUNTEER_VERIFICATION_ABI,
-        provider.getSigner()
+        signer
       );
       
       // Convert hash string to bytes32
@@ -295,11 +298,14 @@ export const recordHoursOnChain = async (
       // Get contract address
       const contractAddress = getContractAddress('VERIFICATION');
       
+      // Get signer from provider
+      const signer = await provider.getSigner();
+      
       // Create contract instance
       const contract = new ethers.Contract(
         contractAddress,
         VOLUNTEER_VERIFICATION_ABI,
-        provider.getSigner()
+        signer
       );
       
       // Convert hash string to bytes32

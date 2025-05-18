@@ -42,7 +42,9 @@ export function useDonation() {
       if (type === DonationType.NATIVE) {
         // For direct donations
         if (poolType === PoolType.DIRECT) {
-          const tx = await contract.donate(charityAddress, {
+          // In ethers v6, we need to use the contract.getFunction method
+          const donateFunction = contract.getFunction('donate');
+          const tx = await donateFunction(charityAddress, {
             value: parsedAmount
           });
           await tx.wait();
@@ -51,7 +53,8 @@ export function useDonation() {
         else if (poolType === PoolType.EQUITY) {
           // This would call a different contract method for equity pool donations
           // For now, we'll use the same method
-          const tx = await contract.donate(charityAddress, {
+          const donateFunction = contract.getFunction('donate');
+          const tx = await donateFunction(charityAddress, {
             value: parsedAmount
           });
           await tx.wait();
@@ -93,7 +96,8 @@ export function useDonation() {
       setError(null);
 
       const parsedAmount = parseEther(amount);
-      const tx = await contract.withdraw(parsedAmount);
+      const withdrawFunction = contract.getFunction('withdraw');
+      const tx = await withdrawFunction(parsedAmount);
       await tx.wait();
 
       Logger.info('Withdrawal successful', {

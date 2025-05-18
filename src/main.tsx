@@ -1,13 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Buffer } from 'buffer';
 import App from './App';
 import './index.css';
 import './i18n';
-
-// Polyfills
-window.global = window;
-window.Buffer = Buffer;
 
 // Create container
 const container = document.getElementById('root');
