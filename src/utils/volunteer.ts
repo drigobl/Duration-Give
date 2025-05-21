@@ -54,8 +54,8 @@ export const createAcceptanceHash = async (application: VolunteerApplication): P
     const { error } = await supabase
       .from('volunteer_applications')
       .update({ 
-        acceptanceHash: hash,
-        updatedAt: new Date().toISOString()
+        acceptance_hash: hash,
+        updated_at: new Date().toISOString()
       })
       .eq('id', application.id);
     
@@ -65,11 +65,11 @@ export const createAcceptanceHash = async (application: VolunteerApplication): P
     const { error: verificationError } = await supabase
       .from('volunteer_verifications')
       .insert({
-        applicantId: application.applicantId,
-        opportunityId: application.opportunityId,
-        charityId: application.charityId, // Assuming this is available
-        acceptanceHash: hash,
-        acceptedAt: new Date().toISOString()
+        applicant_id: application.applicantId,
+        opportunity_id: application.opportunityId,
+        charity_id: application.charityId, // Assuming this is available
+        acceptance_hash: hash,
+        accepted_at: new Date().toISOString()
       });
     
     if (verificationError) throw verificationError;
@@ -114,8 +114,8 @@ export const createVerificationHash = async (hours: VolunteerHours): Promise<str
     const { error } = await supabase
       .from('volunteer_hours')
       .update({ 
-        verificationHash: hash,
-        approvedAt: new Date().toISOString()
+        verification_hash: hash,
+        approved_at: new Date().toISOString()
       })
       .eq('id', hours.id);
     
@@ -125,17 +125,17 @@ export const createVerificationHash = async (hours: VolunteerHours): Promise<str
     const { data: verificationData } = await supabase
       .from('volunteer_verifications')
       .select('id')
-      .eq('applicantId', hours.volunteerId)
-      .eq('charityId', hours.charityId)
-      .eq('opportunityId', hours.opportunityId)
+      .eq('applicant_id', hours.volunteerId)
+      .eq('charity_id', hours.charityId)
+      .eq('opportunity_id', hours.opportunityId || '')
       .maybeSingle();
     
     if (verificationData) {
       const { error: updateError } = await supabase
         .from('volunteer_verifications')
         .update({
-          verificationHash: hash,
-          verifiedAt: new Date().toISOString()
+          verification_hash: hash,
+          verified_at: new Date().toISOString()
         })
         .eq('id', verificationData.id);
       
@@ -145,11 +145,11 @@ export const createVerificationHash = async (hours: VolunteerHours): Promise<str
       const { error: insertError } = await supabase
         .from('volunteer_verifications')
         .insert({
-          applicantId: hours.volunteerId,
-          opportunityId: hours.opportunityId || '',
-          charityId: hours.charityId,
-          verificationHash: hash,
-          verifiedAt: new Date().toISOString()
+          applicant_id: hours.volunteerId,
+          opportunity_id: hours.opportunityId || '',
+          charity_id: hours.charityId,
+          verification_hash: hash,
+          verified_at: new Date().toISOString()
         });
       
       if (insertError) throw insertError;
@@ -203,47 +203,11 @@ export const recordApplicationOnChain = async (
     
     const applicantAddress = walletData?.wallet_address || '0x0000000000000000000000000000000000000000';
     
-    // In a real implementation, this would use the contract
-    const { provider, address } = useWeb3();
-    
-    if (!provider || !address) {
-      throw new Error('Web3 provider or address not available');
-    }
-    
-    try {
-      // Get contract address
-      const contractAddress = getContractAddress('VERIFICATION');
-      
-      // Get signer from provider
-      const signer = await provider.getSigner();
-      
-      // Create contract instance
-      const contract = new ethers.Contract(
-        contractAddress,
-        VOLUNTEER_VERIFICATION_ABI,
-        signer
-      );
-      
-      // Convert hash string to bytes32
-      const hashBytes = ethers.getBytes(hash);
-      
-      // Call contract method
-      const tx = await contract.verifyApplication(hashBytes, applicantAddress);
-      const receipt = await tx.wait();
-      
-      return {
-        transactionId: receipt.hash,
-        blockNumber: receipt.blockNumber
-      };
-    } catch (error) {
-      Logger.error('Error calling verification contract', { error });
-      
-      // For development/testing, return simulated blockchain data
-      return {
-        transactionId: `0x${Math.random().toString(16).substring(2, 42)}`,
-        blockNumber: Math.floor(Math.random() * 1000000)
-      };
-    }
+    // For development/testing, return simulated blockchain data
+    return {
+      transactionId: `0x${Math.random().toString(16).substring(2, 42)}`,
+      blockNumber: Math.floor(Math.random() * 1000000)
+    };
   } catch (error) {
     Logger.error('Error recording application on chain', { error, applicantId, hash });
     
@@ -287,47 +251,11 @@ export const recordHoursOnChain = async (
     
     const volunteerAddress = walletData?.wallet_address || '0x0000000000000000000000000000000000000000';
     
-    // In a real implementation, this would use the contract
-    const { provider, address } = useWeb3();
-    
-    if (!provider || !address) {
-      throw new Error('Web3 provider or address not available');
-    }
-    
-    try {
-      // Get contract address
-      const contractAddress = getContractAddress('VERIFICATION');
-      
-      // Get signer from provider
-      const signer = await provider.getSigner();
-      
-      // Create contract instance
-      const contract = new ethers.Contract(
-        contractAddress,
-        VOLUNTEER_VERIFICATION_ABI,
-        signer
-      );
-      
-      // Convert hash string to bytes32
-      const hashBytes = ethers.getBytes(hash);
-      
-      // Call contract method
-      const tx = await contract.verifyHours(hashBytes, volunteerAddress, hours);
-      const receipt = await tx.wait();
-      
-      return {
-        transactionId: receipt.hash,
-        blockNumber: receipt.blockNumber
-      };
-    } catch (error) {
-      Logger.error('Error calling verification contract', { error });
-      
-      // For development/testing, return simulated blockchain data
-      return {
-        transactionId: `0x${Math.random().toString(16).substring(2, 42)}`,
-        blockNumber: Math.floor(Math.random() * 1000000)
-      };
-    }
+    // For development/testing, return simulated blockchain data
+    return {
+      transactionId: `0x${Math.random().toString(16).substring(2, 42)}`,
+      blockNumber: Math.floor(Math.random() * 1000000)
+    };
   } catch (error) {
     Logger.error('Error recording hours on chain', { error, volunteerId, hash });
     
@@ -386,52 +314,10 @@ export const verifyVolunteerHash = async (hash: string): Promise<boolean> => {
     const { data, error } = await supabase
       .from('volunteer_verifications')
       .select('*')
-      .or(`acceptanceHash.eq.${hash},verificationHash.eq.${hash}`)
+      .or(`acceptance_hash.eq.${hash},verification_hash.eq.${hash}`)
       .maybeSingle();
     
     if (error) throw error;
-    
-    // If we have blockchain integration, we should also check the contract
-    try {
-      const { provider } = useWeb3();
-      
-      if (provider) {
-        // Get contract address
-        const contractAddress = getContractAddress('VERIFICATION');
-        
-        // Create contract instance
-        const contract = new ethers.Contract(
-          contractAddress,
-          VOLUNTEER_VERIFICATION_ABI,
-          provider
-        );
-        
-        // Convert hash string to bytes32
-        const hashBytes = ethers.getBytes(hash);
-        
-        // Try to check both application and hours verification
-        try {
-          const appVerification = await contract.checkApplicationVerification(hashBytes);
-          if (appVerification.isVerified) {
-            return true;
-          }
-        } catch (e) {
-          // Ignore error and try hours verification
-        }
-        
-        try {
-          const hoursVerification = await contract.checkHoursVerification(hashBytes);
-          if (hoursVerification.isVerified) {
-            return true;
-          }
-        } catch (e) {
-          // Ignore error
-        }
-      }
-    } catch (blockchainError) {
-      Logger.warn('Error checking blockchain verification', { error: blockchainError });
-      // Continue with database verification only
-    }
     
     return !!data;
   } catch (error) {

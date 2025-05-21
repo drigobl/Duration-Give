@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useWeb3 } from '@/contexts/Web3Context';
-import { WalletPrompt } from '@/components/web3/WalletPrompt';
 import { DollarSign, Clock, Award, Download, Filter, Calendar, CheckCircle, ExternalLink, Settings } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -18,7 +17,7 @@ type View = 'select' | 'donor' | 'charity' | 'forgotPassword' | 'forgotUsername'
 export const GiveDashboard: React.FC = () => {
   const [view, setView] = useState<View>('select');
   const { user, userType } = useAuth();
-  const { isConnected } = useWeb3();
+  const { isConnected, connect } = useWeb3();
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedYear, setSelectedYear] = useState<string>('all');
@@ -167,7 +166,13 @@ export const GiveDashboard: React.FC = () => {
   if (!isConnected) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <WalletPrompt />
+        <div className="bg-white p-8 rounded-lg shadow-md text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Connect Your Wallet</h2>
+          <p className="text-gray-600 mb-6">
+            To view your dashboard and make donations, please connect your wallet.
+          </p>
+          <Button onClick={connect}>Connect Wallet</Button>
+        </div>
       </div>
     );
   }

@@ -10,9 +10,15 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "deploy:moonbase": "hardhat run scripts/deploy.ts --network moonbase",
-    "test": "hardhat test"
+    "deploy:verification": "hardhat run scripts/deploy-verification.ts --network moonbase",
+    "deploy:distribution": "hardhat run scripts/deploy-distribution.ts --network moonbase",
+    "test": "hardhat test",
+    "compile": "hardhat compile",
+    "node": "hardhat node",
+    "accounts": "hardhat accounts"
   },
   "dependencies": {
+    "@mailchimp/mailchimp_marketing": "^3.0.80",
     "@openzeppelin/contracts": "^5.0.1",
     "@supabase/supabase-js": "^2.39.7",
     "@tailwindcss/typography": "^0.5.10",
