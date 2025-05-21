@@ -312,6 +312,16 @@ export function AppRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route
+          path="/test"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <TestPage />
+              </Suspense>
+            </RouteTransition>
+          }
+        />
+        <Route
           path="*"
           element={
             <RouteTransition>
