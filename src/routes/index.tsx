@@ -28,7 +28,6 @@ const Governance = lazy(() => import('@/pages/Governance').then(m => ({ default:
 const GiveDashboard = lazy(() => import('@/pages/GiveDashboard').then(m => ({ default: m.GiveDashboard })));
 const CharityPortal = lazy(() => import('@/pages/CharityPortal').then(m => ({ default: m.CharityPortal })));
 const CreateOpportunity = lazy(() => import('@/pages/charity/CreateOpportunity'));
-const TestPage = lazy(() => import('@/pages/TestPage'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 const VerifyContribution = lazy(() => import('@/pages/volunteer/VerifyContribution'));
 
@@ -311,16 +310,6 @@ export function AppRoutes() {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route
-          path="/test"
-          element={
-            <RouteTransition>
-              <Suspense fallback={<LoadingFallback />}>
-                <TestPage />
-              </Suspense>
-            </RouteTransition>
-          }
-        />
         <Route
           path="*"
           element={
