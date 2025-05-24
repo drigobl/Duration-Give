@@ -31,6 +31,9 @@ const CreateOpportunity = lazy(() => import('@/pages/charity/CreateOpportunity')
 const NotFound = lazy(() => import('@/pages/NotFound'));
 const VerifyContribution = lazy(() => import('@/pages/volunteer/VerifyContribution'));
 
+// Admin routes
+const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
+
 // Lazy load cause pages
 const CleanWaterInitiative = lazy(() => import('@/pages/causes/CleanWaterInitiative'));
 const EducationAccessProgram = lazy(() => import('@/pages/causes/EducationAccessProgram'));
@@ -54,6 +57,20 @@ export function AppRoutes() {
             <RouteTransition>
               <ComingSoon />
             </RouteTransition>
+          }
+        />
+
+        {/* Admin Routes */}
+        <Route
+          path="/admin/*"
+          element={
+            <ProtectedRoute requiredRoles={['admin']}>
+              <RouteTransition>
+                <Suspense fallback={<LoadingFallback />}>
+                  <AdminDashboard />
+                </Suspense>
+              </RouteTransition>
+            </ProtectedRoute>
           }
         />
 

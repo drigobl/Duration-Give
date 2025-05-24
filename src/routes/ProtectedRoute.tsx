@@ -54,6 +54,8 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
       return <Navigate to="/give-dashboard" replace />;
     } else if (userType === 'charity') {
       return <Navigate to="/charity-portal" replace />;
+    } else if (userType === 'admin') {
+      return <Navigate to="/admin" replace />;
     }
     
     return <Navigate to="/" replace />;
