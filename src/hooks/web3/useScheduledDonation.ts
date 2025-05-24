@@ -55,25 +55,43 @@ export function useScheduledDonation() {
       );
 
       const parsedAmount = ethers.parseEther(totalAmount);
-      const approveTx = await tokenContract.approve(distributionAddress, parsedAmount);
-      await approveTx.wait();
+      
+      try {
+        const approveTx = await tokenContract.approve(distributionAddress, parsedAmount);
+        await approveTx.wait();
+      } catch (approveError: any) {
+        // Check if user rejected the transaction
+        if (approveError.code === 4001 || approveError.message?.includes('user rejected')) {
+          throw new Error('Transaction was rejected. Please approve the transaction in your wallet to continue.');
+        }
+        throw approveError;
+      }
 
       // Create the scheduled donation
-      const tx = await distributionContract.createSchedule(
-        charityAddress,
-        tokenAddress,
-        parsedAmount
-      );
+      try {
+        const tx = await distributionContract.createSchedule(
+          charityAddress,
+          tokenAddress,
+          parsedAmount
+        );
 
-      await tx.wait();
+        const receipt = await tx.wait();
+        
+        Logger.info('Scheduled donation created', {
+          charity: charityAddress,
+          amount: totalAmount,
+          token: tokenAddress,
+          txHash: receipt.hash
+        });
 
-      Logger.info('Scheduled donation created', {
-        charity: charityAddress,
-        amount: totalAmount,
-        token: tokenAddress
-      });
-
-      return tx.hash;
+        return receipt.hash;
+      } catch (txError: any) {
+        // Check if user rejected the transaction
+        if (txError.code === 4001 || txError.message?.includes('user rejected')) {
+          throw new Error('Transaction was rejected. Please confirm the transaction in your wallet to schedule your donation.');
+        }
+        throw txError;
+      }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to schedule donation';
       setError(message);
@@ -105,12 +123,23 @@ export function useScheduledDonation() {
       );
 
       // Cancel the schedule
-      const tx = await distributionContract.cancelSchedule(scheduleId);
-      await tx.wait();
+      try {
+        const tx = await distributionContract.cancelSchedule(scheduleId);
+        const receipt = await tx.wait();
 
-      Logger.info('Scheduled donation cancelled', { scheduleId });
+        Logger.info('Scheduled donation cancelled', { 
+          scheduleId,
+          txHash: receipt.hash
+        });
 
-      return tx.hash;
+        return receipt.hash;
+      } catch (txError: any) {
+        // Check if user rejected the transaction
+        if (txError.code === 4001 || txError.message?.includes('user rejected')) {
+          throw new Error('Transaction was rejected. Please confirm the transaction in your wallet to cancel your donation schedule.');
+        }
+        throw txError;
+      }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to cancel scheduled donation';
       setError(message);

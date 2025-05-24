@@ -12,7 +12,9 @@ import {
   Settings, 
   Database,
   FileText,
-  AlertTriangle
+  AlertTriangle,
+  Menu,
+  X
 } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -33,6 +35,7 @@ const AdminDashboard: React.FC = () => {
   const { profile, loading: profileLoading } = useProfile();
   const [activeTab, setActiveTab] = useState<AdminTab>('dashboard');
   const [error, setError] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   if (!user) {
     return <Navigate to="/login" />;
@@ -87,17 +90,32 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
+      {/* Mobile sidebar toggle */}
+      <div className="md:hidden fixed top-4 left-4 z-20">
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="rounded-full p-2 shadow-md"
+        >
+          {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </Button>
+      </div>
+
       {/* Sidebar */}
-      <div className="w-64 bg-white shadow-md">
+      <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:static z-10 w-64 bg-white shadow-md h-full transition-transform duration-300 ease-in-out`}>
         <div className="p-6 border-b border-gray-200">
           <h1 className="text-xl font-semibold text-gray-900">Admin Panel</h1>
           <p className="text-sm text-gray-500">Dev3 Back-End</p>
         </div>
-        <nav className="mt-6">
+        <nav className="mt-6 overflow-y-auto h-[calc(100vh-88px)]">
           <ul className="space-y-2 px-4">
             <li>
               <button
-                onClick={() => setActiveTab('dashboard')}
+                onClick={() => {
+                  setActiveTab('dashboard');
+                  if (window.innerWidth < 768) setSidebarOpen(false);
+                }}
                 className={`flex items-center w-full px-4 py-2 text-sm font-medium rounded-md ${
                   activeTab === 'dashboard'
                     ? 'bg-indigo-50 text-indigo-700'
@@ -110,7 +128,10 @@ const AdminDashboard: React.FC = () => {
             </li>
             <li>
               <button
-                onClick={() => setActiveTab('charities')}
+                onClick={() => {
+                  setActiveTab('charities');
+                  if (window.innerWidth < 768) setSidebarOpen(false);
+                }}
                 className={`flex items-center w-full px-4 py-2 text-sm font-medium rounded-md ${
                   activeTab === 'charities'
                     ? 'bg-indigo-50 text-indigo-700'
@@ -123,7 +144,10 @@ const AdminDashboard: React.FC = () => {
             </li>
             <li>
               <button
-                onClick={() => setActiveTab('donations')}
+                onClick={() => {
+                  setActiveTab('donations');
+                  if (window.innerWidth < 768) setSidebarOpen(false);
+                }}
                 className={`flex items-center w-full px-4 py-2 text-sm font-medium rounded-md ${
                   activeTab === 'donations'
                     ? 'bg-indigo-50 text-indigo-700'
@@ -136,7 +160,10 @@ const AdminDashboard: React.FC = () => {
             </li>
             <li>
               <button
-                onClick={() => setActiveTab('users')}
+                onClick={() => {
+                  setActiveTab('users');
+                  if (window.innerWidth < 768) setSidebarOpen(false);
+                }}
                 className={`flex items-center w-full px-4 py-2 text-sm font-medium rounded-md ${
                   activeTab === 'users'
                     ? 'bg-indigo-50 text-indigo-700'
@@ -149,7 +176,10 @@ const AdminDashboard: React.FC = () => {
             </li>
             <li>
               <button
-                onClick={() => setActiveTab('withdrawals')}
+                onClick={() => {
+                  setActiveTab('withdrawals');
+                  if (window.innerWidth < 768) setSidebarOpen(false);
+                }}
                 className={`flex items-center w-full px-4 py-2 text-sm font-medium rounded-md ${
                   activeTab === 'withdrawals'
                     ? 'bg-indigo-50 text-indigo-700'
@@ -162,7 +192,10 @@ const AdminDashboard: React.FC = () => {
             </li>
             <li>
               <button
-                onClick={() => setActiveTab('verifications')}
+                onClick={() => {
+                  setActiveTab('verifications');
+                  if (window.innerWidth < 768) setSidebarOpen(false);
+                }}
                 className={`flex items-center w-full px-4 py-2 text-sm font-medium rounded-md ${
                   activeTab === 'verifications'
                     ? 'bg-indigo-50 text-indigo-700'
@@ -175,7 +208,10 @@ const AdminDashboard: React.FC = () => {
             </li>
             <li>
               <button
-                onClick={() => setActiveTab('logs')}
+                onClick={() => {
+                  setActiveTab('logs');
+                  if (window.innerWidth < 768) setSidebarOpen(false);
+                }}
                 className={`flex items-center w-full px-4 py-2 text-sm font-medium rounded-md ${
                   activeTab === 'logs'
                     ? 'bg-indigo-50 text-indigo-700'
@@ -188,7 +224,10 @@ const AdminDashboard: React.FC = () => {
             </li>
             <li>
               <button
-                onClick={() => setActiveTab('settings')}
+                onClick={() => {
+                  setActiveTab('settings');
+                  if (window.innerWidth < 768) setSidebarOpen(false);
+                }}
                 className={`flex items-center w-full px-4 py-2 text-sm font-medium rounded-md ${
                   activeTab === 'settings'
                     ? 'bg-indigo-50 text-indigo-700'
@@ -204,7 +243,7 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-4 md:p-8 md:ml-0 overflow-auto">
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
             {error}

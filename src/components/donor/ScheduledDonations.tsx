@@ -24,6 +24,7 @@ export const ScheduledDonations: React.FC = () => {
   const [loadingSchedules, setLoadingSchedules] = useState(true);
   const [selectedSchedule, setSelectedSchedule] = useState<ScheduledDonation | null>(null);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [cancelError, setCancelError] = useState<string | null>(null);
   const { showToast } = useToast();
 
   useEffect(() => {
@@ -44,6 +45,7 @@ export const ScheduledDonations: React.FC = () => {
 
   const handleCancelClick = (schedule: ScheduledDonation) => {
     setSelectedSchedule(schedule);
+    setCancelError(null);
     setIsCancelModalOpen(true);
   };
 
@@ -51,12 +53,19 @@ export const ScheduledDonations: React.FC = () => {
     if (!selectedSchedule) return;
 
     try {
+      setCancelError(null);
       await cancelSchedule(selectedSchedule.id);
-      showToast('success', 'Scheduled donation cancelled');
+      showToast('success', 'Scheduled donation cancelled', 'Your monthly donation schedule has been cancelled and remaining funds returned to your wallet.');
       setIsCancelModalOpen(false);
       fetchSchedules();
     } catch (err) {
-      showToast('error', 'Failed to cancel scheduled donation', err instanceof Error ? err.message : undefined);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to cancel scheduled donation';
+      setCancelError(errorMessage);
+      
+      // Check if user rejected transaction
+      if (errorMessage.includes('user rejected') || errorMessage.includes('User denied')) {
+        setCancelError('Transaction was rejected. Please confirm the transaction in your wallet to cancel the schedule.');
+      }
     }
   };
 
@@ -109,7 +118,7 @@ export const ScheduledDonations: React.FC = () => {
         <div className="divide-y divide-gray-200">
           {schedules.map((schedule) => (
             <div key={schedule.id} className="p-6">
-              <div className="flex justify-between items-start">
+              <div className="flex flex-col md:flex-row md:justify-between md:items-start">
                 <div>
                   <div className="flex items-center mb-2">
                     <Calendar className="h-5 w-5 text-indigo-500 mr-2" />
@@ -127,6 +136,7 @@ export const ScheduledDonations: React.FC = () => {
                   size="sm"
                   onClick={() => handleCancelClick(schedule)}
                   disabled={loading}
+                  className="mt-4 md:mt-0"
                 >
                   Cancel Schedule
                 </Button>
@@ -150,6 +160,13 @@ export const ScheduledDonations: React.FC = () => {
               <p className="text-sm text-gray-500 text-center mb-6">
                 Are you sure you want to cancel your monthly donation schedule? The remaining funds ({parseFloat(selectedSchedule.amountPerMonth) * selectedSchedule.monthsRemaining} tokens) will be returned to your wallet.
               </p>
+              
+              {cancelError && (
+                <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-md">
+                  {cancelError}
+                </div>
+              )}
+              
               <div className="flex justify-center space-x-3">
                 <Button
                   variant="secondary"
