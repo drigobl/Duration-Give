@@ -1,5 +1,6 @@
 import React from 'react';
 import { DonationButton } from '@/components/web3/donation/DonationButton';
+import { ScheduledDonationButton } from '@/components/web3/donation/ScheduledDonationButton';
 import { formatCurrency } from '@/utils/money';
 import { Link } from 'react-router-dom';
 
@@ -71,15 +72,15 @@ const ClimateActionNow: React.FC = () => {
 
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Giving Options</h2>
-            <div className="space-y-6">
+            <div className="space-y-4">
               <DonationButton
                 charityName={charity.name}
                 charityAddress={charity.id}
                 buttonText="Give Once"
               />
-              <DonationButton
+              <ScheduledDonationButton
                 charityName={charity.name}
-                charityAddress={`${charity.id}-scheduled`}
+                charityAddress={charity.id}
                 buttonText="Give Monthly"
               />
               <Link 

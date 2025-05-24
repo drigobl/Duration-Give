@@ -32,22 +32,32 @@ export const CHAIN_IDS = {
 export const CONTRACT_ADDRESSES: Record<typeof CHAIN_IDS[keyof typeof CHAIN_IDS], {
   DONATION: string | undefined;
   VERIFICATION: string | undefined;
+  DISTRIBUTION: string | undefined;
+  TOKEN: string | undefined;
 }> = {
   [CHAIN_IDS.MOONBASE]: {
     DONATION: ENV.DONATION_CONTRACT_ADDRESS,
-    VERIFICATION: ENV.VERIFICATION_CONTRACT_ADDRESS
+    VERIFICATION: ENV.VERIFICATION_CONTRACT_ADDRESS,
+    DISTRIBUTION: ENV.DISTRIBUTION_CONTRACT_ADDRESS,
+    TOKEN: ENV.TOKEN_CONTRACT_ADDRESS
   },
   [CHAIN_IDS.MOONBEAM]: {
     DONATION: undefined, // To be deployed
-    VERIFICATION: undefined // To be deployed
+    VERIFICATION: undefined, // To be deployed
+    DISTRIBUTION: undefined, // To be deployed
+    TOKEN: undefined // To be deployed
   },
   [CHAIN_IDS.ASTAR]: {
     DONATION: undefined, // To be deployed
-    VERIFICATION: undefined // To be deployed
+    VERIFICATION: undefined, // To be deployed
+    DISTRIBUTION: undefined, // To be deployed
+    TOKEN: undefined // To be deployed
   },
   [CHAIN_IDS.POLYGON]: {
     DONATION: undefined, // To be deployed
-    VERIFICATION: undefined // To be deployed
+    VERIFICATION: undefined, // To be deployed
+    DISTRIBUTION: undefined, // To be deployed
+    TOKEN: undefined // To be deployed
   }
 } as const;
 

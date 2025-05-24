@@ -11,6 +11,7 @@ import { formatDate } from '@/utils/date';
 import { useTranslation } from '@/hooks/useTranslation';
 import { CurrencyDisplay } from '@/components/CurrencyDisplay';
 import { WalletAliasSettings } from '@/components/settings/WalletAliasSettings';
+import { ScheduledDonations } from '@/components/donor/ScheduledDonations';
 
 type View = 'select' | 'donor' | 'charity' | 'forgotPassword' | 'forgotUsername';
 
@@ -24,6 +25,7 @@ export const GiveDashboard: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string>('all');
   const [showExportModal, setShowExportModal] = useState(false);
   const [showWalletSettings, setShowWalletSettings] = useState(false);
+  const [showScheduledDonations, setShowScheduledDonations] = useState(false);
   const { t } = useTranslation();
   
   // Check if we should show wallet settings from location state
@@ -185,20 +187,36 @@ export const GiveDashboard: React.FC = () => {
             <h1 className="text-3xl font-bold text-gray-900">{t('dashboard.title')}</h1>
             <p className="mt-2 text-gray-600">{t('dashboard.subtitle')}</p>
           </div>
-          <Button
-            variant="secondary"
-            onClick={() => setShowWalletSettings(!showWalletSettings)}
-            className="flex items-center"
-          >
-            <Settings className="h-4 w-4 mr-2" />
-            Wallet Settings
-          </Button>
+          <div className="flex space-x-3">
+            <Button
+              variant="secondary"
+              onClick={() => setShowScheduledDonations(!showScheduledDonations)}
+              className="flex items-center"
+            >
+              <Calendar className="h-4 w-4 mr-2" />
+              {showScheduledDonations ? 'Hide' : 'View'} Monthly Donations
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => setShowWalletSettings(!showWalletSettings)}
+              className="flex items-center"
+            >
+              <Settings className="h-4 w-4 mr-2" />
+              Wallet Settings
+            </Button>
+          </div>
         </div>
       </div>
 
       {showWalletSettings && (
         <div className="mb-8">
           <WalletAliasSettings />
+        </div>
+      )}
+
+      {showScheduledDonations && (
+        <div className="mb-8">
+          <ScheduledDonations />
         </div>
       )}
 

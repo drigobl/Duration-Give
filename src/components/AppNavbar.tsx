@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Logo } from './Logo';
 import { ConnectButton } from './web3/ConnectButton';
 import { SettingsMenu } from './SettingsMenu';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Calendar } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -96,6 +96,15 @@ export const AppNavbar: React.FC = () => {
                   >
                     <span>{t('nav.dashboard')}</span>
                   </a>
+                  {userType === 'donor' && (
+                    <Link
+                      to="/scheduled-donations"
+                      className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 ${isActive('/scheduled-donations')}`}
+                    >
+                      <Calendar className="h-4 w-4 mr-1" />
+                      <span>Monthly Donations</span>
+                    </Link>
+                  )}
                   <Link
                     to="/governance"
                     className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 ${isActive('/governance')}`}
@@ -204,6 +213,16 @@ export const AppNavbar: React.FC = () => {
                 >
                   {t('nav.dashboard')}
                 </a>
+                {userType === 'donor' && (
+                  <Link
+                    to="/scheduled-donations"
+                    className={`flex items-center px-3 py-3 rounded-md text-base font-medium ${isActive('/scheduled-donations')}`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <Calendar className="h-4 w-4 mr-1" />
+                    <span>Monthly Donations</span>
+                  </Link>
+                )}
                 <Link
                   to="/governance"
                   className={`block px-3 py-3 rounded-md text-base font-medium ${isActive('/governance')}`}

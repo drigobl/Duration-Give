@@ -18,6 +18,7 @@ export const ENV = {
   DONATION_CONTRACT_ADDRESS: import.meta.env.VITE_DONATION_CONTRACT_ADDRESS,
   TOKEN_CONTRACT_ADDRESS: import.meta.env.VITE_TOKEN_CONTRACT_ADDRESS,
   VERIFICATION_CONTRACT_ADDRESS: import.meta.env.VITE_VERIFICATION_CONTRACT_ADDRESS,
+  DISTRIBUTION_CONTRACT_ADDRESS: import.meta.env.VITE_DISTRIBUTION_CONTRACT_ADDRESS,
 
   // Optional variables with defaults
   NETWORK: import.meta.env.VITE_NETWORK || 'moonbase',
@@ -66,6 +67,16 @@ if (!ENV.DONATION_CONTRACT_ADDRESS) {
 if (!ENV.VERIFICATION_CONTRACT_ADDRESS) {
   console.warn('Verification contract address not found in environment variables. Using development address.');
   ENV.VERIFICATION_CONTRACT_ADDRESS = '0x2345678901234567890123456789012345678901';
+}
+
+if (!ENV.DISTRIBUTION_CONTRACT_ADDRESS) {
+  console.warn('Distribution contract address not found in environment variables. Using development address.');
+  ENV.DISTRIBUTION_CONTRACT_ADDRESS = '0x3456789012345678901234567890123456789012';
+}
+
+if (!ENV.TOKEN_CONTRACT_ADDRESS) {
+  console.warn('Token contract address not found in environment variables. Using development address.');
+  ENV.TOKEN_CONTRACT_ADDRESS = '0x4567890123456789012345678901234567890123';
 }
 
 export type EnvVars = typeof ENV;
