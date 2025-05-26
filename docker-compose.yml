@@ -55,7 +55,7 @@ services:
       GOTRUE_DB_USER: postgres
       GOTRUE_DB_PASSWORD: postgres
       GOTRUE_SITE_URL: http://localhost:3000
-      GOTRUE_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters
+      GOTRUE_JWT_SECRET: your-new-super-secret-jwt-token-with-at-least-32-characters-long
       GOTRUE_JWT_EXP: 3600
       GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
       GOTRUE_DISABLE_SIGNUP: "false"
@@ -69,7 +69,7 @@ services:
       PGRST_DB_URI: postgres://postgres:postgres@postgres:5432/postgres
       PGRST_DB_SCHEMA: public
       PGRST_DB_ANON_ROLE: anon
-      PGRST_JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters
+      PGRST_JWT_SECRET: your-new-super-secret-jwt-token-with-at-least-32-characters-long
       PGRST_DB_USE_LEGACY_GUCS: "false"
 
   realtime:
@@ -83,7 +83,7 @@ services:
       DB_USER: postgres
       DB_PASSWORD: postgres
       PORT: 4000
-      JWT_SECRET: your-super-secret-jwt-token-with-at-least-32-characters
+      JWT_SECRET: your-new-super-secret-jwt-token-with-at-least-32-characters-long
       REPLICATION_MODE: RLS
       REPLICATION_POLL_INTERVAL: 100
       SECURE_CHANNELS: "true"
