@@ -27,19 +27,19 @@ dist-ssr
 # Environment variables
 .env
 .env.*
-!.env.example
-
-# Supabase
-.supabase
 
 # Build artifacts
-build
 coverage
 .coverage
-
-# Hardhat artifacts
+.nyc_output
 artifacts
 cache
+typechain
+typechain-types
 
-# Misc
-.bolt
+# Hardhat files
+cache/
+artifacts/
+
+# Deployment files
+deployments.json
