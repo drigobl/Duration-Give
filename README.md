@@ -66,6 +66,32 @@ To deploy contracts to Moonbase Alpha TestNet:
 npm run deploy:moonbase
 ```
 
+## Deployment
+
+### Deploying to Netlify
+
+1. Install Netlify CLI
+   ```
+   npm install -g netlify-cli
+   ```
+
+2. Build the project
+   ```
+   npm run build
+   ```
+
+3. Deploy to Netlify
+   ```
+   netlify deploy --prod --dir=dist
+   ```
+
+   Or using an auth token:
+   ```
+   netlify deploy --prod --dir=dist --auth-token=YOUR_AUTH_TOKEN
+   ```
+
+4. Follow the prompts to complete the deployment
+
 ## License
 
 MIT
