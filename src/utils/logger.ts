@@ -32,6 +32,14 @@ export class Logger {
     
     if (value && typeof value === 'object') {
       try {
+        if (value instanceof Error) {
+          return {
+            message: value.message,
+            stack: value.stack,
+            name: value.name
+          };
+        }
+        
         return Object.fromEntries(
           Object.entries(value).map(([key, val]) => [
             key,

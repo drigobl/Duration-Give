@@ -30,10 +30,21 @@ export function useAuth() {
         throw new Error(`Too many login attempts. Please try again in ${LOCKOUT_DURATION / 60000} minutes.`);
       }
 
-      await authContext.login(email, password, accountType);
-      
-      // Reset rate limiting on successful login
-      rateLimiter.reset(email);
+      try {
+        await authContext.login(email, password, accountType);
+        
+        // Reset rate limiting on successful login
+        rateLimiter.reset(email);
+      } catch (authError) {
+        // Log the detailed error
+        Logger.error('Auth context login failed', { 
+          error: authError instanceof Error ? 
+            { message: authError.message, stack: authError.stack } : 
+            authError,
+          email
+        });
+        throw authError;
+      }
     } catch (error) {
       rateLimiter.increment(email);
       const message = error instanceof Error ? error.message : 'Failed to sign in';
@@ -45,7 +56,12 @@ export function useAuth() {
       }
       
       showToast('error', 'Authentication Error', message);
-      Logger.error('Login failed', { error, email });
+      Logger.error('Login failed', { 
+        error: error instanceof Error ? 
+          { message: error.message, stack: error.stack } : 
+          error, 
+        email 
+      });
       throw error;
     } finally {
       setLoading(false);
@@ -69,7 +85,13 @@ export function useAuth() {
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to register';
       showToast('error', 'Registration Error', message);
-      Logger.error('Registration failed', { error, email, type });
+      Logger.error('Registration failed', { 
+        error: error instanceof Error ? 
+          { message: error.message, stack: error.stack } : 
+          error, 
+        email, 
+        type 
+      });
       throw error;
     } finally {
       setLoading(false);
@@ -83,7 +105,12 @@ export function useAuth() {
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to send reset email';
       showToast('error', 'Reset Password Error', message);
-      Logger.error('Password reset failed', { error, email });
+      Logger.error('Password reset failed', { 
+        error: error instanceof Error ? 
+          { message: error.message, stack: error.stack } : 
+          error, 
+        email 
+      });
       throw error;
     } finally {
       setLoading(false);
@@ -97,7 +124,12 @@ export function useAuth() {
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to send username reminder';
       showToast('error', 'Username Reminder Error', message);
-      Logger.error('Username reminder failed', { error, email });
+      Logger.error('Username reminder failed', { 
+        error: error instanceof Error ? 
+          { message: error.message, stack: error.stack } : 
+          error, 
+        email 
+      });
       throw error;
     } finally {
       setLoading(false);
@@ -119,7 +151,11 @@ export function useAuth() {
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to log out';
       showToast('error', 'Logout Error', message);
-      Logger.error('Logout failed', { error });
+      Logger.error('Logout failed', { 
+        error: error instanceof Error ? 
+          { message: error.message, stack: error.stack } : 
+          error 
+      });
       throw error;
     } finally {
       setLoading(false);

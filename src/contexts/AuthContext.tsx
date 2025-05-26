@@ -41,7 +41,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const refreshSession = useCallback(async () => {
     try {
       const { data: { session }, error } = await supabase.auth.refreshSession();
-      if (error) throw error;
+      if (error) {
+        Logger.error('Session refresh error', { 
+          error: error.message,
+          stack: error.stack,
+          code: error.status
+        });
+        throw error;
+      }
       
       const userType = session?.user?.user_metadata?.type as 'donor' | 'charity' | null;
       
@@ -53,7 +60,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       Logger.info('Session refreshed successfully');
     } catch (err) {
-      Logger.error('Session refresh failed', { error: err });
+      Logger.error('Session refresh failed', { 
+        error: err instanceof Error ? 
+          { message: err.message, stack: err.stack } : 
+          err,
+        retryCount
+      });
+      
       if (retryCount < MAX_RETRY_ATTEMPTS) {
         setRetryCount(prev => prev + 1);
         setTimeout(refreshSession, RETRY_DELAY * Math.pow(2, retryCount));
@@ -79,7 +92,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Check active session
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         
-        if (sessionError) throw sessionError;
+        if (sessionError) {
+          Logger.error('Get session error', { 
+            error: sessionError.message,
+            stack: sessionError.stack,
+            code: sessionError.status
+          });
+          throw sessionError;
+        }
 
         if (mounted) {
           const userType = session?.user?.user_metadata?.type as 'donor' | 'charity' | null;
@@ -137,7 +157,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
         };
       } catch (err) {
-        Logger.error('Auth initialization failed', { error: err });
+        Logger.error('Auth initialization failed', { 
+          error: err instanceof Error ? 
+            { message: err.message, stack: err.stack } : 
+            err 
+        });
+        
         if (mounted) {
           setState(prev => ({
             ...prev,
@@ -161,7 +186,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         password
       });
       
-      if (checkError) throw checkError;
+      if (checkError) {
+        Logger.error('Login error from Supabase', { 
+          error: checkError.message,
+          code: checkError.status,
+          email
+        });
+        throw checkError;
+      }
       
       // Verify the user has the correct account type
       const userType = user?.user_metadata?.type;
@@ -215,7 +247,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       });
 
-      if (error) throw error;
+      if (error) {
+        Logger.error('Google login error', { 
+          error: error.message,
+          code: error.status
+        });
+        throw error;
+      }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to sign in with Google';
       showToast('error', 'Authentication Error', message);
@@ -233,7 +271,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       setState(prev => ({ ...prev, loading: true, error: null }));
       const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      if (error) {
+        Logger.error('Logout error', { 
+          error: error.message,
+          code: error.status
+        });
+        throw error;
+      }
       
       // Clear user state immediately
       setState({
@@ -270,7 +314,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         redirectTo: `${window.location.origin}/reset-password`
       });
 
-      if (error) throw error;
+      if (error) {
+        Logger.error('Password reset error', { 
+          error: error.message,
+          code: error.status,
+          email
+        });
+        throw error;
+      }
       showToast('success', 'Password reset email sent');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to send reset email';
@@ -316,7 +367,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       });
 
-      if (error) throw error;
+      if (error) {
+        Logger.error('Registration error', { 
+          error: error.message,
+          code: error.status,
+          email,
+          type
+        });
+        throw error;
+      }
 
       if (data.user) {
         const { error: profileError } = await supabase
@@ -326,7 +385,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             type
           });
 
-        if (profileError) throw profileError;
+        if (profileError) {
+          Logger.error('Profile creation error', { 
+            error: profileError.message,
+            code: profileError.code,
+            userId: data.user.id,
+            type
+          });
+          throw profileError;
+        }
       }
 
       showToast('success', 'Registration successful', 'Please check your email to verify your account');
