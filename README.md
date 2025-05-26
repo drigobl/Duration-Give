@@ -9,6 +9,7 @@ A blockchain-based charitable giving platform built with React, Vite, and Supaba
 - Skill endorsement system
 - Multiple donation methods (direct, equity pools, portfolio funds)
 - Charity verification system
+- Monthly donation scheduling
 
 ## Tech Stack
 
@@ -16,15 +17,54 @@ A blockchain-based charitable giving platform built with React, Vite, and Supaba
 - Vite for fast development and optimized builds
 - Tailwind CSS for styling
 - Supabase for backend and authentication
-- Ethers.js and Polkadot.js for blockchain integration
+- Ethers.js for blockchain integration
 - Hardhat for smart contract development
 
 ## Getting Started
 
 1. Clone the repository
-2. Install dependencies: `npm install`
+   ```
+   git clone https://github.com/yourusername/give-protocol.git
+   cd give-protocol
+   ```
+
+2. Install dependencies
+   ```
+   npm install
+   ```
+
 3. Copy `.env.example` to `.env` and fill in your environment variables
-4. Run the development server: `npm run dev`
+   ```
+   cp .env.example .env
+   ```
+
+4. Run the development server
+   ```
+   npm run dev
+   ```
+
+## Smart Contracts
+
+The project includes several smart contracts:
+
+- `DurationDonation.sol`: Handles direct donations in native tokens
+- `CharityScheduledDistribution.sol`: Manages monthly donation schedules
+- `VolunteerVerification.sol`: Verifies volunteer applications and hours
+
+To compile contracts:
+```
+npm run compile
+```
+
+To run tests:
+```
+npm test
+```
+
+To deploy contracts to Moonbase Alpha TestNet:
+```
+npm run deploy:moonbase
+```
 
 ## License
 
