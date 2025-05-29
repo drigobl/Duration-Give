@@ -4,12 +4,13 @@ pragma solidity ^0.8.24;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 
 /**
  * @title CharityScheduledDistribution
  * @dev Allows donors to schedule token distributions to charities on a monthly basis
  */
-contract CharityScheduledDistribution is Ownable, ReentrancyGuard {
+contract CharityScheduledDistribution is Ownable, ReentrancyGuard, Pausable {
     // Struct to track donation schedules
     struct DonationSchedule {
         address donor;
@@ -65,9 +66,7 @@ contract CharityScheduledDistribution is Ownable, ReentrancyGuard {
     /**
      * @dev Constructor
      */
-    constructor() Ownable(msg.sender) {
-        nextScheduleId = 1;
-    }
+    constructor() Ownable(msg.sender) {}
     
     /**
      * @dev Add a verified charity
@@ -121,7 +120,7 @@ contract CharityScheduledDistribution is Ownable, ReentrancyGuard {
         address charity, 
         address token, 
         uint256 totalAmount
-    ) external nonReentrant {
+    ) external nonReentrant whenNotPaused {
         require(verifiedCharities[charity], "Charity not verified");
         require(tokenPrices[token] > 0, "Token not supported");
         require(totalAmount > 0, "Amount must be > 0");
@@ -165,7 +164,7 @@ contract CharityScheduledDistribution is Ownable, ReentrancyGuard {
      * @dev Execute distributions that are due
      * @param scheduleIds Array of schedule IDs to process
      */
-    function executeDistributions(uint256[] calldata scheduleIds) external nonReentrant {
+    function executeDistributions(uint256[] calldata scheduleIds) external nonReentrant whenNotPaused {
         for (uint256 i = 0; i < scheduleIds.length; i++) {
             uint256 scheduleId = scheduleIds[i];
             DonationSchedule storage schedule = donationSchedules[scheduleId];
@@ -202,7 +201,7 @@ contract CharityScheduledDistribution is Ownable, ReentrancyGuard {
      * @dev Cancel a schedule (only by donor)
      * @param scheduleId The schedule ID to cancel
      */
-    function cancelSchedule(uint256 scheduleId) external nonReentrant {
+    function cancelSchedule(uint256 scheduleId) external nonReentrant whenNotPaused {
         DonationSchedule storage schedule = donationSchedules[scheduleId];
         
         require(schedule.donor == msg.sender, "Not the donor");
@@ -248,5 +247,21 @@ contract CharityScheduledDistribution is Ownable, ReentrancyGuard {
         }
         
         return result;
+    }
+
+    /**
+     * @dev Pause the contract
+     * Only owner can call this function
+     */
+    function pause() external onlyOwner {
+        _pause();
+    }
+
+    /**
+     * @dev Unpause the contract
+     * Only owner can call this function
+     */
+    function unpause() external onlyOwner {
+        _unpause();
     }
 }
