@@ -79,8 +79,20 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
               chainId: network.chainId 
             });
           }
-        } catch (err) {
-          Logger.error('Failed to restore connection', { error: err });
+        } catch (err: any) {
+          // Clear any existing connection state
+          setProvider(null);
+          setAddress(null);
+          setChainId(null);
+
+          // Handle unauthorized error specifically
+          if (err?.message?.includes('has not been authorized')) {
+            const error = new Error('Wallet connection needs authorization. Please click "Connect" to continue.');
+            setError(error);
+            Logger.info('Wallet needs reauthorization');
+          } else {
+            Logger.error('Failed to restore connection', { error: err });
+          }
         }
       }
     };
