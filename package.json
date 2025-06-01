@@ -12,6 +12,8 @@
     "deploy:moonbase": "hardhat run scripts/deploy.ts --network moonbase",
     "deploy:verification": "hardhat run scripts/deploy-verification.ts --network moonbase",
     "deploy:distribution": "hardhat run scripts/deploy-distribution.ts --network moonbase",
+    "git:push-help": "./scripts/git-push-helper.sh",
+    "git:quick-push": "./scripts/quick-push.sh",
     "test": "hardhat test",
     "compile": "hardhat compile",
     "node": "hardhat node",

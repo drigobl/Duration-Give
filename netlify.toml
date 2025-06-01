@@ -32,6 +32,7 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://etqbojasfmpieigeefdj.supabase.co https://*.sentry.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self'; connect-src 'self' https://etqbojasfmpieigeefdj.supabase.co https://*.sentry.io wss://*.supabase.co https://api.giveprotocol.io https://*.ingest.sentry.io;"
 
 # Cache control for static assets
 [[headers]]
