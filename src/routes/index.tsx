@@ -13,6 +13,7 @@ import Register from '@/pages/Register';
 // Lazy load other routes
 const Home = lazy(() => import('@/pages/Home'));
 const CharityBrowser = lazy(() => import('@/pages/CharityBrowser'));
+const SentryTest = lazy(() => import('@/pages/SentryTest'));
 const GlobalWaterFoundation = lazy(() => import('@/pages/charities/GlobalWaterFoundation'));
 const EducationForAll = lazy(() => import('@/pages/charities/EducationForAll'));
 const ClimateActionNow = lazy(() => import('@/pages/charities/ClimateActionNow'));
@@ -227,6 +228,16 @@ export function AppRoutes() {
           element={
             <RouteTransition>
               <Privacy />
+            </RouteTransition>
+          }
+        />
+        <Route
+          path="/sentry-test"
+          element={
+            <RouteTransition>
+              <Suspense fallback={<LoadingFallback />}>
+                <SentryTest />
+              </Suspense>
             </RouteTransition>
           }
         />
