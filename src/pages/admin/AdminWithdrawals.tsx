@@ -8,6 +8,7 @@ import { Search, AlertTriangle, CheckCircle, XCircle, Eye } from 'lucide-react';
 import { formatCurrency } from '@/utils/money';
 import { formatDate } from '@/utils/date';
 import { Logger } from '@/utils/logger';
+import { useDonation } from '@/hooks/web3/useDonation';
 
 interface WithdrawalRequest {
   id: string;
@@ -36,6 +37,8 @@ const AdminWithdrawals: React.FC = () => {
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
   const [rejectReason, setRejectReason] = useState('');
+  const [processingTransaction, setProcessingTransaction] = useState(false);
+  const { withdraw } = useDonation();
 
   useEffect(() => {
     fetchWithdrawals();
@@ -112,16 +115,62 @@ const AdminWithdrawals: React.FC = () => {
 
     try {
       setLoading(true);
+      setProcessingTransaction(true);
       
-      const { error: updateError } = await supabase
-        .from('withdrawal_requests')
-        .update({
-          status: 'approved',
-          processed_at: new Date().toISOString()
-        })
-        .eq('id', selectedWithdrawal.id);
+      // First, initiate the blockchain transaction
+      try {
+        // Call the withdraw function from useDonation hook
+        // This will execute the actual blockchain transaction
+        await withdraw(selectedWithdrawal.amount.toString());
+        
+        Logger.info('Blockchain withdrawal successful', { 
+          withdrawalId: selectedWithdrawal.id,
+          amount: selectedWithdrawal.amount
+        });
+        
+        // Now update the database to reflect the successful withdrawal
+        const { error: updateError } = await supabase
+          .from('withdrawal_requests')
+          .update({
+            status: 'approved',
+            processed_at: new Date().toISOString()
+          })
+          .eq('id', selectedWithdrawal.id);
 
-      if (updateError) throw updateError;
+        if (updateError) throw updateError;
+        
+        // Update the charity's available balance in the database
+        const { error: balanceUpdateError } = await supabase
+          .from('charity_details')
+          .update({
+            available_balance: supabase.rpc('increment_balance', { 
+              row_id: selectedWithdrawal.charity_id,
+              amount: -selectedWithdrawal.amount // Negative amount to decrease balance
+            })
+          })
+          .eq('profile_id', selectedWithdrawal.charity_id);
+
+        if (balanceUpdateError) throw balanceUpdateError;
+        
+      } catch (txError) {
+        // If blockchain transaction fails, update the withdrawal status to rejected
+        Logger.error('Blockchain withdrawal failed', { 
+          error: txError, 
+          withdrawalId: selectedWithdrawal.id 
+        });
+        
+        const { error: updateError } = await supabase
+          .from('withdrawal_requests')
+          .update({
+            status: 'rejected',
+            processed_at: new Date().toISOString()
+          })
+          .eq('id', selectedWithdrawal.id);
+
+        if (updateError) throw updateError;
+        
+        throw new Error('Blockchain transaction failed. Withdrawal request has been rejected.');
+      }
 
       setIsApproveModalOpen(false);
       setSelectedWithdrawal(null);
@@ -135,6 +184,7 @@ const AdminWithdrawals: React.FC = () => {
       Logger.error('Admin withdrawal approve error', { error: err });
     } finally {
       setLoading(false);
+      setProcessingTransaction(false);
     }
   };
 
@@ -153,19 +203,6 @@ const AdminWithdrawals: React.FC = () => {
         .eq('id', selectedWithdrawal.id);
 
       if (updateError) throw updateError;
-
-      // Update charity available balance
-      const { error: charityError } = await supabase
-        .from('charity_details')
-        .update({
-          available_balance: supabase.rpc('increment_balance', { 
-            row_id: selectedWithdrawal.charity_id,
-            amount: selectedWithdrawal.amount
-          })
-        })
-        .eq('profile_id', selectedWithdrawal.charity_id);
-
-      if (charityError) throw charityError;
 
       setIsRejectModalOpen(false);
       setSelectedWithdrawal(null);
@@ -403,16 +440,25 @@ const AdminWithdrawals: React.FC = () => {
               <p className="text-sm text-gray-500 text-center mb-6">
                 Are you sure you want to approve the withdrawal request for <span className="font-semibold">{formatCurrency(selectedWithdrawal.amount)}</span> from <span className="font-semibold">{selectedWithdrawal.charity?.charity_details?.name || 'Unknown Charity'}</span>?
               </p>
+              
+              {processingTransaction && (
+                <div className="mb-4 p-3 bg-blue-50 text-blue-700 rounded-md flex items-center justify-center">
+                  <LoadingSpinner size="sm" className="mr-2" />
+                  <span>Processing blockchain transaction...</span>
+                </div>
+              )}
+              
               <div className="flex justify-center space-x-3">
                 <Button
                   variant="secondary"
                   onClick={() => setIsApproveModalOpen(false)}
+                  disabled={processingTransaction || loading}
                 >
                   Cancel
                 </Button>
                 <Button
                   onClick={confirmApprove}
-                  disabled={loading}
+                  disabled={processingTransaction || loading}
                 >
                   {loading ? 'Processing...' : 'Approve Withdrawal'}
                 </Button>

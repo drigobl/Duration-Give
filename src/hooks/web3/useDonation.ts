@@ -98,11 +98,14 @@ export function useDonation() {
       const parsedAmount = parseEther(amount);
       const withdrawFunction = contract.getFunction('withdraw');
       const tx = await withdrawFunction(parsedAmount);
-      await tx.wait();
+      const receipt = await tx.wait();
 
       Logger.info('Withdrawal successful', {
-        amount
+        amount,
+        txHash: receipt.hash
       });
+      
+      return receipt.hash;
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to process withdrawal';
       setError(message);
