@@ -53,9 +53,26 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
   });
 } else {
-  // Development mode - proxy to Vite dev server
-  app.get('*', (req, res) => {
-    res.redirect(`http://localhost:5173${req.originalUrl}`);
+  // Development mode - serve a simple page for testing
+  app.get('/', (req, res) => {
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Duration Give Protocol</title>
+        </head>
+        <body>
+          <h1>Server is running!</h1>
+          <p>The Express server is working correctly on port ${PORT}.</p>
+          <p>However, Vite is having issues with ARM64 architecture.</p>
+          <h2>Next Steps:</h2>
+          <ul>
+            <li>Build the project: <code>npm run build</code></li>
+            <li>Then run: <code>NODE_ENV=production npm start</code></li>
+          </ul>
+        </body>
+      </html>
+    `);
   });
 }
 
