@@ -4,6 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { useToast } from './ToastContext';
 import { Logger } from '@/utils/logger';
 import { ENV } from '@/config/env';
+import { setSentryUser, clearSentryUser } from '@/lib/sentry';
 
 interface AuthState {
   user: User | null;
@@ -111,6 +112,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             loading: false
           }));
 
+          // Update Sentry user context
+          if (session?.user) {
+            setSentryUser({
+              id: session.user.id,
+              email: session.user.email,
+              userType: userType || undefined
+            });
+          } else {
+            clearSentryUser();
+          }
+
           // Start session refresh interval if user is logged in
           if (session?.user) {
             refreshInterval = setInterval(refreshSession, SESSION_REFRESH_INTERVAL);
@@ -147,6 +159,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             userType,
             loading: false
           }));
+
+          // Update Sentry user context on auth state change
+          if (session?.user) {
+            setSentryUser({
+              id: session.user.id,
+              email: session.user.email,
+              userType: userType || undefined
+            });
+          } else {
+            clearSentryUser();
+          }
         });
 
         return () => {

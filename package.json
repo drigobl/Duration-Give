@@ -18,9 +18,10 @@
     "accounts": "hardhat accounts"
   },
   "dependencies": {
-    "@chainlink/contracts": "^0.8.0",
+    "@chainlink/contracts": "^1.4.0",
     "@mailchimp/mailchimp_marketing": "^3.0.80",
     "@openzeppelin/contracts": "^5.0.1",
+    "@sentry/react": "^9.24.0",
     "@supabase/supabase-js": "^2.39.7",
     "@tailwindcss/typography": "^0.5.10",
     "@tanstack/react-query": "^5.24.1",

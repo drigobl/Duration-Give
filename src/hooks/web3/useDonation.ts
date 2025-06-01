@@ -3,6 +3,7 @@ import { useContract } from './useContract';
 import { useWeb3 } from '@/contexts/Web3Context';
 import { parseEther } from 'ethers';
 import { Logger } from '@/utils/logger';
+import { trackTransaction } from '@/lib/sentry';
 
 export enum DonationType {
   NATIVE = 'native',
@@ -32,6 +33,14 @@ export function useDonation() {
     if (!contract || !address) {
       throw new Error('Contract or wallet not connected');
     }
+
+    // Start Sentry transaction tracking
+    const transaction = trackTransaction('donation', {
+      amount,
+      charityId: charityAddress,
+      donationType: type,
+      status: 'started'
+    });
 
     try {
       setLoading(true);
@@ -66,6 +75,9 @@ export function useDonation() {
           type: 'native',
           poolType
         });
+
+        // Mark transaction as successful
+        transaction.finish('ok');
       } else {
         // For token donations, we would need to implement this
         // based on the contract's token donation functionality
@@ -80,6 +92,10 @@ export function useDonation() {
         charity: charityAddress,
         type
       });
+      
+      // Mark transaction as failed
+      transaction.finish('error');
+      
       throw err;
     } finally {
       setLoading(false);

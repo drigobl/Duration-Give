@@ -1,4 +1,5 @@
 import type LogLevel from 'loglevel';
+import * as Sentry from '@sentry/react';
 
 type LogLevel = 'info' | 'warn' | 'error';
 
@@ -100,16 +101,48 @@ export class Logger {
   }
 
   private static async sendToMonitoring(entry: LogEntry) {
+    // Send to Sentry
     try {
-      await fetch('/api/logs', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(entry),
-      });
+      const sentryLevel = entry.level === 'warn' ? 'warning' : entry.level;
+      
+      if (entry.level === 'error') {
+        // For errors, try to extract the actual error object from metadata
+        const error = entry.metadata?.error || new Error(entry.message);
+        Sentry.captureException(error, {
+          level: sentryLevel,
+          extra: entry.metadata,
+          tags: {
+            source: 'logger',
+          },
+        });
+      } else {
+        // For info and warnings, use captureMessage
+        Sentry.captureMessage(entry.message, {
+          level: sentryLevel,
+          extra: entry.metadata,
+          tags: {
+            source: 'logger',
+          },
+        });
+      }
     } catch (error) {
-      console.error('Failed to send log to monitoring service:', error);
+      console.error('Failed to send log to Sentry:', error);
+    }
+
+    // Also send to custom endpoint if configured
+    const monitoringEndpoint = import.meta.env.VITE_MONITORING_ENDPOINT;
+    if (monitoringEndpoint) {
+      try {
+        await fetch(monitoringEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(entry),
+        });
+      } catch (error) {
+        console.error('Failed to send log to monitoring endpoint:', error);
+      }
     }
   }
 
