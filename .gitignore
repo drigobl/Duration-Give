@@ -27,6 +27,9 @@ dist-ssr
 # Environment variables
 .env
 .env.*
+.env.local
+.env.production
+*.env 
 !.env.example
 
 # Supabase
@@ -43,3 +46,6 @@ cache
 
 # Misc
 .bolt
+server.ts
+build-simple.js
+webpack.config.js

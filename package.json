@@ -1,12 +1,10 @@
-{
+﻿{
     "name":  "duration-charity-platform",
     "private":  true,
     "version":  "0.0.0",
     "type":  "module",
     "scripts":  {
-                    "dev":  "concurrently \"npm run dev:client\" \"npm run dev:server\"",
-                    "dev:client":  "parcel index.html",
-                    "dev:server":  "tsx watch server.ts",
+                    "dev":  "vite",
                     "build":  "tsc \u0026\u0026 vite build",
                     "build:parcel":  "parcel build index.html --dist-dir dist",
                     "build:vite":  "tsc \u0026\u0026 vite build",
