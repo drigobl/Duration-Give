@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
-    "dev:client": "vite",
+    "dev:client": "parcel index.html",
     "dev:server": "tsx watch server.ts",
-    "build": "tsc && vite build",
+    "build": "node build-simple.js",
+    "build:parcel": "parcel build index.html --dist-dir dist",
+    "build:vite": "tsc && vite build",
     "build:app": "tsc && vite build --mode app",
     "start": "NODE_ENV=production node --loader tsx server.ts",
     "lint": "eslint .",
@@ -21,9 +23,9 @@
     "accounts": "hardhat accounts"
   },
   "dependencies": {
-    "@chainlink/contracts": "^0.8.0",
     "@mailchimp/mailchimp_marketing": "^3.0.80",
     "@openzeppelin/contracts": "^5.0.1",
+    "@sentry/react": "^9.24.0",
     "@supabase/supabase-js": "^2.39.7",
     "@tailwindcss/typography": "^0.5.10",
     "@tanstack/react-query": "^5.24.1",
@@ -61,6 +63,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.18",
     "concurrently": "^8.2.2",
+    "esbuild": "^0.25.5",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",

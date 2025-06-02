@@ -1,4 +1,5 @@
 import type LogLevel from 'loglevel';
+import * as Sentry from '@sentry/react';
 
 type LogLevel = 'info' | 'warn' | 'error';
 
@@ -101,15 +102,21 @@ export class Logger {
 
   private static async sendToMonitoring(entry: LogEntry) {
     try {
-      await fetch('/api/logs', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(entry),
-      });
+      const sentryLevel = entry.level === 'warn' ? 'warning' : entry.level;
+
+      if (entry.level === 'error') {
+        Sentry.captureException(entry.metadata?.error || new Error(entry.message), {
+          level: sentryLevel,
+          extra: entry.metadata,
+        });
+      } else {
+        Sentry.captureMessage(entry.message, {
+          level: sentryLevel,
+          extra: entry.metadata,
+        });
+      }
     } catch (error) {
-      console.error('Failed to send log to monitoring service:', error);
+      console.error('Failed to send log to Sentry:', error);
     }
   }
 
