@@ -17,7 +17,7 @@ interface VolunteerHoursVerificationProps {
 
 export const VolunteerHoursVerification: React.FC<VolunteerHoursVerificationProps> = ({
   hoursId,
-  volunteerId,
+  volunteerId: _volunteerId,
   volunteerName,
   hours,
   datePerformed,

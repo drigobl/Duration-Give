@@ -7,7 +7,7 @@ describe("CharityScheduledDistribution", function () {
   let distribution: Contract;
   let executor: Contract;
   let token: Contract;
-  let owner: SignerWithAddress;
+  let _owner: SignerWithAddress;
   let charity: SignerWithAddress;
   let donor: SignerWithAddress;
 
@@ -16,7 +16,7 @@ describe("CharityScheduledDistribution", function () {
   const MONTHLY_AMOUNT = ethers.parseEther("1.0"); // 1 token per month
 
   beforeEach(async function () {
-    [owner, charity, donor] = await ethers.getSigners();
+    [_owner, charity, donor] = await ethers.getSigners();
 
     // Deploy mock ERC20 token
     const MockToken = await ethers.getContractFactory("MockERC20");
@@ -238,7 +238,7 @@ describe("CharityScheduledDistribution", function () {
   describe("Donor Schedules", function () {
     beforeEach(async function () {
       // Approve tokens for distribution contract
-      await token.connect(donor).approve(await distribution.getAddress(), TOTAL_AMOUNT.mul(2));
+      await token.connect(donor).approve(await distribution.getAddress(), TOTAL_AMOUNT * BigInt(2));
       
       // Create two schedules
       await distribution.connect(donor).createSchedule(

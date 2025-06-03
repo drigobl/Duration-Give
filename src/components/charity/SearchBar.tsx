@@ -57,7 +57,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   });
   const [showFilters, setShowFilters] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
-  const debouncedSearch = useDebounce(query, 300);
+  // Currently unused but may be needed for future search optimization
+  // const debouncedSearch = useDebounce(query, 300);
 
   const handleSearch = useCallback((searchQuery: string) => {
     setQuery(searchQuery);

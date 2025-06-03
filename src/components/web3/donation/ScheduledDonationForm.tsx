@@ -20,8 +20,7 @@ interface ScheduledDonationFormProps {
 export function ScheduledDonationForm({ 
   charityAddress, 
   charityName, 
-  onSuccess, 
-  onClose 
+  onSuccess
 }: ScheduledDonationFormProps) {
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);

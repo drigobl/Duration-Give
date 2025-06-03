@@ -1,8 +1,8 @@
 import { supabase } from './supabase';
 import { web3Enable, web3Accounts } from '@polkadot/extension-dapp';
-import { Logger } from '../utils/logger';
-import { SecurityMonitor } from '../utils/security';
-import { validateEmail, validatePassword } from '../utils/validation';
+import { Logger } from '@/utils/logger';
+import { SecurityMonitor } from '@/utils/security';
+import { validateEmail, validatePassword } from '@/utils/validation';
 
 export interface AuthError {
   code: string;

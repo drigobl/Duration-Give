@@ -1,5 +1,5 @@
-import { SecurityManager } from '../utils/security';
-import { Logger } from '../utils/logger';
+import { SecurityManager } from '@/utils/security';
+import { Logger } from '@/utils/logger';
 
 export function initializeSecurity(): void {
   try {

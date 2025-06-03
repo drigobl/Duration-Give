@@ -15,7 +15,7 @@ export const ConnectionTest: React.FC = () => {
 
   const testSupabaseConnection = async () => {
     try {
-      const { data, error } = await supabase.from('profiles').select('count');
+      const { error } = await supabase.from('profiles').select('count');
       if (error) throw error;
       setSupabaseStatus('success');
     } catch (err) {

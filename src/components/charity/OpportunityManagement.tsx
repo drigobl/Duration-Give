@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Plus, Edit, Trash2, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { OpportunityForm } from '@/components/volunteer/OpportunityForm';
@@ -28,13 +28,7 @@ export const OpportunityManagement: React.FC = () => {
   const [showForm, setShowForm] = useState(false);
   const { t } = useTranslation();
 
-  useEffect(() => {
-    if (profile?.id) {
-      fetchOpportunities();
-    }
-  }, [profile?.id]);
-
-  const fetchOpportunities = async () => {
+  const fetchOpportunities = useCallback(async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -50,7 +44,13 @@ export const OpportunityManagement: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [profile?.id]);
+
+  useEffect(() => {
+    if (profile?.id) {
+      fetchOpportunities();
+    }
+  }, [profile?.id, fetchOpportunities]);
 
   const handleCreateSuccess = () => {
     setShowForm(false);

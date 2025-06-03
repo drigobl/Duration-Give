@@ -2,16 +2,14 @@
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
-import "@openzeppelin/contracts/utils/Address.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
 
 /**
  * @title VolunteerVerification
  * @dev A contract for verifying volunteer applications and hours on the blockchain
  */
 contract VolunteerVerification is Ownable, ReentrancyGuard, Pausable {
-    using Address for address payable;
 
     // Structs
     struct Charity {
@@ -29,10 +27,10 @@ contract VolunteerVerification is Ownable, ReentrancyGuard, Pausable {
     }
 
     struct VolunteerHours {
-        bytes32 hoursHash;
+        bytes32 timeWorkedHash;
         address volunteer;
         address charity;
-        uint256 hours;
+        uint256 totalHours;
         uint256 timestamp;
         bool isVerified;
     }
@@ -51,11 +49,11 @@ contract VolunteerVerification is Ownable, ReentrancyGuard, Pausable {
         address indexed charity,
         uint256 timestamp
     );
-    event HoursVerified(
-        bytes32 indexed hoursHash,
+    event TimeWorkedVerified(
+        bytes32 indexed timeWorkedHash,
         address indexed volunteer,
         address indexed charity,
-        uint256 hours,
+        uint256 totalHours,
         uint256 timestamp
     );
     
@@ -109,6 +107,8 @@ contract VolunteerVerification is Ownable, ReentrancyGuard, Pausable {
         nonReentrant 
         whenNotPaused 
     {
+        require(_applicant != address(0), "Invalid applicant address");
+        
         if (!charities[msg.sender].isRegistered) {
             revert CharityNotRegistered(msg.sender);
         }
@@ -137,16 +137,18 @@ contract VolunteerVerification is Ownable, ReentrancyGuard, Pausable {
     }
     
     /**
-     * @dev Verify volunteer hours
-     * @param _hoursHash The hash of the hours record
+     * @dev Verify volunteer timeWorked
+     * @param _timeWorkedHash The hash of the timeWorked record
      * @param _volunteer The address of the volunteer
-     * @param _hours The number of hours worked
+     * @param _timeWorked The amount of time worked
      */
-    function verifyHours(bytes32 _hoursHash, address _volunteer, uint256 _hours) 
+    function verifyTimeWorked(bytes32 _timeWorkedHash, address _volunteer, uint256 _timeWorked) 
         external 
         nonReentrant 
         whenNotPaused 
     {
+        require(_volunteer != address(0), "Invalid volunteer address");
+        
         if (!charities[msg.sender].isRegistered) {
             revert CharityNotRegistered(msg.sender);
         }
@@ -155,52 +157,59 @@ contract VolunteerVerification is Ownable, ReentrancyGuard, Pausable {
             revert CharityNotActive(msg.sender);
         }
         
-        if (_hoursHash == bytes32(0)) {
+        if (_timeWorkedHash == bytes32(0)) {
             revert InvalidHash();
         }
         
-        if (volunteerHours[_hoursHash].isVerified) {
-            revert HashAlreadyVerified(_hoursHash);
+        if (volunteerHours[_timeWorkedHash].isVerified) {
+            revert HashAlreadyVerified(_timeWorkedHash);
         }
         
-        volunteerHours[_hoursHash] = VolunteerHours({
-            hoursHash: _hoursHash,
+        volunteerHours[_timeWorkedHash] = VolunteerHours({
+            timeWorkedHash: _timeWorkedHash,
             volunteer: _volunteer,
             charity: msg.sender,
-            hours: _hours,
+            totalHours: _timeWorked,
             timestamp: block.timestamp,
             isVerified: true
         });
         
-        emit HoursVerified(_hoursHash, _volunteer, msg.sender, _hours, block.timestamp);
+        emit TimeWorkedVerified(_timeWorkedHash, _volunteer, msg.sender, _timeWorked, block.timestamp);
     }
     
     /**
      * @dev Check if an application hash is verified
      * @param _applicationHash The hash to check
-     * @return A tuple containing verification status, applicant, charity, and timestamp
+     * @return isVerified Whether the application is verified
+     * @return applicant The applicant address
+     * @return charity The charity address
+     * @return timestamp When it was verified
      */
     function checkApplicationVerification(bytes32 _applicationHash) 
         external 
         view 
         returns (bool isVerified, address applicant, address charity, uint256 timestamp) 
     {
-        VolunteerApplication storage app = applications[_applicationHash];
+        VolunteerApplication memory app = applications[_applicationHash];
         return (app.isVerified, app.applicant, app.charity, app.timestamp);
     }
     
     /**
-     * @dev Check if hours hash is verified
-     * @param _hoursHash The hash to check
-     * @return A tuple containing verification status, volunteer, charity, hours, and timestamp
+     * @dev Check if timeWorked hash is verified
+     * @param _timeWorkedHash The hash to check
+     * @return isVerified Whether the hours are verified
+     * @return volunteer The volunteer address
+     * @return charity The charity address
+     * @return totaltimeWorked The hours worked
+     * @return timestamp When it was verified
      */
-    function checkHoursVerification(bytes32 _hoursHash) 
+    function checkTimeWorkedVerification(bytes32 _timeWorkedHash) 
         external 
         view 
-        returns (bool isVerified, address volunteer, address charity, uint256 hours, uint256 timestamp) 
+        returns (bool isVerified, address volunteer, address charity, uint256 totaltimeWorked, uint256 timestamp) 
     {
-        VolunteerHours storage hours = volunteerHours[_hoursHash];
-        return (hours.isVerified, hours.volunteer, hours.charity, hours.hours, hours.timestamp);
+        VolunteerHours memory record = volunteerHours[_timeWorkedHash];
+        return (record.isVerified, record.volunteer, record.charity, record.totalHours, record.timestamp);
     }
 
     /**

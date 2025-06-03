@@ -2,16 +2,6 @@ import { ethers } from 'ethers';
 import { supabase } from '@/lib/supabase';
 import { VolunteerApplication, VolunteerHours, VolunteerVerification } from '@/types/volunteer';
 import { Logger } from './logger';
-import { useWeb3 } from '@/contexts/Web3Context';
-import { getContractAddress } from '@/config/contracts';
-
-// ABI for the VolunteerVerification contract
-const VOLUNTEER_VERIFICATION_ABI = [
-  "function verifyApplication(bytes32 _applicationHash, address _applicant) external",
-  "function verifyHours(bytes32 _hoursHash, address _volunteer, uint256 _hours) external",
-  "function checkApplicationVerification(bytes32 _applicationHash) external view returns (bool isVerified, address applicant, address charity, uint256 timestamp)",
-  "function checkHoursVerification(bytes32 _hoursHash) external view returns (bool isVerified, address volunteer, address charity, uint256 hours, uint256 timestamp)"
-];
 
 /**
  * Generates a unique hash for volunteer activity verification
@@ -201,7 +191,7 @@ export const recordApplicationOnChain = async (
     
     if (walletError) throw walletError;
     
-    const applicantAddress = walletData?.wallet_address || '0x0000000000000000000000000000000000000000';
+    // const applicantAddress = walletData?.wallet_address || '0x0000000000000000000000000000000000000000';
     
     // For development/testing, return simulated blockchain data
     return {
@@ -228,7 +218,7 @@ export const recordApplicationOnChain = async (
 export const recordHoursOnChain = async (
   volunteerId: string,
   hash: string,
-  hours: number
+  _hours: number
 ): Promise<{ transactionId: string; blockNumber: number }> => {
   try {
     // Get volunteer's wallet address from profile
@@ -249,7 +239,7 @@ export const recordHoursOnChain = async (
     
     if (walletError) throw walletError;
     
-    const volunteerAddress = walletData?.wallet_address || '0x0000000000000000000000000000000000000000';
+    // const volunteerAddress = walletData?.wallet_address || '0x0000000000000000000000000000000000000000';
     
     // For development/testing, return simulated blockchain data
     return {

@@ -1,5 +1,6 @@
 import { ethers } from "hardhat";
 import { Logger } from "../src/utils/logger";
+import * as fs from "fs";
 
 async function main() {
   try {
@@ -21,7 +22,6 @@ async function main() {
     });
 
     // Write deployment addresses to a file
-    const fs = require('fs');
     const deploymentInfo = {
       network: 'moonbase',
       verificationAddress,

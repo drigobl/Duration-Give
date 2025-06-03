@@ -1,17 +1,3 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-
-const MAILCHIMP_API_KEY = "46d774aa1b75d6365b650c5fbb183bdb-us22";
-const MAILCHIMP_AUDIENCE_ID = "2e7d2ccbc6";
-const MAILCHIMP_SERVER = "us22"; // Extracted from the API key (us22)
-
-const MAILCHIMP_API_URL = `https://${MAILCHIMP_SERVER}.api.mailchimp.com/3.0/lists/${MAILCHIMP_AUDIENCE_ID}/members`;
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-};
-
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {

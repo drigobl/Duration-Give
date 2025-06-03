@@ -5,13 +5,13 @@ import { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
 
 describe("VolunteerVerification", function () {
   let verification: Contract;
-  let owner: SignerWithAddress;
+  let _owner: SignerWithAddress;
   let charity: SignerWithAddress;
   let applicant: SignerWithAddress;
   let volunteer: SignerWithAddress;
 
   beforeEach(async function () {
-    [owner, charity, applicant, volunteer] = await ethers.getSigners();
+    [_owner, charity, applicant, volunteer] = await ethers.getSigners();
 
     // Deploy verification contract
     const VolunteerVerification = await ethers.getContractFactory("VolunteerVerification");

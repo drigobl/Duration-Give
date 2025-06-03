@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Search, Filter, Award, Clock, Users, Globe } from 'lucide-react';
-import { Card } from '../components/ui/Card';
-import { ApplicationForm } from '../components/volunteer/ApplicationForm';
-import { ConsentForm } from '../components/volunteer/ConsentForm';
+import { Card } from '@/components/ui/Card';
+import { ApplicationForm } from '@/components/volunteer/ApplicationForm';
+import { ConsentForm } from '@/components/volunteer/ConsentForm';
 import { useTranslation } from '@/hooks/useTranslation';
 import { WorkLanguage } from '@/types/volunteer';
 import { useToast } from '@/contexts/ToastContext';

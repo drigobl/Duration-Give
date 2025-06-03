@@ -73,7 +73,7 @@ export class InputSanitizer {
   sanitizeText(input: string, field: keyof typeof this.maxLengths): string {
     if (!input) return '';
 
-    let sanitized = input
+    const sanitized = input
       .trim()
       .slice(0, this.maxLengths[field])
       .replace(/[<>]/g, '')

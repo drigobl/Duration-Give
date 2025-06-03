@@ -5,12 +5,12 @@ import { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
 
 describe("DurationDonation", function () {
   let donation: Contract;
-  let owner: SignerWithAddress;
+  let _owner: SignerWithAddress;
   let charity: SignerWithAddress;
   let donor: SignerWithAddress;
 
   beforeEach(async function () {
-    [owner, charity, donor] = await ethers.getSigners();
+    [_owner, charity, donor] = await ethers.getSigners();
 
     // Deploy donation contract
     const DurationDonation = await ethers.getContractFactory("DurationDonation");

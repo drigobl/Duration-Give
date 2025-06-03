@@ -1,4 +1,4 @@
-import { UUID, Address, Timestamp } from './common';
+import { UUID, Timestamp } from './common';
 
 export enum VolunteerOpportunityStatus {
   ACTIVE = 'active',

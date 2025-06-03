@@ -1,17 +1,29 @@
 import { useState } from 'react';
 import { validateAmount } from '@/utils/validation';
 import { Logger } from '@/utils/logger';
+import { useSubstrateTransaction } from '@/hooks/substrate/useSubstrateTransaction';
 
 interface TransactionFormConfig {
   onSuccess?: () => void;
+  // Web3/Substrate specific config
+  pallet?: string;
+  method?: string;
 }
 
-export function useTransactionForm({ onSuccess }: TransactionFormConfig) {
+export function useTransactionForm({ onSuccess, pallet, method }: TransactionFormConfig = {}) {
   const [amount, setAmount] = useState('');
   const [validationError, setValidationError] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  // Use substrate transaction hook if pallet and method are provided
+  const substrateTransaction = pallet && method 
+    ? useSubstrateTransaction({ pallet, method })
+    : null;
 
-  const handleSubmit = async (e: React.FormEvent, submitFn: (amount: string) => Promise<void>) => {
+  const handleSubmit = async (
+    e: React.FormEvent, 
+    submitFnOrArgs?: ((amount: string) => Promise<void>) | unknown[]
+  ) => {
     e.preventDefault();
     setValidationError('');
 
@@ -22,22 +34,36 @@ export function useTransactionForm({ onSuccess }: TransactionFormConfig) {
     }
 
     try {
-      setLoading(true);
-      await submitFn(amount);
+      // If using substrate transaction
+      if (substrateTransaction && Array.isArray(submitFnOrArgs)) {
+        await substrateTransaction.execute(...submitFnOrArgs, amount);
+      } 
+      // If using custom submit function
+      else if (typeof submitFnOrArgs === 'function') {
+        setLoading(true);
+        await submitFnOrArgs(amount);
+      } else {
+        throw new Error('Invalid submit configuration');
+      }
+
       setAmount('');
       onSuccess?.();
 
       Logger.info('Transaction successful', {
-        amount
+        amount,
+        ...(pallet && method && { pallet, method })
       });
     } catch (err) {
       Logger.error('Transaction failed', {
         error: err instanceof Error ? err.message : String(err),
-        amount
+        amount,
+        ...(pallet && method && { pallet, method })
       });
       throw err;
     } finally {
-      setLoading(false);
+      if (!substrateTransaction) {
+        setLoading(false);
+      }
     }
   };
 
@@ -45,7 +71,7 @@ export function useTransactionForm({ onSuccess }: TransactionFormConfig) {
     amount,
     setAmount,
     validationError,
-    loading,
+    loading: substrateTransaction?.loading ?? loading,
     handleSubmit
   };
 }
