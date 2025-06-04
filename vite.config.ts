@@ -13,6 +13,7 @@ export default defineConfig(({ mode }) => ({
   ],
   define: {
     global: 'globalThis',
+    'process.env': {},
   },
   build: {
     target: 'es2020',
@@ -51,7 +52,10 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      buffer: 'buffer'
+      buffer: 'buffer',
+      stream: 'readable-stream',
+      util: 'util',
+      events: 'events'
     }
   },
   server: {
@@ -78,7 +82,10 @@ export default defineConfig(({ mode }) => ({
       '@supabase/supabase-js',
       'ethers',
       'viem',
-      'buffer'
+      'buffer',
+      'readable-stream',
+      'util',
+      'events'
     ],
     force: true
   }
