@@ -5,6 +5,12 @@
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Give Protocol - Smart Giving Platform</title>
+    <script>
+      // Polyfill for Node.js globals that some packages expect
+      if (typeof global === "undefined") {
+        window.global = window;
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

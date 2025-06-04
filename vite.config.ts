@@ -11,6 +11,9 @@ export default defineConfig(({ mode }) => ({
       ext: '.gz'
     })
   ],
+  define: {
+    global: 'globalThis',
+  },
   build: {
     target: 'es2020',
     minify: mode === 'production' ? 'terser' : false,
@@ -47,7 +50,8 @@ export default defineConfig(({ mode }) => ({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
+      '@': path.resolve(__dirname, './src'),
+      buffer: 'buffer'
     }
   },
   server: {
@@ -73,7 +77,8 @@ export default defineConfig(({ mode }) => ({
       'react-router-dom',
       '@supabase/supabase-js',
       'ethers',
-      'viem'
+      'viem',
+      'buffer'
     ],
     force: true
   }
