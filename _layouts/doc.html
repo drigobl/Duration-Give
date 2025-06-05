@@ -10,27 +10,7 @@ layout: default
     {% endif %}
   </header>
 
-  {% if page.toc %}
-    <nav class="doc-toc">
-      <h2>Table of Contents</h2>
-      {% include toc.html html=content %}
-    </nav>
-  {% endif %}
-
   <div class="doc-content">
     {{ content }}
   </div>
-
-  <footer class="doc-footer">
-    {% if page.prev or page.next %}
-      <nav class="doc-pagination">
-        {% if page.prev %}
-          <a href="{{ page.prev.url | relative_url }}" class="prev">← {{ page.prev.title }}</a>
-        {% endif %}
-        {% if page.next %}
-          <a href="{{ page.next.url | relative_url }}" class="next">{{ page.next.title }} →</a>
-        {% endif %}
-      </nav>
-    {% endif %}
-  </footer>
 </article>

@@ -1,0 +1,26 @@
+{% comment %}
+  Simple Table of Contents generator
+  Parses headings from the content and creates a nested list
+{% endcomment %}
+
+{% assign headings = include.html | split: '<h' %}
+{% assign toc_html = '' %}
+{% assign inside_toc = false %}
+
+<nav class="toc">
+  <ul>
+    {% for heading in headings %}
+      {% if heading contains 'id="' %}
+        {% assign id = heading | split: 'id="' | last | split: '"' | first %}
+        {% assign text = heading | split: '>' | last | split: '<' | first %}
+        {% assign level = heading | truncate: 1, '' %}
+        
+        {% if level == '2' %}
+          <li><a href="#{{ id }}">{{ text }}</a></li>
+        {% elsif level == '3' %}
+          <li class="toc-indent"><a href="#{{ id }}">{{ text }}</a></li>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  </ul>
+</nav>
