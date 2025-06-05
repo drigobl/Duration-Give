@@ -6,7 +6,6 @@ url: https://yourusername.github.io # Replace with your GitHub Pages URL
 baseurl: /Duration-Give # Replace with your repository name
 
 # Build settings
-theme: minima
 markdown: kramdown
 kramdown:
   input: GFM
