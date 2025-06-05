@@ -5,35 +5,42 @@ title: Give Protocol Documentation
 
 # Welcome to Give Protocol Documentation
 
-Give Protocol is a blockchain-based charitable giving platform that brings transparency and efficiency to charitable donations.
+Give Protocol is a blockchain-based charitable living platform that brings transparency and efficiency to charitable activity.
 
 ## Quick Links
 
-- [Getting Started](/docs/getting-started/) - Set up your development environment
-- [Architecture Overview](/docs/architecture/) - Understand the system design
-- [API Reference](/docs/api/) - Detailed API documentation
-- [Smart Contracts](/docs/contracts/) - Blockchain contract documentation
-- [Contributing Guide](/docs/contributing/) - How to contribute to the project
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 2rem 0;">
+  <a href="{{ "/docs/getting-started/" | relative_url }}" class="card" style="text-decoration: none; color: inherit;">
+    <h3 style="margin-top: 0;">Getting Started</h3>
+    <p>Set up your development environment</p>
+  </a>
+  
+  <a href="{{ "/docs/user-guides/" | relative_url }}" class="card" style="text-decoration: none; color: inherit;">
+    <h3 style="margin-top: 0;">User Guides</h3>
+    <p>Guides for donors, organizations, and volunteers</p>
+  </a>
+  
+  <a href="{{ "/docs/platform-features/" | relative_url }}" class="card" style="text-decoration: none; color: inherit;">
+    <h3 style="margin-top: 0;">Platform Features</h3>
+    <p>Explore platform capabilities</p>
+  </a>
+  
+  <a href="{{ "/docs/technical/" | relative_url }}" class="card" style="text-decoration: none; color: inherit;">
+    <h3 style="margin-top: 0;">Technical Docs</h3>
+    <p>Technical specifications and details</p>
+  </a>
+</div>
 
 ## Overview
 
-Give Protocol leverages blockchain technology to create a transparent, efficient, and trustworthy platform for charitable giving. Our platform supports:
+Give Protocol empowering sustainable global philanthropy through innovative technologies and collaborative investment solutions. Our V1 platform supports:
 
 - **Transparent Donations**: Every donation is recorded on the blockchain
 - **Volunteer Matching**: Connect volunteers with opportunities
-- **Multiple Donation Methods**: Direct donations, equity pools, and portfolio funds
+- **Multiple Donation Methods**: Direct donations, portfolio funds and timed gifts
 - **Charity Verification**: Robust verification system for registered charities
-
-## Technology Stack
-
-- **Frontend**: React with TypeScript and Vite
-- **Styling**: Tailwind CSS
-- **Backend**: Supabase
-- **Blockchain**: Ethereum (via Ethers.js) and Polkadot
-- **Smart Contracts**: Solidity with Hardhat
 
 ## Getting Help
 
 - [GitHub Issues](https://github.com/yourusername/Duration-Give/issues)
-- [Community Discord](#) <!-- Add your Discord link -->
 - [Email Support](#) <!-- Add your support email -->
