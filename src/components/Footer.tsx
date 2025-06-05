@@ -25,7 +25,7 @@ export const Footer: React.FC = () => {
               <ul className="mt-4 space-y-4">
                 <li>
                   <a 
-                    href="https://give-protocol.gitbook.io"
+                    href="https://giveprotocol.github.io/Duration-Give/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-gray-600 hover:text-gray-900"

@@ -121,7 +121,7 @@ export const AppNavbar: React.FC = () => {
                     <span>{t('nav.about')}</span>
                   </Link>
                   <a
-                    href="https://give-protocol.gitbook.io"
+                    href="https://giveprotocol.github.io/Duration-Give/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 text-gray-700 hover:bg-primary-50`}

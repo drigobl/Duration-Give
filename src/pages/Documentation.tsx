@@ -5,8 +5,8 @@ export const Documentation: React.FC = () => {
   const navigate = useNavigate();
   
   useEffect(() => {
-    // Redirect to GitBook documentation
-    window.location.href = 'https://give-protocol.gitbook.io';
+    // Redirect to GitHub Pages documentation
+    window.location.href = 'https://giveprotocol.github.io/Duration-Give/';
     
     // Fallback navigation if redirect fails
     const fallbackTimeout = setTimeout(() => {
@@ -25,7 +25,7 @@ export const Documentation: React.FC = () => {
         <p className="text-gray-600">
           If you are not redirected automatically,{' '}
           <a 
-            href="https://give-protocol.gitbook.io"
+            href="https://giveprotocol.github.io/Duration-Give/"
             className="text-indigo-600 hover:text-indigo-800"
           >
             click here

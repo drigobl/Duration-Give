@@ -34,7 +34,7 @@ export const Navbar: React.FC = () => {
                 {t('nav.about')}
               </Link>
               <a
-                href="https://give-protocol.gitbook.io"
+                href="https://giveprotocol.github.io/Duration-Give/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 text-gray-700 hover:bg-primary-50`}
@@ -91,7 +91,7 @@ export const Navbar: React.FC = () => {
               {t('nav.about')}
             </Link>
             <a
-              href="https://give-protocol.gitbook.io"
+              href="https://giveprotocol.github.io/Duration-Give/"
               target="_blank"
               rel="noopener noreferrer"
               className="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:bg-primary-50"

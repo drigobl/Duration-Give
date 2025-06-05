@@ -2,8 +2,8 @@
 
 title: Give Protocol Documentation
 description: A blockchain-based charitable giving platform built with React, Vite, and Supabase
-url: https://yourusername.github.io # Replace with your GitHub Pages URL
-baseurl: /Duration-Give # Replace with your repository name
+url: https://giveprotocol.github.io
+baseurl: /Duration-Give
 
 # Build settings
 markdown: kramdown
