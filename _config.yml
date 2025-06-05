@@ -139,6 +139,8 @@ exclude:
   - "*.lock"
   - ".git"
   - ".gitignore"
+  - index.html
+  - app.html
 
 # Include specific files in Jekyll build
 include:
@@ -146,4 +148,6 @@ include:
   - _layouts
   - _includes
   - index.md
-  - README.md
+
+# Force Jekyll to use index.md as homepage
+index: index.md
