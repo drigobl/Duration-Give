@@ -112,6 +112,7 @@ navigation:
 
 # Exclude files from Jekyll build
 exclude:
+  - vendor
   - node_modules
   - package.json
   - package-lock.json
