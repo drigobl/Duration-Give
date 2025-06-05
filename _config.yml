@@ -1,0 +1,149 @@
+# GitHub Pages / Jekyll configuration for Give Protocol Documentation
+
+title: Give Protocol Documentation
+description: A blockchain-based charitable giving platform built with React, Vite, and Supabase
+url: https://yourusername.github.io # Replace with your GitHub Pages URL
+baseurl: /Duration-Give # Replace with your repository name
+
+# Build settings
+theme: minima
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Collections for organizing documentation
+collections:
+  docs:
+    output: true
+    permalink: /:collection/:path/
+
+# Default layout for documentation pages
+defaults:
+  - scope:
+      path: "_docs"
+      type: "docs"
+    values:
+      layout: "doc"
+      toc: true
+
+# Navigation structure
+navigation:
+  - title: Help Center
+    url: /docs/help-center/
+    subnav:
+      - title: FAQ
+        url: /docs/help-center/faq/
+      - title: Need Help
+        url: /docs/help-center/need-help/
+      - title: Report Issue
+        url: /docs/help-center/report-issue/
+  - title: Introduction
+    url: /docs/introduction/
+    subnav:
+      - title: What is Give Protocol
+        url: /docs/introduction/what-is-give-protocol/
+      - title: How to Join
+        url: /docs/introduction/how-to-join/
+  - title: Getting Started
+    url: /docs/getting-started/
+    subnav:
+      - title: Creating Your Account
+        url: /docs/getting-started/creating-account/
+      - title: Wallet Connection
+        url: /docs/getting-started/wallet-connection/
+      - title: First Steps
+        url: /docs/getting-started/first-steps/
+      - title: Dashboard Overview
+        url: /docs/getting-started/dashboard/
+  - title: User Guides
+    url: /docs/user-guides/
+    subnav:
+      - title: For Donors
+        url: /docs/user-guides/donors/
+      - title: For Organizations
+        url: /docs/user-guides/organizations/
+      - title: For Volunteers
+        url: /docs/user-guides/volunteers/
+  - title: Platform Features
+    url: /docs/platform-features/
+    subnav:
+      - title: Search & Discovery
+        url: /docs/platform-features/search-discovery/
+      - title: Verification & Trust
+        url: /docs/platform-features/verification/
+  - title: Technical Docs
+    url: /docs/technical/
+    subnav:
+      - title: Supported Cryptocurrencies
+        url: /docs/technical/cryptocurrencies/
+      - title: Transaction Fees
+        url: /docs/technical/fees/
+  - title: Safety & Security
+    url: /docs/safety-security/
+    subnav:
+      - title: Smart Giving
+        url: /docs/safety-security/smart-giving/
+      - title: Volunteer Safety
+        url: /docs/safety-security/volunteer-safety/
+      - title: Platform Security
+        url: /docs/safety-security/platform-security/
+  - title: Community
+    url: /docs/community/
+    subnav:
+      - title: Forums Guidelines
+        url: /docs/community/forums/
+      - title: Contact
+        url: /docs/community/contact/
+      - title: Social Media
+        url: /docs/community/social/
+  - title: Resources
+    url: /docs/resources/
+    subnav:
+      - title: Donation Calculator
+        url: /docs/resources/calculator/
+      - title: Time Tracking
+        url: /docs/resources/time-tracking/
+
+# Exclude files from Jekyll build
+exclude:
+  - node_modules
+  - package.json
+  - package-lock.json
+  - yarn.lock
+  - src
+  - public
+  - scripts
+  - test
+  - cypress
+  - contracts
+  - hardhat.config.ts
+  - vite.config.ts
+  - tsconfig.json
+  - .env
+  - .env.example
+  - docker-compose.yml
+  - build.simple.js
+  - jest.config.ts
+  - postcss.config.js
+  - tailwind.config.js
+  - volumes
+  - supabase/functions
+  - "*.log"
+  - "*.lock"
+  - ".git"
+  - ".gitignore"
+
+# Include specific files in Jekyll build
+include:
+  - _docs
+  - _layouts
+  - _includes
+  - index.md
+  - README.md
