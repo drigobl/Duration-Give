@@ -79,11 +79,13 @@ class JekyllPreviewHandler(http.server.SimpleHTTPRequestHandler):
         return md
     
     def get_layout(self, content):
-        """Get the HTML layout"""
+        """Get the HTML layout with GitBook-style sidebar"""
+        sidebar_html = self.get_sidebar()
         return f'''<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Give Protocol Documentation</title>
     <link rel="stylesheet" href="/assets/css/main.css">
 </head>
@@ -94,35 +96,135 @@ class JekyllPreviewHandler(http.server.SimpleHTTPRequestHandler):
                 <img src="/assets/logo.svg" alt="Give Protocol Logo" style="height: 2rem; width: 2rem;">
                 Give Protocol Documentation
             </a>
-            <nav class="site-nav">
-                <div class="nav-item">
-                    <a class="page-link" href="/docs/getting-started/">Getting Started</a>
-                </div>
-                <div class="nav-item">
-                    <a class="page-link" href="/docs/user-guides/">User Guides</a>
-                </div>
-                <div class="nav-item">
-                    <a class="page-link" href="/docs/technical/">Technical Docs</a>
-                </div>
-            </nav>
+            <div class="site-search">
+                <input type="search" class="search-input" placeholder="Search docs..." />
+            </div>
         </div>
     </header>
     
     <main class="page-content">
-        <div class="wrapper">
-            <div class="home">
-                {content}
-            </div>
+        <div class="docs-wrapper">
+            {sidebar_html}
+            
+            <article class="doc-main">
+                <div class="doc-container">
+                    <div class="doc-content">
+                        {content}
+                    </div>
+                </div>
+            </article>
         </div>
     </main>
     
     <footer class="site-footer">
         <div class="wrapper">
-            <p>&copy; 2025 Give Protocol. Licensed under MIT.</p>
+            <p>&copy; 2025 Give Protocol. All rights reserved.</p>
         </div>
     </footer>
 </body>
 </html>'''
+
+    def get_sidebar(self):
+        """Generate sidebar navigation"""
+        return '''<nav class="docs-sidebar">
+        <div class="sidebar-content">
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">
+                    <a href="/docs/help-center/" class="sidebar-link">Help Center</a>
+                </h3>
+                <ul class="sidebar-list">
+                    <li><a href="/docs/help-center/faq/" class="sidebar-sublink">FAQ</a></li>
+                    <li><a href="/docs/help-center/need-help/" class="sidebar-sublink">Need Help</a></li>
+                    <li><a href="/docs/help-center/report-issue/" class="sidebar-sublink">Report Issue</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">
+                    <a href="/docs/introduction/" class="sidebar-link">Introduction</a>
+                </h3>
+                <ul class="sidebar-list">
+                    <li><a href="/docs/introduction/what-is-give-protocol/" class="sidebar-sublink">What is Give Protocol</a></li>
+                    <li><a href="/docs/introduction/how-to-join/" class="sidebar-sublink">How to Join</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">
+                    <a href="/docs/getting-started/" class="sidebar-link">Getting Started</a>
+                </h3>
+                <ul class="sidebar-list">
+                    <li><a href="/docs/getting-started/creating-account/" class="sidebar-sublink">Creating Your Account</a></li>
+                    <li><a href="/docs/getting-started/wallet-connection/" class="sidebar-sublink">Wallet Connection</a></li>
+                    <li><a href="/docs/getting-started/first-steps/" class="sidebar-sublink">First Steps</a></li>
+                    <li><a href="/docs/getting-started/dashboard/" class="sidebar-sublink">Dashboard Overview</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">
+                    <a href="/docs/user-guides/" class="sidebar-link">User Guides</a>
+                </h3>
+                <ul class="sidebar-list">
+                    <li><a href="/docs/user-guides/donors/" class="sidebar-sublink">For Donors</a></li>
+                    <li><a href="/docs/user-guides/organizations/" class="sidebar-sublink">For Organizations</a></li>
+                    <li><a href="/docs/user-guides/volunteers/" class="sidebar-sublink">For Volunteers</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">
+                    <a href="/docs/platform-features/" class="sidebar-link">Platform Features</a>
+                </h3>
+                <ul class="sidebar-list">
+                    <li><a href="/docs/platform-features/search-discovery/" class="sidebar-sublink">Search & Discovery</a></li>
+                    <li><a href="/docs/platform-features/verification/" class="sidebar-sublink">Verification & Trust</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">
+                    <a href="/docs/technical/" class="sidebar-link">Technical Docs</a>
+                </h3>
+                <ul class="sidebar-list">
+                    <li><a href="/docs/technical/cryptocurrencies/" class="sidebar-sublink">Supported Cryptocurrencies</a></li>
+                    <li><a href="/docs/technical/fees/" class="sidebar-sublink">Transaction Fees</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">
+                    <a href="/docs/safety-security/" class="sidebar-link">Safety & Security</a>
+                </h3>
+                <ul class="sidebar-list">
+                    <li><a href="/docs/safety-security/smart-giving/" class="sidebar-sublink">Smart Giving</a></li>
+                    <li><a href="/docs/safety-security/volunteer-safety/" class="sidebar-sublink">Volunteer Safety</a></li>
+                    <li><a href="/docs/safety-security/platform-security/" class="sidebar-sublink">Platform Security</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">
+                    <a href="/docs/community/" class="sidebar-link">Community</a>
+                </h3>
+                <ul class="sidebar-list">
+                    <li><a href="/docs/community/forums/" class="sidebar-sublink">Forums Guidelines</a></li>
+                    <li><a href="/docs/community/contact/" class="sidebar-sublink">Contact</a></li>
+                    <li><a href="/docs/community/social/" class="sidebar-sublink">Social Media</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3 class="sidebar-heading">
+                    <a href="/docs/resources/" class="sidebar-link">Resources</a>
+                </h3>
+                <ul class="sidebar-list">
+                    <li><a href="/docs/resources/calculator/" class="sidebar-sublink">Donation Calculator</a></li>
+                    <li><a href="/docs/resources/time-tracking/" class="sidebar-sublink">Time Tracking</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>'''
 
 # Start server
 PORT = 4000
