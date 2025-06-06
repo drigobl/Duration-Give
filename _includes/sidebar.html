@@ -1,0 +1,24 @@
+<nav class="docs-sidebar">
+  <div class="sidebar-content">
+    {% for section in site.navigation %}
+      <div class="sidebar-section">
+        <h3 class="sidebar-heading">
+          <a href="{{ section.url | relative_url }}" class="sidebar-link {% if page.url == section.url %}active{% endif %}">
+            {{ section.title }}
+          </a>
+        </h3>
+        {% if section.subnav %}
+          <ul class="sidebar-list">
+            {% for item in section.subnav %}
+              <li>
+                <a href="{{ item.url | relative_url }}" class="sidebar-sublink {% if page.url == item.url %}active{% endif %}">
+                  {{ item.title }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</nav>

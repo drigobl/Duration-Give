@@ -108,67 +108,119 @@ a:hover {
   color: var(--color-primary-900);
 }
 
-/* Navigation */
-.site-nav {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
+/* Search Bar in Header */
+.site-search {
+  margin-left: auto;
 }
 
-.nav-item {
+.site-search .search-input {
+  width: 300px;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-primary-200);
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  background-color: var(--color-primary-50);
+}
+
+.site-search .search-input:focus {
+  outline: none;
+  border-color: var(--color-indigo-600);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  background-color: white;
+}
+
+/* GitBook Style Layout */
+.docs-wrapper {
+  display: flex;
+  min-height: calc(100vh - 4rem);
   position: relative;
 }
 
-.page-link {
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--color-primary-700);
-  transition: all 0.2s ease;
-  display: inline-block;
-}
-
-.page-link:hover {
+/* Sidebar Navigation */
+.docs-sidebar {
+  width: 280px;
   background-color: var(--color-primary-50);
-  color: var(--color-primary-900);
+  border-right: 1px solid var(--color-primary-200);
+  overflow-y: auto;
+  position: sticky;
+  top: 4rem;
+  height: calc(100vh - 4rem);
+  flex-shrink: 0;
 }
 
-/* Dropdown Navigation */
-.subnav {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: white;
-  border: 1px solid var(--color-primary-200);
-  border-radius: 0.5rem;
-  box-shadow: var(--shadow-card);
-  min-width: 200px;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-10px);
-  transition: all 0.2s ease;
-  margin-top: 0.5rem;
+.sidebar-content {
+  padding: 2rem 0;
 }
 
-.nav-item:hover .subnav {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
+.sidebar-section {
+  margin-bottom: 2rem;
 }
 
-.subpage-link {
+.sidebar-heading {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+  margin: 0 1.5rem 0.5rem;
+}
+
+.sidebar-link {
+  color: var(--color-text-secondary);
   display: block;
-  padding: 0.5rem 1rem;
+  padding: 0.25rem 0;
+  transition: color 0.2s ease;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+  color: var(--color-indigo-600);
+}
+
+.sidebar-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-list li {
+  margin: 0;
+}
+
+.sidebar-sublink {
+  display: block;
+  padding: 0.5rem 1.5rem;
   color: var(--color-text-secondary);
   font-size: 0.875rem;
   transition: all 0.2s ease;
+  border-left: 2px solid transparent;
 }
 
-.subpage-link:hover {
-  background-color: var(--color-primary-50);
+.sidebar-sublink:hover {
   color: var(--color-primary-900);
+  background-color: rgba(0, 0, 0, 0.02);
+  border-left-color: var(--color-primary-300);
 }
+
+.sidebar-sublink.active {
+  color: var(--color-indigo-600);
+  background-color: rgba(79, 70, 229, 0.05);
+  border-left-color: var(--color-indigo-600);
+  font-weight: 500;
+}
+
+/* Main Content Area */
+.doc-main {
+  flex: 1;
+  background-color: white;
+  overflow-y: auto;
+}
+
+.doc-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
 
 /* Main Content */
 .page-content {
@@ -177,14 +229,6 @@ a:hover {
 }
 
 /* Documentation Styles */
-.doc {
-  background-color: white;
-  border-radius: 0.5rem;
-  box-shadow: var(--shadow-card);
-  padding: 2rem;
-  margin-bottom: 2rem;
-}
-
 .doc-header {
   border-bottom: 1px solid var(--color-primary-200);
   padding-bottom: 1.5rem;
@@ -193,6 +237,8 @@ a:hover {
 
 .doc-title {
   margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  font-weight: 700;
 }
 
 .doc-description {
@@ -203,6 +249,7 @@ a:hover {
 
 .doc-content {
   color: var(--color-text-secondary);
+  max-width: 100%;
 }
 
 .doc-content h2 {
@@ -336,21 +383,29 @@ a:hover {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .site-nav {
-    display: none;
+  .site-search .search-input {
+    width: 200px;
   }
   
   .wrapper {
     padding: 0 1rem;
   }
   
-  .doc {
-    padding: 1.5rem;
+  .docs-sidebar {
+    display: none;
+  }
+  
+  .doc-container {
+    padding: 2rem 1rem;
   }
   
   h1 { font-size: 2rem; }
   h2 { font-size: 1.5rem; }
   h3 { font-size: 1.25rem; }
+  
+  .doc-title {
+    font-size: 2rem;
+  }
 }
 
 /* Animation */
@@ -365,6 +420,6 @@ a:hover {
   }
 }
 
-.doc {
+.doc-main {
   animation: fadeIn 0.3s ease-in-out;
 }

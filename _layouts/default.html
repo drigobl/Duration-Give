@@ -16,20 +16,9 @@
         <img src="{{ "/assets/logo.svg" | relative_url }}" alt="Give Protocol Logo" style="height: 2rem; width: 2rem;">
         {{ site.title }}
       </a>
-      <nav class="site-nav">
-        {% for item in site.navigation %}
-          <div class="nav-item">
-            <a class="page-link" href="{{ item.url | relative_url }}">{{ item.title }}</a>
-            {% if item.subnav %}
-              <div class="subnav">
-                {% for subitem in item.subnav %}
-                  <a class="subpage-link" href="{{ subitem.url | relative_url }}">{{ subitem.title }}</a>
-                {% endfor %}
-              </div>
-            {% endif %}
-          </div>
-        {% endfor %}
-      </nav>
+      <div class="site-search">
+        <input type="search" class="search-input" placeholder="Search docs..." />
+      </div>
     </div>
   </header>
 
