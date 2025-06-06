@@ -13,7 +13,7 @@ from pathlib import Path
 class JekyllPreviewHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         # Map root to index.md content
-        if self.path == '/' or self.path == '':
+        if self.path in ('/', ''):
             self.path = '/index.html'
             self.serve_markdown('index.md')
             return
