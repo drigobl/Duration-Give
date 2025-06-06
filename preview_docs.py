@@ -25,6 +25,11 @@ class JekyllPreviewHandler(http.server.SimpleHTTPRequestHandler):
                 self.serve_markdown(md_path)
                 return
         
+        # Handle search.json
+        if self.path == '/search.json' or self.path == '/Duration-Give/search.json':
+            self.serve_search_json()
+            return
+        
         # Handle assets
         if self.path.startswith('/assets/'):
             super().do_GET()
@@ -121,6 +126,8 @@ class JekyllPreviewHandler(http.server.SimpleHTTPRequestHandler):
             <p>&copy; 2025 Give Protocol. All rights reserved.</p>
         </div>
     </footer>
+    
+    <script src="/assets/js/search.js"></script>
 </body>
 </html>'''
 
@@ -225,6 +232,41 @@ class JekyllPreviewHandler(http.server.SimpleHTTPRequestHandler):
             </div>
         </div>
     </nav>'''
+
+    def serve_search_json(self):
+        """Serve a mock search index for preview"""
+        search_data = [
+            {
+                "title": "Getting Started",
+                "url": "/docs/getting-started/",
+                "content": "Learn how to get started with Give Protocol. Set up your account, connect your wallet, and make your first donation.",
+                "excerpt": "Quick start guide for new users"
+            },
+            {
+                "title": "Creating Your Account",
+                "url": "/docs/getting-started/creating-account/",
+                "content": "Step by step guide to creating your Give Protocol account. Connect wallet, verify email, complete profile.",
+                "excerpt": "Account creation walkthrough"
+            },
+            {
+                "title": "For Donors",
+                "url": "/docs/user-guides/donors/",
+                "content": "Complete guide for donors. Learn how to find charities, make donations, track impact, and manage recurring giving.",
+                "excerpt": "Everything donors need to know"
+            },
+            {
+                "title": "Technical Documentation",
+                "url": "/docs/technical/",
+                "content": "Technical documentation for developers. API reference, smart contract details, supported cryptocurrencies.",
+                "excerpt": "Developer resources and technical details"
+            }
+        ]
+        
+        import json
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json')
+        self.end_headers()
+        self.wfile.write(json.dumps(search_data).encode())
 
 # Start server
 PORT = 4000
