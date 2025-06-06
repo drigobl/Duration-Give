@@ -1,5 +1,7 @@
 import { Logger } from '@/utils/logger';
 import { CHAIN_IDS } from '@/config/contracts';
+import type { EthereumProvider, AddEthereumChainParameter } from '@/types/ethereum';
+import { isEthereumError } from '@/types/ethereum';
 
 interface WalletProvider {
   name: string;
@@ -14,9 +16,9 @@ interface WalletProvider {
 class EVMWalletBase implements WalletProvider {
   name: string;
   icon: string;
-  protected provider: any;
+  protected provider: EthereumProvider | null;
 
-  constructor(name: string, icon: string, provider: any) {
+  constructor(name: string, icon: string, provider: EthereumProvider | null) {
     this.name = name;
     this.icon = icon;
     this.provider = provider;
@@ -28,7 +30,8 @@ class EVMWalletBase implements WalletProvider {
 
   async isConnected(address: string): Promise<boolean> {
     try {
-      const accounts = await this.provider.request({ method: 'eth_accounts' });
+      if (!this.provider) return false;
+      const accounts = await this.provider.request({ method: 'eth_accounts' }) as string[];
       return accounts?.includes(address) || false;
     } catch {
       return false;
@@ -37,9 +40,13 @@ class EVMWalletBase implements WalletProvider {
 
   async connect(): Promise<string> {
     try {
+      if (!this.provider) {
+        throw new Error('Wallet provider not found');
+      }
+      
       const accounts = await this.provider.request({
         method: 'eth_requestAccounts'
-      });
+      }) as string[];
 
       if (!accounts?.length) {
         throw new Error('No accounts found');
@@ -59,12 +66,16 @@ class EVMWalletBase implements WalletProvider {
 
   async switchChain(chainId: number): Promise<void> {
     try {
+      if (!this.provider) {
+        throw new Error('Wallet provider not found');
+      }
+      
       await this.provider.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: `0x${chainId.toString(16)}` }]
       });
-    } catch (error: any) {
-      if (error.code === 4902) {
+    } catch (error) {
+      if (isEthereumError(error) && error.code === 4902) {
         // Chain not added, add it
         await this.addChain(chainId);
       } else {
@@ -74,6 +85,10 @@ class EVMWalletBase implements WalletProvider {
   }
 
   protected async addChain(chainId: number): Promise<void> {
+    if (!this.provider) {
+      throw new Error('Wallet provider not found');
+    }
+    
     const chainParams = this.getChainParams(chainId);
     if (!chainParams) throw new Error('Unsupported chain');
 
@@ -83,7 +98,7 @@ class EVMWalletBase implements WalletProvider {
     });
   }
 
-  protected getChainParams(chainId: number) {
+  protected getChainParams(chainId: number): AddEthereumChainParameter | undefined {
     const chains = {
       [CHAIN_IDS.MOONBASE]: {
         chainId: `0x${CHAIN_IDS.MOONBASE.toString(16)}`,
@@ -174,11 +189,17 @@ class BraveWallet extends EVMWalletBase {
   }
 }
 
+interface PolkadotInjector {
+  signer: {
+    signPayload?: (payload: unknown) => Promise<unknown>;
+  };
+}
+
 class PolkadotWallet implements WalletProvider {
   name = 'Polkadot';
   icon = 'polkadot';
-  private injector: any = null;
-  private extensions: any[] = [];
+  private injector: PolkadotInjector | null = null;
+  private extensions: Array<{ name: string; version: string }> = [];
 
   async initialize() {
     // Polkadot.js extension functionality removed

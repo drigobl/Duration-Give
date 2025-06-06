@@ -45,7 +45,14 @@ export const Editor: React.FC<EditorProps> = ({
     return null;
   }
 
-  const MenuButton = ({ onClick, active, icon: Icon, title }: any) => (
+  interface MenuButtonProps {
+    onClick: () => void;
+    active?: boolean;
+    icon: React.ComponentType<{ className?: string }>;
+    title: string;
+  }
+
+  const MenuButton: React.FC<MenuButtonProps> = ({ onClick, active, icon: Icon, title }) => (
     <Button
       type="button"
       variant="secondary"
