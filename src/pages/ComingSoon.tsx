@@ -107,18 +107,21 @@ const ComingSoon: React.FC = () => {
             </div>
 
             {/* Features Preview */}
-            <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="p-6 bg-white/50 backdrop-blur-sm rounded-xl shadow-sm">
-                <h3 className="text-lg font-semibold mb-2">Transparent</h3>
-                <p className="text-gray-600">Track your impact with blockchain-verified donations</p>
-              </div>
-              <div className="p-6 bg-white/50 backdrop-blur-sm rounded-xl shadow-sm">
-                <h3 className="text-lg font-semibold mb-2">Efficient</h3>
-                <p className="text-gray-600">Smart contracts ensure funds reach their destination</p>
-              </div>
-              <div className="p-6 bg-white/50 backdrop-blur-sm rounded-xl shadow-sm">
-                <h3 className="text-lg font-semibold mb-2">Impactful</h3>
-                <p className="text-gray-600">Maximize your giving through innovative DeFi strategies</p>
+            <div className="mt-20">
+              <h2 className="sr-only">Key Features</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="p-6 bg-white/50 backdrop-blur-sm rounded-xl shadow-sm">
+                  <h3 className="text-lg font-semibold mb-2">Transparent</h3>
+                  <p className="text-gray-600">Track your impact with blockchain-verified donations</p>
+                </div>
+                <div className="p-6 bg-white/50 backdrop-blur-sm rounded-xl shadow-sm">
+                  <h3 className="text-lg font-semibold mb-2">Efficient</h3>
+                  <p className="text-gray-600">Smart contracts ensure funds reach their destination</p>
+                </div>
+                <div className="p-6 bg-white/50 backdrop-blur-sm rounded-xl shadow-sm">
+                  <h3 className="text-lg font-semibold mb-2">Impactful</h3>
+                  <p className="text-gray-600">Maximize your giving through innovative DeFi strategies</p>
+                </div>
               </div>
             </div>
           </div>
@@ -128,13 +131,25 @@ const ComingSoon: React.FC = () => {
         <footer className="py-12">
           <div className="flex flex-col items-center space-y-4">
             <div className="flex space-x-6">
-              <a href="https://giveprotocol.bsky.social" className="text-gray-400 hover:text-gray-600">
+              <a 
+                href="https://giveprotocol.bsky.social" 
+                className="text-gray-400 hover:text-gray-600"
+                aria-label="Follow Give Protocol on Bluesky"
+              >
                 <Bird className="h-6 w-6" />
               </a>
-              <a href="https://github.com/giveprotocol" className="text-gray-400 hover:text-gray-600">
+              <a 
+                href="https://github.com/giveprotocol" 
+                className="text-gray-400 hover:text-gray-600"
+                aria-label="View Give Protocol on GitHub"
+              >
                 <Github className="h-6 w-6" />
               </a>
-              <a href="https://discord.gg/giveprotocol" className="text-gray-400 hover:text-gray-600">
+              <a 
+                href="https://discord.gg/giveprotocol" 
+                className="text-gray-400 hover:text-gray-600"
+                aria-label="Join Give Protocol Discord community"
+              >
                 <Discord className="h-6 w-6" />
               </a>
             </div>
