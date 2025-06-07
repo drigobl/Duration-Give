@@ -102,8 +102,8 @@ const ClimateActionNow: React.FC = () => {
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Impact Highlights</h2>
             <ul className="space-y-2">
-              {charity.impact.map((item, index) => (
-                <li key={index} className="flex items-center text-gray-600">
+              {charity.impact.map((item) => (
+                <li key={item} className="flex items-center text-gray-600">
                   <span className="w-2 h-2 bg-green-500 rounded-full mr-3" />
                   {item}
                 </li>

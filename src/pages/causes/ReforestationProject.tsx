@@ -81,8 +81,8 @@ const ReforestationProject: React.FC = () => {
               <div>
                 <p className="text-sm text-gray-500">Key Partners</p>
                 <ul className="list-disc list-inside">
-                  {cause.partners.map((partner, index) => (
-                    <li key={index} className="text-gray-700">{partner}</li>
+                  {cause.partners.map((partner) => (
+                    <li key={partner} className="text-gray-700">{partner}</li>
                   ))}
                 </ul>
               </div>
@@ -93,8 +93,8 @@ const ReforestationProject: React.FC = () => {
         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Impact Highlights</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {cause.impact.map((item, index) => (
-              <div key={index} className="flex items-start">
+            {cause.impact.map((item) => (
+              <div key={item} className="flex items-start">
                 <span className="w-2 h-2 mt-2 bg-indigo-500 rounded-full mr-3" />
                 <p className="text-gray-700">{item}</p>
               </div>

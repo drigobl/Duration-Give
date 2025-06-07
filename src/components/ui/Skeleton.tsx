@@ -1,4 +1,3 @@
-```typescript
 import React from 'react';
 import { cn } from '@/utils/cn';
 
@@ -35,11 +34,17 @@ export const Skeleton: React.FC<SkeletonProps> = ({
     height: height,
   };
 
+  // Generate unique IDs for skeleton items to avoid using index as key
+  const skeletonItems = items.map((_, index) => ({
+    id: `skeleton-${Date.now()}-${index}`,
+    index
+  }));
+
   return (
     <>
-      {items.map((index) => (
+      {skeletonItems.map((item) => (
         <div
-          key={index}
+          key={item.id}
           className={cn(
             'bg-gray-200 rounded',
             getAnimationClass(),
@@ -52,4 +57,3 @@ export const Skeleton: React.FC<SkeletonProps> = ({
     </>
   );
 };
-```
