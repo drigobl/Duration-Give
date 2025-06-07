@@ -158,7 +158,9 @@ class DocumentationSearch {
   
   highlightText(text, query) {
     if (!text) return '';
-    const regex = new RegExp(`(${query})`, 'gi');
+    // Escape regex special characters in query
+    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escapedQuery})`, 'gi');
     return text.replace(regex, '<mark>$1</mark>');
   }
   
@@ -183,7 +185,7 @@ class DocumentationSearch {
     let index = -1;
     
     if (current) {
-      index = parseInt(current.dataset.index);
+      index = parseInt(current.dataset.index, 10);
       current.classList.remove('focused');
     }
     
