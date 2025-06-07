@@ -41,7 +41,7 @@ function App() {
           <AuthProvider>
             <SettingsProvider>
               <Web3Provider>
-                <BrowserRouter>
+                <BrowserRouter future={{ v7_startTransition: true }}>
                   <Layout>
                     <AppRoutes />
                   </Layout>

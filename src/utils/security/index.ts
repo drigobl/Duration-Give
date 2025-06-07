@@ -54,7 +54,7 @@ export class SecurityManager {
     return {
       'Content-Security-Policy': `
         default-src 'self';
-        script-src 'self' 'unsafe-inline' 'unsafe-eval' ${trustedDomainsList};
+        script-src 'self' 'unsafe-inline' ${trustedDomainsList};
         style-src 'self' 'unsafe-inline';
         img-src 'self' data: https: blob:;
         font-src 'self';
