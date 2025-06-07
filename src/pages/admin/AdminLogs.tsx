@@ -4,9 +4,44 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import { Search, AlertTriangle, Eye, Download, Trash, Filter, Calendar } from 'lucide-react';
+import { Search, AlertTriangle, Eye, Download, Trash, Filter, Calendar, XCircle } from 'lucide-react';
 import { formatDate } from '@/utils/date';
 import { Logger } from '@/utils/logger';
+
+interface AuditLogData {
+  [key: string]: unknown;
+}
+
+interface ProfileData extends AuditLogData {
+  id?: string;
+  user_id?: string;
+  email?: string;
+  type?: 'donor' | 'charity';
+  created_at?: string;
+  updated_at?: string;
+}
+
+interface DonationData extends AuditLogData {
+  id?: string;
+  donor_id?: string;
+  charity_id?: string;
+  amount?: number;
+  currency?: string;
+  transaction_hash?: string;
+  created_at?: string;
+}
+
+interface CharityData extends AuditLogData {
+  id?: string;
+  name?: string;
+  description?: string;
+  category?: string;
+  verified?: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+type TableSpecificData = ProfileData | DonationData | CharityData | AuditLogData;
 
 interface AuditLog {
   id: string;
@@ -14,8 +49,8 @@ interface AuditLog {
   action: string;
   table_name: string;
   record_id: string;
-  old_data: any;
-  new_data: any;
+  old_data: TableSpecificData | null;
+  new_data: TableSpecificData | null;
   ip_address: string | null;
   user_agent: string | null;
   created_at: string;
@@ -122,33 +157,68 @@ const AdminLogs: React.FC = () => {
     setIsViewModalOpen(true);
   };
 
+  const sanitizeCSVValue = (value: string | null | undefined): string => {
+    if (!value) return '';
+    // Escape quotes and remove potential formula injections
+    const sanitized = String(value)
+      .replace(/"/g, '""')
+      .replace(/^[@=+\-]/, "'$&"); // Prefix dangerous characters with single quote
+    return `"${sanitized}"`;
+  };
+
   const handleExport = () => {
     try {
-      // Convert logs to CSV
+      // Validate export permission (could be expanded with role checks)
+      if (filteredLogs.length === 0) {
+        setError('No logs to export');
+        return;
+      }
+      
+      if (filteredLogs.length > 10000) {
+        setError('Too many logs to export. Please apply filters to reduce the dataset.');
+        return;
+      }
+      
+      // Convert logs to CSV with proper sanitization
       const headers = ['ID', 'User', 'Action', 'Table', 'Record ID', 'IP Address', 'Date'];
       const csvContent = [
-        headers.join(','),
+        headers.map(h => sanitizeCSVValue(h)).join(','),
         ...filteredLogs.map(log => [
-          log.id,
-          log.user?.email || 'Anonymous',
-          log.action,
-          log.table_name,
-          log.record_id,
-          log.ip_address || 'Unknown',
-          formatDate(log.created_at, true)
+          sanitizeCSVValue(log.id),
+          sanitizeCSVValue(log.user?.email || 'Anonymous'),
+          sanitizeCSVValue(log.action),
+          sanitizeCSVValue(log.table_name),
+          sanitizeCSVValue(log.record_id),
+          sanitizeCSVValue(log.ip_address || 'Unknown'),
+          sanitizeCSVValue(formatDate(log.created_at, true))
         ].join(','))
       ].join('\n');
       
-      // Create download link
+      // Validate CSV content size
+      if (csvContent.length > 50 * 1024 * 1024) { // 50MB limit
+        setError('Export file too large. Please apply filters to reduce the dataset.');
+        return;
+      }
+      
+      // Create download link with secure filename
+      const filename = `audit_logs_${new Date().toISOString().split('T')[0]}.csv`;
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.setAttribute('href', url);
-      link.setAttribute('download', `audit_logs_${new Date().toISOString().split('T')[0]}.csv`);
+      link.setAttribute('download', filename);
       link.style.visibility = 'hidden';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      
+      // Clean up blob URL
+      setTimeout(() => URL.revokeObjectURL(url), 100);
+      
+      Logger.info('Admin logs exported successfully', { 
+        logCount: filteredLogs.length, 
+        filename 
+      });
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to export logs';
       setError(message);

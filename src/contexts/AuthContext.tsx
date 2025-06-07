@@ -4,6 +4,34 @@ import { supabase } from '@/lib/supabase';
 import { useToast } from './ToastContext';
 import { Logger } from '@/utils/logger';
 import { ENV } from '@/config/env';
+import { buildAppUrl, buildSecureUrl, getRedirectPath, safeRedirect } from '@/utils/navigation';
+
+interface DonorMetadata {
+  type: 'donor';
+  firstName?: string;
+  lastName?: string;
+  preferredCauses?: string[];
+  donationPreferences?: {
+    currency?: string;
+    defaultAmount?: number;
+    frequency?: 'one-time' | 'monthly' | 'quarterly' | 'yearly';
+  };
+}
+
+interface CharityMetadata {
+  type: 'charity';
+  organizationName?: string;
+  taxId?: string;
+  description?: string;
+  website?: string;
+  categories?: string[];
+  contactInfo?: {
+    phone?: string;
+    address?: string;
+  };
+}
+
+type UserMetadata = DonorMetadata | CharityMetadata;
 
 interface AuthState {
   user: User | null;
@@ -18,7 +46,7 @@ interface AuthContextType extends AuthState {
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   refreshSession: () => Promise<void>;
-  register: (email: string, password: string, type: 'donor' | 'charity', metadata?: any) => Promise<void>;
+  register: (email: string, password: string, type: 'donor' | 'charity', metadata?: Partial<UserMetadata>) => Promise<void>;
   sendUsernameReminder: (email: string) => Promise<void>;
 }
 
@@ -206,19 +234,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       }
 
-      // Determine redirect path based on user type
-      let redirectPath = '/give-dashboard'; // Default for donor
+      // Get secure redirect path and navigate safely
+      const redirectPath = getRedirectPath(accountType);
+      const redirectUrl = buildAppUrl(redirectPath);
       
-      if (accountType === 'charity') {
-        redirectPath = '/charity-portal';
-      }
-      
-      // Redirect based on domain and user type
-      if (ENV.APP_DOMAIN === 'localhost') {
-        window.location.href = `http://localhost:5173${redirectPath}`;
-      } else {
-        window.location.href = `https://app.${ENV.APP_DOMAIN}${redirectPath}`;
-      }
+      // Use secure redirect
+      window.location.href = redirectUrl;
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to sign in';
       showToast('error', 'Authentication Error', message);
@@ -287,12 +308,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         error: null
       });
       
-      // Redirect to main domain
-      if (ENV.APP_DOMAIN === 'localhost') {
-        window.location.href = 'http://localhost:5173';
-      } else {
-        window.location.href = `https://${ENV.APP_DOMAIN}`;
-      }
+      // Redirect to main domain safely
+      const mainUrl = buildSecureUrl('/');
+      window.location.href = mainUrl;
       
       showToast('success', 'Logged out successfully');
     } catch (err) {
@@ -336,25 +354,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const register = async (email: string, password: string, type: 'donor' | 'charity', metadata = {}) => {
+  const register = async (email: string, password: string, type: 'donor' | 'charity', metadata: Partial<UserMetadata> = { type }) => {
     try {
       setState(prev => ({ ...prev, loading: true, error: null }));
       
-      // Check if user already exists with a different account type
-      const { data: existingUser, error: checkError } = await supabase.auth.signInWithPassword({
-        email,
-        password: 'dummy-password-for-check' // This will fail if user doesn't exist, which is what we want
-      });
-      
-      // If login succeeded, the user exists with the provided password
-      if (existingUser?.user) {
-        const existingType = existingUser.user.user_metadata?.type;
-        if (existingType && existingType !== type) {
-          throw new Error(`This email is already registered as a ${existingType} account. Please use a different email.`);
-        }
-      }
-      
-      // If we get here, either the user doesn't exist or has the same account type
+      // Attempt registration - Supabase will handle duplicate email detection
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -374,6 +378,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           email,
           type
         });
+        
+        // Handle specific error cases
+        if (error.message.includes('already registered') || error.message.includes('User already registered')) {
+          throw new Error(`This email is already registered. Please use the login page or try a different email.`);
+        }
+        
         throw error;
       }
 
@@ -398,8 +408,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       showToast('success', 'Registration successful', 'Please check your email to verify your account');
       
-      // Redirect to the appropriate login page
-      window.location.href = `/login?type=${type}`;
+      // Redirect to the appropriate login page safely
+      safeRedirect(`/login?type=${type}`, '/login');
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to register';
       showToast('error', 'Registration Error', message);
