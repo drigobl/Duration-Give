@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { CharityCard } from './CharityCard';
 import { Charity } from '@/types/charity';
 import { cn } from '@/utils/cn';
@@ -50,14 +50,17 @@ export const CharityGrid: React.FC<CharityGridProps> = ({
     }
   ];
 
-  const filteredCharities = charities.filter(charity => {
-    const matchesSearch = charity.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         charity.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = !category || charity.category === category;
-    const matchesVerified = !verifiedOnly || charity.verified;
-    
-    return matchesSearch && matchesCategory && matchesVerified;
-  });
+  // Memoize filtered charities to prevent unnecessary recalculations
+  const filteredCharities = useMemo(() => {
+    return charities.filter(charity => {
+      const matchesSearch = charity.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           charity.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = !category || charity.category === category;
+      const matchesVerified = !verifiedOnly || charity.verified;
+      
+      return matchesSearch && matchesCategory && matchesVerified;
+    });
+  }, [charities, searchTerm, category, verifiedOnly]);
 
   if (filteredCharities.length === 0) {
     return (

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useMemo } from 'react';
 import { Search, X } from 'lucide-react';
 import { useDebounce } from '@/hooks/useDebounce';
 import { Button } from '@/components/ui/Button';
@@ -57,49 +57,77 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   });
   const [showFilters, setShowFilters] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
-  // Currently unused but may be needed for future search optimization
-  // const debouncedSearch = useDebounce(query, 300);
 
+  // Use debounced search to avoid excessive API calls
+  const debouncedQuery = useDebounce(query, 300);
+  
+  // Memoize search callback to prevent unnecessary re-renders
   const handleSearch = useCallback((searchQuery: string) => {
     setQuery(searchQuery);
-    onSearch(searchQuery, filters);
-  }, [filters, onSearch]);
+  }, []); // No dependencies - just updates local state
+
+  // Execute search only when debounced query or filters change
+  React.useEffect(() => {
+    onSearch(debouncedQuery, filters);
+  }, [debouncedQuery, filters, onSearch]);
 
   const handleFilterChange = useCallback((key: keyof SearchFilters, value: string) => {
-    const newFilters = { ...filters, [key]: value };
-    setFilters(newFilters);
-    onSearch(query, newFilters);
-  }, [filters, query, onSearch]);
+    setFilters(prev => ({ ...prev, [key]: value }));
+  }, []); // No dependencies - just updates local state
+
+  // Memoize country and category lookups
+  const countriesMap = useMemo(() => 
+    new Map(countries.map(c => [c.code, c])), 
+    [countries]
+  );
+  
+  const categoriesMap = useMemo(() => 
+    new Map(categories.map(c => [c.id, c])), 
+    [categories]
+  );
 
   const handleCountryChange = useCallback((countryCode: string) => {
-    const country = countries.find(c => c.code === countryCode);
+    const country = countriesMap.get(countryCode);
     if (country && onCountrySelect) {
       onCountrySelect(country);
     }
     handleFilterChange('country', countryCode);
-  }, [countries, handleFilterChange, onCountrySelect]);
+  }, [countriesMap, handleFilterChange, onCountrySelect]);
 
   const handleCategoryChange = useCallback((categoryId: string) => {
-    const category = categories.find(c => c.id === categoryId);
+    const category = categoriesMap.get(categoryId);
     if (category && onCategorySelect) {
       onCategorySelect(category);
     }
     handleFilterChange('category', categoryId);
-  }, [categories, handleFilterChange, onCategorySelect]);
+  }, [categoriesMap, handleFilterChange, onCategorySelect]);
 
-  const clearSearch = () => {
+  const clearSearch = useCallback(() => {
     setQuery('');
-    onSearch('', filters);
-  };
+  }, []);
 
-  const renderCountryOption = (country: Country) => {
-    const flagEmoji = country.flag || '';
-    return (
-      <option key={country.code} value={country.code}>
-        {flagEmoji && `${flagEmoji} `}{country.name}
+  // Memoize rendered country options
+  const countryOptions = useMemo(() => 
+    countries.map((country) => {
+      const flagEmoji = country.flag || '';
+      return (
+        <option key={country.code} value={country.code}>
+          {flagEmoji && `${flagEmoji} `}{country.name}
+        </option>
+      );
+    }), 
+    [countries]
+  );
+
+  // Memoize rendered category options
+  const categoryOptions = useMemo(() => 
+    categories.map((category) => (
+      <option key={category.id} value={category.id}>
+        {category.name}
       </option>
-    );
-  };
+    )), 
+    [categories]
+  );
 
   return (
     <div 
@@ -157,7 +185,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               >
                 <option value="">All Countries</option>
-                {countries.map(renderCountryOption)}
+                {countryOptions}
               </select>
             </div>
 
@@ -171,11 +199,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               >
                 <option value="">All Categories</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
+                {categoryOptions}
               </select>
             </div>
           </div>

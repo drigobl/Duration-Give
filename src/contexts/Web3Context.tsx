@@ -51,14 +51,37 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Handle chain changes
-  const handleChainChanged = useCallback((chainIdHex: string) => {
+  const handleChainChanged = useCallback(async (chainIdHex: string) => {
     const newChainId = parseInt(chainIdHex, 16);
-    setChainId(newChainId);
     Logger.info('Chain changed', { chainId: newChainId });
-
-    // Reload the page when chain changes to ensure all state is fresh
-    window.location.reload();
-  }, []);
+    
+    try {
+      // Update chain ID state
+      setChainId(newChainId);
+      
+      // If we have a provider, update it to reflect the new chain
+      if (provider && window.ethereum) {
+        const newProvider = new ethers.BrowserProvider(window.ethereum);
+        const network = await newProvider.getNetwork();
+        
+        // Verify the network matches what we expect
+        if (Number(network.chainId) === newChainId) {
+          setProvider(newProvider);
+          Logger.info('Provider updated for new chain', { chainId: newChainId });
+        } else {
+          Logger.warn('Network mismatch after chain change', { 
+            expected: newChainId, 
+            actual: Number(network.chainId) 
+          });
+        }
+      }
+    } catch (error) {
+      Logger.error('Failed to update provider after chain change', { error });
+      // Clear provider if we can't update it properly
+      setProvider(null);
+      setError(new Error('Failed to update connection after network change. Please reconnect your wallet.'));
+    }
+  }, [provider]);
 
   // Initialize provider and check for existing connection
   useEffect(() => {
@@ -212,12 +235,22 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
     }
 
     try {
+      setError(null); // Clear any previous errors
+      
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: `0x${targetChainId.toString(16)}` }]
       });
-      Logger.info('Switched network', { chainId: targetChainId });
+      
+      // The handleChainChanged callback will update our state
+      Logger.info('Network switch requested', { chainId: targetChainId });
+      
     } catch (error: any) {
+      // Handle user rejection
+      if (error.code === 4001) {
+        throw new Error('Network switch cancelled by user');
+      }
+      
       // If the chain hasn't been added to MetaMask
       if (error.code === 4902) {
         try {
@@ -225,14 +258,18 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
             method: 'wallet_addEthereumChain',
             params: [MOONBASE_CHAIN_INFO]
           });
-          Logger.info('Added Moonbase Alpha network');
-        } catch (addError) {
+          Logger.info('Added and switched to Moonbase Alpha network');
+        } catch (addError: any) {
           Logger.error('Failed to add network', { error: addError });
+          
+          if (addError.code === 4001) {
+            throw new Error('Network addition cancelled by user');
+          }
           throw new Error('Failed to add Moonbase Alpha network');
         }
       } else {
         Logger.error('Failed to switch network', { error });
-        throw error;
+        throw new Error(`Failed to switch network: ${error.message || 'Unknown error'}`);
       }
     }
   }, []);

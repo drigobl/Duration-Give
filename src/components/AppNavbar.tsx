@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Logo } from './Logo';
 import { ConnectButton } from './web3/ConnectButton';
@@ -15,37 +15,43 @@ export const AppNavbar: React.FC = () => {
   const { t } = useTranslation();
   const { userType } = useAuth();
   
-  // Check if current page should only show limited navigation
-  const isLimitedNavPage = ['/about', '/legal', '/privacy', '/governance'].includes(location.pathname);
+  // Memoize limited nav pages check
+  const isLimitedNavPage = useMemo(() => 
+    ['/about', '/legal', '/privacy', '/governance'].includes(location.pathname),
+    [location.pathname]
+  );
   
-  const isActive = (path: string) => 
-    location.pathname === path ? 'bg-primary-100 text-primary-900' : 'text-gray-700 hover:bg-primary-50';
+  // Memoize isActive function to prevent recreation on every render
+  const isActive = useCallback((path: string) => 
+    location.pathname === path ? 'bg-primary-100 text-primary-900' : 'text-gray-700 hover:bg-primary-50',
+    [location.pathname]
+  );
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen(prev => !prev);
+  }, []);
 
   // Close menu when route changes
   useEffect(() => {
     setIsMenuOpen(false);
   }, [location]);
 
-  // Handle keyboard navigation
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  // Memoize keyboard navigation handler
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
       setIsMenuOpen(false);
     }
-  };
+  }, []);
 
-  // Handle dashboard navigation based on user type
-  const handleDashboardClick = (e: React.MouseEvent) => {
+  // Memoize dashboard navigation handler
+  const handleDashboardClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     if (userType === 'charity') {
       navigate('/charity-portal');
     } else {
       navigate('/give-dashboard');
     }
-  };
+  }, [userType, navigate]);
 
   return (
     <nav 

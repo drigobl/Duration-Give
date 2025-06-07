@@ -42,8 +42,8 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
     certifications: '',
     interests: '',
     references: [
-      { name: '', contact: '' },
-      { name: '', contact: '' }
+      { id: 'ref-1', name: '', contact: '' },
+      { id: 'ref-2', name: '', contact: '' }
     ],
     workSamples: ''
   });
@@ -149,7 +149,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
           skills: formData.skills.split(',').map(s => s.trim()).filter(Boolean),
           certifications: formData.certifications.split(',').map(c => c.trim()).filter(Boolean),
           interests: formData.interests.split(',').map(i => i.trim()).filter(Boolean),
-          reference_contacts: formData.references,
+          reference_contacts: formData.references.map(ref => ({ name: ref.name, contact: ref.contact })),
           work_samples: formData.workSamples.split(',').map(w => w.trim()).filter(Boolean)
         });
 
@@ -347,7 +347,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-gray-900">References</h3>
               {formData.references.map((ref, index) => (
-                <div key={`ref-${index}-${ref.name}-${ref.contact}`} className="space-y-2">
+                <div key={ref.id} className="space-y-2">
                   <Input
                     label={`Reference ${index + 1} Name`}
                     value={ref.name}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Charity } from '@/types/charity';
 import { ImageWithFallback } from '@/components/ui/ImageWithFallback';
@@ -8,14 +8,14 @@ interface CharityCardProps {
   charity: Charity;
 }
 
-export const CharityCard: React.FC<CharityCardProps> = ({ charity }) => {
-  // Convert charity name to URL-friendly slug
-  const getCharitySlug = (name: string) => {
-    return name.toLowerCase().replace(/\s+/g, '-');
-  };
+export const CharityCard: React.FC<CharityCardProps> = React.memo(({ charity }) => {
+  // Memoize charity slug to prevent recalculation
+  const charitySlug = useMemo(() => {
+    return charity.name.toLowerCase().replace(/\s+/g, '-');
+  }, [charity.name]);
 
   return (
-    <Link to={`/charity/${getCharitySlug(charity.name)}`}>
+    <Link to={`/charity/${charitySlug}`}>
       <Card className="overflow-hidden transition-transform hover:scale-[1.02]">
         <ImageWithFallback
           src={charity.image}
@@ -38,4 +38,4 @@ export const CharityCard: React.FC<CharityCardProps> = ({ charity }) => {
       </Card>
     </Link>
   );
-};
+});
