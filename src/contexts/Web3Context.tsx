@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState, useCallback, useEffect } fr
 import { ethers } from 'ethers';
 import { Logger } from '@/utils/logger';
 import { CHAIN_IDS } from '@/config/contracts';
+import { useWallet } from '@/hooks/useWallet';
+import type { EthereumProvider } from '@/types/ethereum';
 
 interface Web3ContextType {
   provider: ethers.Provider | null;
@@ -9,10 +11,12 @@ interface Web3ContextType {
   chainId: number | null;
   isConnected: boolean;
   isConnecting: boolean;
-  connect: () => Promise<void>;
+  connectedWallet: string | null;
+  connect: (walletName?: string) => Promise<void>;
   disconnect: () => Promise<void>;
   error: Error | null;
   switchChain: (chainId: number) => Promise<void>;
+  availableWallets: Array<{ name: string; icon: string; installed: boolean }>;
 }
 
 const Web3Context = createContext<Web3ContextType | undefined>(undefined);
@@ -35,6 +39,24 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
   const [chainId, setChainId] = useState<number | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+  const [connectedWallet, setConnectedWallet] = useState<string | null>(null);
+  const [currentWalletProvider, setCurrentWalletProvider] = useState<EthereumProvider | null>(null);
+
+  const { getInstalledWallets, getWalletByName, getAllWallets } = useWallet();
+
+  // Get available wallets for UI - with error handling
+  const availableWallets = React.useMemo(() => {
+    try {
+      return getAllWallets().map(wallet => ({
+        name: wallet.name,
+        icon: wallet.icon,
+        installed: wallet.isInstalled()
+      }));
+    } catch (error) {
+      Logger.error('Failed to get available wallets', { error });
+      return [];
+    }
+  }, [getAllWallets]);
 
   // Handle account changes
   const handleAccountsChanged = useCallback((accounts: string[]) => {
@@ -43,6 +65,8 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
       setAddress(null);
       setProvider(null);
       setChainId(null);
+      setConnectedWallet(null);
+      setCurrentWalletProvider(null);
       Logger.info('Wallet disconnected');
     } else {
       setAddress(accounts[0]);
@@ -60,8 +84,8 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
       setChainId(newChainId);
       
       // If we have a provider, update it to reflect the new chain
-      if (provider && window.ethereum) {
-        const newProvider = new ethers.BrowserProvider(window.ethereum);
+      if (provider && currentWalletProvider) {
+        const newProvider = new ethers.BrowserProvider(currentWalletProvider);
         const network = await newProvider.getNetwork();
         
         // Verify the network matches what we expect
@@ -81,90 +105,129 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
       setProvider(null);
       setError(new Error('Failed to update connection after network change. Please reconnect your wallet.'));
     }
-  }, [provider]);
+  }, [provider, currentWalletProvider]);
+
+  // Handle disconnect
+  const handleDisconnect = useCallback(() => {
+    setProvider(null);
+    setAddress(null);
+    setChainId(null);
+    setConnectedWallet(null);
+    setCurrentWalletProvider(null);
+    Logger.info('Wallet disconnected via event');
+  }, []);
 
   // Initialize provider and check for existing connection
   useEffect(() => {
     const initProvider = async () => {
-      if (typeof window.ethereum !== 'undefined') {
+      // Check if we have a previously connected wallet stored
+      const storedWallet = localStorage.getItem('connectedWallet');
+      if (storedWallet) {
         try {
-          // Check if already connected
-          const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-          if (accounts.length > 0) {
-            const provider = new ethers.BrowserProvider(window.ethereum);
-            const network = await provider.getNetwork();
-            
-            setProvider(provider);
-            setAddress(accounts[0]);
-            setChainId(Number(network.chainId));
-            Logger.info('Restored existing connection', { 
-              address: accounts[0],
-              chainId: network.chainId 
-            });
+          const wallet = getWalletByName(storedWallet);
+          if (wallet && wallet.isInstalled()) {
+            const walletProvider = wallet.getProvider?.();
+            if (walletProvider) {
+              // Check if already connected
+              const accounts = await walletProvider.request({ method: 'eth_accounts' }) as string[];
+              if (accounts.length > 0) {
+                const ethersProvider = new ethers.BrowserProvider(walletProvider);
+                const network = await ethersProvider.getNetwork();
+                
+                setProvider(ethersProvider);
+                setAddress(accounts[0]);
+                setChainId(Number(network.chainId));
+                setConnectedWallet(storedWallet);
+                setCurrentWalletProvider(walletProvider);
+                
+                Logger.info('Restored existing connection', { 
+                  wallet: storedWallet,
+                  address: accounts[0],
+                  chainId: network.chainId 
+                });
+              }
+            }
           }
         } catch (err) {
-          Logger.error('Failed to restore connection', { error: err });
+          Logger.error('Failed to restore connection', { error: err, wallet: storedWallet });
+          localStorage.removeItem('connectedWallet'); // Clean up invalid stored wallet
         }
       }
     };
 
     initProvider();
-  }, []);
+  }, [getWalletByName]);
 
-  // Set up event listeners
+  // Set up event listeners for the current wallet provider
   useEffect(() => {
-    if (typeof window.ethereum !== 'undefined') {
-      window.ethereum.on('accountsChanged', handleAccountsChanged);
-      window.ethereum.on('chainChanged', handleChainChanged);
-      window.ethereum.on('disconnect', () => {
-        setProvider(null);
-        setAddress(null);
-        setChainId(null);
-      });
+    if (currentWalletProvider) {
+      // Set up event listeners for the specific provider
+      if (currentWalletProvider.on) {
+        currentWalletProvider.on('accountsChanged', handleAccountsChanged);
+        currentWalletProvider.on('chainChanged', handleChainChanged);
+        currentWalletProvider.on('disconnect', handleDisconnect);
+      }
 
       return () => {
-        if (window.ethereum?.removeListener) {
-          window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
-          window.ethereum.removeListener('chainChanged', handleChainChanged);
-          window.ethereum.removeListener('disconnect', () => {});
+        if (currentWalletProvider.removeListener) {
+          currentWalletProvider.removeListener('accountsChanged', handleAccountsChanged);
+          currentWalletProvider.removeListener('chainChanged', handleChainChanged);
+          currentWalletProvider.removeListener('disconnect', handleDisconnect);
         }
       };
     }
-  }, [handleAccountsChanged, handleChainChanged]);
+  }, [currentWalletProvider, handleAccountsChanged, handleChainChanged, handleDisconnect]);
 
-  const connect = useCallback(async () => {
-    if (typeof window.ethereum === 'undefined') {
-      const error = new Error('Please install MetaMask to connect');
-      Logger.error('MetaMask not found', { error });
-      setError(error);
-      throw error;
-    }
-
+  const connect = useCallback(async (walletName?: string) => {
     try {
       setIsConnecting(true);
       setError(null);
 
-      // Request account access
-      const accounts = await window.ethereum.request({ 
-        method: 'eth_requestAccounts' 
-      });
+      // If no wallet name provided, try to use MetaMask as default
+      const targetWalletName = walletName || 'MetaMask';
+      const wallet = getWalletByName(targetWalletName);
 
-      if (!accounts || accounts.length === 0) {
-        throw new Error('No accounts found');
+      if (!wallet) {
+        throw new Error(`Wallet "${targetWalletName}" not found`);
+      }
+
+      if (!wallet.isInstalled()) {
+        throw new Error(`${targetWalletName} is not installed. Please install it to continue.`);
+      }
+
+      // Connect to the wallet
+      const account = await wallet.connect();
+      
+      // Get the wallet's provider
+      const walletProvider = wallet.getProvider?.();
+      if (!walletProvider) {
+        throw new Error(`Failed to get provider for ${targetWalletName}`);
       }
 
       // Create Web3 provider
-      const provider = new ethers.BrowserProvider(window.ethereum);
+      let ethersProvider: ethers.Provider;
+      
+      if (targetWalletName === 'WalletConnect') {
+        // WalletConnect provides its own ethers provider
+        ethersProvider = (wallet as any).walletConnect?.getEthersProvider();
+        if (!ethersProvider) {
+          throw new Error('Failed to get WalletConnect ethers provider');
+        }
+      } else {
+        // Regular EVM wallet
+        ethersProvider = new ethers.BrowserProvider(walletProvider);
+      }
       
       // Get connected chain ID
-      const network = await provider.getNetwork();
+      const network = await ethersProvider.getNetwork();
       const currentChainId = Number(network.chainId);
 
       // Set provider first so it's available for chain switching
-      setProvider(provider);
+      setProvider(ethersProvider);
+      setCurrentWalletProvider(walletProvider);
       
-      // Switch to Moonbase Alpha if on wrong network
-      if (currentChainId !== CHAIN_IDS.MOONBASE) {
+      // Switch to Moonbase Alpha if on wrong network (skip for WalletConnect as it might not support this)
+      if (currentChainId !== CHAIN_IDS.MOONBASE && targetWalletName !== 'WalletConnect') {
         try {
           await switchChain(CHAIN_IDS.MOONBASE);
         } catch (switchError: any) {
@@ -178,14 +241,19 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
       }
 
       // Get chain ID again in case it changed
-      const finalNetwork = await provider.getNetwork();
+      const finalNetwork = await ethersProvider.getNetwork();
       setChainId(Number(finalNetwork.chainId));
       
-      // Set connected account
-      setAddress(accounts[0]);
+      // Set connected account and wallet
+      setAddress(account);
+      setConnectedWallet(targetWalletName);
+
+      // Store the connected wallet for reconnection
+      localStorage.setItem('connectedWallet', targetWalletName);
 
       Logger.info('Wallet connected successfully', {
-        address: accounts[0],
+        wallet: targetWalletName,
+        address: account,
         chainId: Number(finalNetwork.chainId)
       });
 
@@ -200,26 +268,34 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
       // Handle other errors
       const message = err?.message || 'Failed to connect wallet';
       const error = new Error(message);
-      Logger.error('Wallet connection failed', { error });
+      Logger.error('Wallet connection failed', { error, walletName });
       setError(error);
       throw error;
     } finally {
       setIsConnecting(false);
     }
-  }, []);
+  }, [getWalletByName]);
 
   const disconnect = useCallback(async () => {
     try {
+      // Disconnect from the current wallet if it supports it
+      if (connectedWallet) {
+        const wallet = getWalletByName(connectedWallet);
+        if (wallet) {
+          await wallet.disconnect();
+        }
+      }
+
       // Clear state
       setProvider(null);
       setAddress(null);
       setChainId(null);
       setError(null);
+      setConnectedWallet(null);
+      setCurrentWalletProvider(null);
       
-      // If provider has a disconnect method, call it
-      if (window.ethereum && typeof window.ethereum.disconnect === 'function') {
-        await window.ethereum.disconnect();
-      }
+      // Clear stored wallet
+      localStorage.removeItem('connectedWallet');
       
       Logger.info('Wallet disconnected');
       return true;
@@ -227,52 +303,30 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
       Logger.error('Error disconnecting wallet', { error: err });
       return false;
     }
-  }, []);
+  }, [connectedWallet, getWalletByName]);
 
   const switchChain = useCallback(async (targetChainId: number) => {
-    if (typeof window.ethereum === 'undefined') {
-      throw new Error('Please install MetaMask to switch networks');
+    if (!connectedWallet) {
+      throw new Error('No wallet connected');
+    }
+
+    const wallet = getWalletByName(connectedWallet);
+    if (!wallet) {
+      throw new Error('Connected wallet not found');
     }
 
     try {
       setError(null); // Clear any previous errors
-      
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: `0x${targetChainId.toString(16)}` }]
-      });
+      await wallet.switchChain(targetChainId);
       
       // The handleChainChanged callback will update our state
-      Logger.info('Network switch requested', { chainId: targetChainId });
+      Logger.info('Network switch requested', { chainId: targetChainId, wallet: connectedWallet });
       
     } catch (error: any) {
-      // Handle user rejection
-      if (error.code === 4001) {
-        throw new Error('Network switch cancelled by user');
-      }
-      
-      // If the chain hasn't been added to MetaMask
-      if (error.code === 4902) {
-        try {
-          await window.ethereum.request({
-            method: 'wallet_addEthereumChain',
-            params: [MOONBASE_CHAIN_INFO]
-          });
-          Logger.info('Added and switched to Moonbase Alpha network');
-        } catch (addError: any) {
-          Logger.error('Failed to add network', { error: addError });
-          
-          if (addError.code === 4001) {
-            throw new Error('Network addition cancelled by user');
-          }
-          throw new Error('Failed to add Moonbase Alpha network');
-        }
-      } else {
-        Logger.error('Failed to switch network', { error });
-        throw new Error(`Failed to switch network: ${error.message || 'Unknown error'}`);
-      }
+      Logger.error('Failed to switch network', { error, wallet: connectedWallet });
+      throw error;
     }
-  }, []);
+  }, [connectedWallet, getWalletByName]);
 
   return (
     <Web3Context.Provider
@@ -282,10 +336,12 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
         chainId,
         isConnected: !!address,
         isConnecting,
+        connectedWallet,
         connect,
         disconnect,
         error,
-        switchChain
+        switchChain,
+        availableWallets
       }}
     >
       {children}

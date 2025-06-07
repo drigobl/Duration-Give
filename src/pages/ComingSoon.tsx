@@ -19,20 +19,8 @@ const ComingSoon: React.FC = () => {
 
     setStatus('loading');
     try {
-      // Call the MailChimp API endpoint
-      const response = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to subscribe');
-      }
+      // Simulate API call for now
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       setStatus('success');
       setEmail('');

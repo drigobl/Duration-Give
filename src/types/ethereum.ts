@@ -3,8 +3,10 @@
 export interface EthereumProvider {
   isMetaMask?: boolean;
   isCoinbaseWallet?: boolean;
-  isTally?: boolean;
-  isBraveWallet?: boolean;
+  isSubWallet?: boolean;
+  isTalisman?: boolean;
+  isNovaWallet?: boolean;
+  isRabby?: boolean;
   request: (args: RequestArguments) => Promise<unknown>;
   on?: (eventName: string, handler: (...args: unknown[]) => void) => void;
   removeListener?: (eventName: string, handler: (...args: unknown[]) => void) => void;
@@ -50,5 +52,9 @@ export function isEthereumError(error: unknown): error is EthereumError {
 declare global {
   interface Window {
     ethereum?: EthereumProvider;
+    SubWallet?: EthereumProvider;
+    talismanEth?: EthereumProvider;
+    novaWallet?: EthereumProvider;
+    rabby?: EthereumProvider;
   }
 }

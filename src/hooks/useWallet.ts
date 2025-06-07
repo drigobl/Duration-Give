@@ -2,6 +2,9 @@ import { Logger } from '@/utils/logger';
 import { CHAIN_IDS } from '@/config/contracts';
 import type { EthereumProvider, AddEthereumChainParameter } from '@/types/ethereum';
 import { isEthereumError } from '@/types/ethereum';
+import { detectInstalledWallets, getWalletProvider, type WalletInfo } from '@/utils/walletDetection';
+import { WalletConnectManager, getDefaultWalletConnectConfig } from '@/utils/walletConnect';
+import { ethers } from 'ethers';
 
 interface WalletProvider {
   name: string;
@@ -11,6 +14,7 @@ interface WalletProvider {
   connect: () => Promise<string>;
   disconnect: () => Promise<void>;
   switchChain: (chainId: number | string) => Promise<void>;
+  getProvider?: () => EthereumProvider | null;
 }
 
 class EVMWalletBase implements WalletProvider {
@@ -28,6 +32,10 @@ class EVMWalletBase implements WalletProvider {
     return !!this.provider;
   }
 
+  getProvider(): EthereumProvider | null {
+    return this.provider;
+  }
+
   async isConnected(address: string): Promise<boolean> {
     try {
       if (!this.provider) return false;
@@ -41,7 +49,7 @@ class EVMWalletBase implements WalletProvider {
   async connect(): Promise<string> {
     try {
       if (!this.provider) {
-        throw new Error('Wallet provider not found');
+        throw new Error(`${this.name} is not installed. Please install the ${this.name} extension.`);
       }
       
       const accounts = await this.provider.request({
@@ -52,6 +60,7 @@ class EVMWalletBase implements WalletProvider {
         throw new Error('No accounts found');
       }
 
+      Logger.info(`${this.name} connected successfully`, { address: accounts[0] });
       return accounts[0];
     } catch (error) {
       Logger.error(`${this.name} connection failed`, { error });
@@ -67,7 +76,7 @@ class EVMWalletBase implements WalletProvider {
   async switchChain(chainId: number): Promise<void> {
     try {
       if (!this.provider) {
-        throw new Error('Wallet provider not found');
+        throw new Error(`${this.name} provider not found`);
       }
       
       await this.provider.request({
@@ -86,7 +95,7 @@ class EVMWalletBase implements WalletProvider {
 
   protected async addChain(chainId: number): Promise<void> {
     if (!this.provider) {
-      throw new Error('Wallet provider not found');
+      throw new Error(`${this.name} provider not found`);
     }
     
     const chainParams = this.getChainParams(chainId);
@@ -149,98 +158,127 @@ class EVMWalletBase implements WalletProvider {
   }
 }
 
+// Individual wallet implementations
 class MetaMaskWallet extends EVMWalletBase {
   constructor() {
-    super('MetaMask', 'metamask', window.ethereum?.isMetaMask ? window.ethereum : null);
+    super('MetaMask', 'metamask', getWalletProvider('MetaMask'));
   }
+}
 
-  isInstalled(): boolean {
-    return typeof window.ethereum?.isMetaMask !== 'undefined';
+class SubWallet extends EVMWalletBase {
+  constructor() {
+    super('SubWallet', 'subwallet', getWalletProvider('SubWallet'));
+  }
+}
+
+class TalismanWallet extends EVMWalletBase {
+  constructor() {
+    super('Talisman', 'talisman', getWalletProvider('Talisman'));
+  }
+}
+
+class NovaWallet extends EVMWalletBase {
+  constructor() {
+    super('Nova Wallet', 'nova', getWalletProvider('Nova Wallet'));
   }
 }
 
 class CoinbaseWallet extends EVMWalletBase {
   constructor() {
-    super('Coinbase Wallet', 'coinbase', window.ethereum?.isCoinbaseWallet ? window.ethereum : null);
-  }
-
-  isInstalled(): boolean {
-    return typeof window.ethereum?.isCoinbaseWallet !== 'undefined';
+    super('Coinbase Wallet', 'coinbase', getWalletProvider('Coinbase Wallet'));
   }
 }
 
-class TallyWallet extends EVMWalletBase {
+class RabbyWallet extends EVMWalletBase {
   constructor() {
-    super('Tally', 'tally', window.ethereum?.isTally ? window.ethereum : null);
-  }
-
-  isInstalled(): boolean {
-    return typeof window.ethereum?.isTally !== 'undefined';
+    super('Rabby', 'rabby', getWalletProvider('Rabby'));
   }
 }
 
-class BraveWallet extends EVMWalletBase {
+
+// WalletConnect implementation
+class WalletConnectWallet implements WalletProvider {
+  name = 'WalletConnect';
+  icon = 'walletconnect';
+  private walletConnect: WalletConnectManager | null = null;
+
   constructor() {
-    super('Brave', 'brave', window.ethereum?.isBraveWallet ? window.ethereum : null);
+    this.walletConnect = new WalletConnectManager(getDefaultWalletConnectConfig());
   }
 
   isInstalled(): boolean {
-    return typeof window.ethereum?.isBraveWallet !== 'undefined';
-  }
-}
-
-interface PolkadotInjector {
-  signer: {
-    signPayload?: (payload: unknown) => Promise<unknown>;
-  };
-}
-
-class PolkadotWallet implements WalletProvider {
-  name = 'Polkadot';
-  icon = 'polkadot';
-  private injector: PolkadotInjector | null = null;
-  private extensions: Array<{ name: string; version: string }> = [];
-
-  async initialize() {
-    // Polkadot.js extension functionality removed
-  }
-
-  isInstalled(): boolean {
-    return false;
+    // WalletConnect is always "available" as it's a protocol
+    return true;
   }
 
   async isConnected(address: string): Promise<boolean> {
-    return false;
+    return this.walletConnect?.isConnected() || false;
   }
 
   async connect(): Promise<string> {
-    throw new Error('Polkadot wallet connection not implemented');
+    try {
+      if (!this.walletConnect) {
+        throw new Error('WalletConnect not initialized');
+      }
+
+      const { address } = await this.walletConnect.connect();
+      return address;
+    } catch (error) {
+      Logger.error('WalletConnect connection failed', { error });
+      throw error;
+    }
   }
 
   async disconnect(): Promise<void> {
-    return Promise.resolve();
+    if (this.walletConnect) {
+      await this.walletConnect.disconnect();
+    }
   }
 
-  async switchChain(chainId: string): Promise<void> {
-    Logger.info('Chain switch requested', { chain: chainId });
+  async switchChain(chainId: number): Promise<void> {
+    if (!this.walletConnect) {
+      throw new Error('WalletConnect not initialized');
+    }
+    await this.walletConnect.switchChain(chainId);
+  }
+
+  getProvider(): EthereumProvider | null {
+    return this.walletConnect?.getProvider() as EthereumProvider | null;
   }
 }
 
 export function useWallet() {
-  const wallets: WalletProvider[] = [
-    new MetaMaskWallet(),
-    new CoinbaseWallet(),
-    new TallyWallet(),
-    new BraveWallet(),
-    new PolkadotWallet()
-  ];
+  // Get all possible wallets
+  const getAllWallets = (): WalletProvider[] => {
+    return [
+      new MetaMaskWallet(),
+      new SubWallet(),
+      new TalismanWallet(),
+      new NovaWallet(),
+      new CoinbaseWallet(),
+      new RabbyWallet()
+    ];
+  };
 
-  const getInstalledWallets = () => {
-    return wallets.filter(wallet => wallet.isInstalled());
+  const getInstalledWallets = (): WalletProvider[] => {
+    return getAllWallets().filter(wallet => wallet.isInstalled());
+  };
+
+  const getWalletByName = (name: string): WalletProvider | undefined => {
+    return getAllWallets().find(wallet => wallet.name === name);
+  };
+
+  // Get detected wallet information for UI
+  const getDetectedWallets = (): WalletInfo[] => {
+    return detectInstalledWallets();
   };
 
   return {
+    getAllWallets,
     getInstalledWallets,
-    wallets
+    getWalletByName,
+    getDetectedWallets,
+    // Legacy support
+    wallets: getAllWallets()
   };
 }

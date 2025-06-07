@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => ({
   define: {
     global: 'globalThis',
     'process.env': {},
+    Buffer: ['buffer', 'Buffer'],
   },
   build: {
     target: 'es2020',
@@ -61,7 +62,10 @@ export default defineConfig(({ mode }) => ({
   server: {
     port: 5173,
     strictPort: true,
-    host: true
+    host: true,
+    headers: {
+      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; connect-src 'self' wss: https:;"
+    }
   },
   preview: {
     port: 4173,

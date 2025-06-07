@@ -2,6 +2,7 @@
     "name": "duration-charity-platform",
     "private": true,
     "version": "0.0.0",
+    "type": "module",
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build",
@@ -30,6 +31,8 @@
         "@tiptap/pm": "^2.2.4",
         "@tiptap/react": "^2.2.4",
         "@tiptap/starter-kit": "^2.2.4",
+        "@walletconnect/modal": "^2.7.0",
+        "@walletconnect/web3-provider": "^1.8.0",
         "buffer": "^6.0.3",
         "clsx": "^2.1.0",
         "compression": "^1.7.4",

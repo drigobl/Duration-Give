@@ -1,9 +1,15 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { Buffer } from 'buffer';
 import App from './App';
 import './index.css';
 import './i18n';
 import { initSentry } from './lib/sentry';
+
+// Set up Buffer polyfill for Web3 libraries
+if (typeof window !== 'undefined') {
+  window.Buffer = Buffer;
+}
 
   // Initialize Sentry before rendering
   initSentry();
