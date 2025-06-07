@@ -323,7 +323,7 @@ export const GiveDashboard: React.FC = () => {
               {filteredContributions.map((contribution) => (
                 <tr key={contribution.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {formatDate(contribution.timestamp, true)}
+                    {formatDate(contribution.timestamp, true, true)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {t(`contribution.type.${contribution.purpose.toLowerCase().replace(' ', '')}`, contribution.purpose)}
