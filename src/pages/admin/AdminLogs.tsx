@@ -326,7 +326,7 @@ const AdminLogs: React.FC = () => {
             <thead className="bg-gray-50">
               <tr>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Date
+                  Date (UTC)
                 </th>
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   User
@@ -349,8 +349,7 @@ const AdminLogs: React.FC = () => {
               {filteredLogs.map((log) => (
                 <tr key={log.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{formatDate(log.created_at)}</div>
-                    <div className="text-xs text-gray-500">{new Date(log.created_at).toLocaleTimeString()}</div>
+                    <div className="text-sm text-gray-900">{formatDate(log.created_at, true, true)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">{log.user?.email || 'Anonymous'}</div>
