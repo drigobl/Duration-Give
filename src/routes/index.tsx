@@ -30,7 +30,6 @@ const CharityPortal = lazy(() => import('@/pages/CharityPortal').then(m => ({ de
 const CreateOpportunity = lazy(() => import('@/pages/charity/CreateOpportunity'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 const VerifyContribution = lazy(() => import('@/pages/volunteer/VerifyContribution'));
-const ScheduledDonationsPage = lazy(() => import('@/pages/donor/ScheduledDonationsPage'));
 
 // Admin routes
 const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
@@ -207,19 +206,6 @@ export function AppRoutes() {
           }
         />
 
-        {/* Donor Routes */}
-        <Route
-          path="/scheduled-donations"
-          element={
-            <ProtectedRoute requiredRoles={['donor']}>
-              <RouteTransition>
-                <Suspense fallback={<LoadingFallback />}>
-                  <ScheduledDonationsPage />
-                </Suspense>
-              </RouteTransition>
-            </ProtectedRoute>
-          }
-        />
 
         {/* Other Routes */}
         <Route

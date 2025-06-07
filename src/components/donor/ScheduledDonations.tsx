@@ -115,34 +115,61 @@ export const ScheduledDonations: React.FC = () => {
             </Button>
           </div>
         </div>
-        <div className="divide-y divide-gray-200">
-          {schedules.map((schedule) => (
-            <div key={schedule.id} className="p-6">
-              <div className="flex flex-col md:flex-row md:justify-between md:items-start">
-                <div>
-                  <div className="flex items-center mb-2">
-                    <Calendar className="h-5 w-5 text-indigo-500 mr-2" />
-                    <h3 className="text-lg font-medium text-gray-900">Monthly Donation to {schedule.charity.substring(0, 6)}...{schedule.charity.substring(38)}</h3>
-                  </div>
-                  <div className="space-y-1 text-sm text-gray-500">
-                    <p>Total Amount: {schedule.totalAmount} tokens</p>
-                    <p>Monthly Payment: {schedule.amountPerMonth} tokens</p>
-                    <p>Months Remaining: {schedule.monthsRemaining} of 12</p>
-                    <p>Next Distribution: {formatDate(schedule.nextDistribution.toISOString())}</p>
-                  </div>
-                </div>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => handleCancelClick(schedule)}
-                  disabled={loading}
-                  className="mt-4 md:mt-0"
-                >
-                  Cancel Schedule
-                </Button>
-              </div>
-            </div>
-          ))}
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Transaction Date
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Recipient
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Amount
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Remaining Distributions
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {schedules.map((schedule) => (
+                <tr key={schedule.id}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {formatDate(schedule.nextDistribution.toISOString(), true, true)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <span className="font-mono text-xs">
+                      {schedule.charity.substring(0, 6)}...{schedule.charity.substring(38)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {schedule.amountPerMonth} {schedule.token}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <div className="flex items-center">
+                      <span className="font-medium">{schedule.monthsRemaining}</span>
+                      <span className="text-gray-500 ml-1">of 12</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => handleCancelClick(schedule)}
+                      disabled={loading}
+                    >
+                      Cancel
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </Card>
 
