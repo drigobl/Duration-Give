@@ -63,7 +63,9 @@ export const DonorRegistration: React.FC = () => {
 
         <Input
           label="Full Name"
+          id="donor-name"
           name="name"
+          autoComplete="name"
           value={formData.name}
           onChange={handleChange}
           required
@@ -72,7 +74,9 @@ export const DonorRegistration: React.FC = () => {
         <Input
           label="Email"
           type="email"
+          id="donor-reg-email"
           name="email"
+          autoComplete="email"
           value={formData.email}
           onChange={handleChange}
           required
@@ -81,7 +85,9 @@ export const DonorRegistration: React.FC = () => {
         <Input
           label="Password"
           type="password"
+          id="donor-reg-password"
           name="password"
+          autoComplete="new-password"
           value={formData.password}
           onChange={handleChange}
           required
@@ -90,7 +96,9 @@ export const DonorRegistration: React.FC = () => {
         <Input
           label="Confirm Password"
           type="password"
+          id="donor-reg-confirm-password"
           name="confirmPassword"
+          autoComplete="new-password"
           value={formData.confirmPassword}
           onChange={handleChange}
           required

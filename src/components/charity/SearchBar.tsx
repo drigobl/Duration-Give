@@ -138,6 +138,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         <div className="relative flex-grow">
           <input
             type="text"
+            id="charity-search"
+            name="search"
+            autoComplete="off"
             value={query}
             onChange={(e) => handleSearch(e.target.value)}
             placeholder={placeholder}
@@ -180,6 +183,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 Country
               </label>
               <select
+                id="country-filter"
+                name="country"
                 value={filters.country}
                 onChange={(e) => handleCountryChange(e.target.value)}
                 className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
@@ -194,6 +199,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 Category
               </label>
               <select
+                id="category-filter"
+                name="category"
                 value={filters.category}
                 onChange={(e) => handleCategoryChange(e.target.value)}
                 className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
@@ -210,6 +217,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 Status
               </label>
               <select
+                id="status-filter"
+                name="status"
                 value={filters.status}
                 onChange={(e) => handleFilterChange('status', e.target.value)}
                 className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
@@ -225,6 +234,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 Sort By
               </label>
               <select
+                id="sort-filter"
+                name="sortBy"
                 value={filters.sortBy}
                 onChange={(e) => handleFilterChange('sortBy', e.target.value)}
                 className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"

@@ -54,6 +54,9 @@ export const CharityLogin: React.FC = () => {
       <Input
         label="Email"
         type="email"
+        id="charity-email"
+        name="email"
+        autoComplete="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
@@ -61,6 +64,9 @@ export const CharityLogin: React.FC = () => {
       <Input
         label="Password"
         type="password"
+        id="charity-password"
+        name="password"
+        autoComplete="current-password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         required
