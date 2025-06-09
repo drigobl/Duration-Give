@@ -55,6 +55,14 @@ export const PortfolioGrid: React.FC<PortfolioGridProps> = ({ searchTerm, catego
     return matchesSearch && matchesCategory;
   });
 
+  if (filteredPortfolios.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-500">No portfolio funds found matching your criteria.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {filteredPortfolios.map((portfolio) => (
