@@ -3,6 +3,12 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    /* Fix for webkit-text-size-adjust compatibility warning */
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+  
   body {
     @apply bg-[#F0EEE7] min-h-screen text-gray-900;
   }
