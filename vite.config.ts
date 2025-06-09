@@ -62,12 +62,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     port: 5173,
     strictPort: true,
-    host: true,
-    headers: {
-      'Content-Security-Policy': mode === 'development' 
-        ? "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; connect-src 'self' wss: https:;"
-        : "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; connect-src 'self' wss: https:;"
-    }
+    host: true
   },
   preview: {
     port: 4173,
