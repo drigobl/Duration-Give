@@ -26,8 +26,8 @@
 
 /*.css
   X-Content-Type-Options: nosniff
-  Content-Type: text/css
+  Content-Type: text/css; charset=UTF-8
 
 /*.js
   X-Content-Type-Options: nosniff
-  Content-Type: application/javascript
+  Content-Type: application/javascript; charset=UTF-8
