@@ -1,11 +1,22 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Charity } from '@/types/charity';
 import { ImageWithFallback } from '@/components/ui/ImageWithFallback';
 import { Card } from '@/components/ui/Card';
 
+// Simplified charity interface for display purposes
+interface SimpleCharity {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  image: string;
+  verified: boolean;
+  country: string;
+  causes: string[];
+}
+
 interface CharityCardProps {
-  charity: Charity;
+  charity: SimpleCharity;
 }
 
 export const CharityCard: React.FC<CharityCardProps> = React.memo(({ charity }) => {

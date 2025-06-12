@@ -1,9 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from '../ui/Card';
-import { Cause } from '../../types/charity';
 import { formatCurrency } from '../../utils/money';
 import { DonationButton } from '../web3/donation/DonationButton';
+
+// Define Cause interface locally
+interface Cause {
+  id: string;
+  name: string;
+  description: string;
+  targetAmount: number;
+  raisedAmount: number;
+  charityId: string;
+  category: string;
+  image: string;
+}
 
 interface CauseGridProps {
   searchTerm: string;

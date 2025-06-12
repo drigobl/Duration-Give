@@ -1,7 +1,18 @@
 import React, { useMemo } from 'react';
 import { CharityCard } from './CharityCard';
-import { Charity } from '@/types/charity';
 import { cn } from '@/utils/cn';
+
+// Simplified charity interface for display purposes
+interface SimpleCharity {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  image: string;
+  verified: boolean;
+  country: string;
+  causes: string[];
+}
 
 interface CharityGridProps {
   searchTerm: string;
@@ -17,7 +28,7 @@ export const CharityGrid: React.FC<CharityGridProps> = ({
   className
 }) => {
   // Sample charities - replace with actual data fetching
-  const charities: Charity[] = [
+  const charities: SimpleCharity[] = [
     {
       id: '1',
       name: "Global Water Foundation",

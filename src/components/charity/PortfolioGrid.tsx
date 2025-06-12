@@ -1,9 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from '../ui/Card';
-import { PortfolioFund } from '../../types/charity';
 import { formatCurrency } from '../../utils/money';
 import { DonationButton } from '../web3/donation/DonationButton';
+
+// Define PortfolioFund interface locally
+interface PortfolioFund {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  totalDonated: number;
+  charities: string[];
+  image: string;
+}
 
 interface PortfolioGridProps {
   searchTerm: string;
