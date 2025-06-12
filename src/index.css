@@ -5,8 +5,8 @@
 @layer base {
   html {
     /* Fix for webkit-text-size-adjust compatibility warning */
-    text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
   
   body {

@@ -8,6 +8,14 @@
   Cache-Control: public, max-age=31536000, immutable
   X-Content-Type-Options: nosniff
 
+/assets/*.css
+  Content-Type: text/css; charset=utf-8
+  X-Content-Type-Options: nosniff
+
+/assets/*.js
+  Content-Type: application/javascript; charset=utf-8
+  X-Content-Type-Options: nosniff
+
 /*.svg
   X-Content-Type-Options: nosniff
   Content-Type: image/svg+xml
@@ -26,8 +34,8 @@
 
 /*.css
   X-Content-Type-Options: nosniff
-  Content-Type: text/css; charset=UTF-8
+  Content-Type: text/css; charset=utf-8
 
 /*.js
   X-Content-Type-Options: nosniff
-  Content-Type: application/javascript; charset=UTF-8
+  Content-Type: application/javascript; charset=utf-8
