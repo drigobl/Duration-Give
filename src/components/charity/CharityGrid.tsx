@@ -71,7 +71,7 @@ export const CharityGrid: React.FC<CharityGridProps> = ({
       
       return matchesSearch && matchesCategory && matchesVerified;
     });
-  }, [charities, searchTerm, category, verifiedOnly]);
+  }, [searchTerm, category, verifiedOnly]);
 
   if (filteredCharities.length === 0) {
     return (

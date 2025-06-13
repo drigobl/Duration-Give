@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Search, Filter, CheckCircle } from 'lucide-react';
-import { SearchBar } from '../components/charity/SearchBar';
+import { SimpleSearchBar } from '../components/charity/SimpleSearchBar';
 import { CharityGrid } from '../components/charity/CharityGrid';
 import { PortfolioGrid } from '../components/charity/PortfolioGrid';
 import { CauseGrid } from '../components/charity/CauseGrid';
@@ -73,7 +73,7 @@ const CharityBrowser: React.FC = () => {
           </div>
 
           <div className="space-y-4">
-            <SearchBar
+            <SimpleSearchBar
               searchTerm={searchTerm}
               onSearchChange={handleSearch}
               selectedCategory={selectedCategory}

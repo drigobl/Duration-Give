@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 @layer base {
-  html {
+  html,
+  :host {
     /* Fix for webkit-text-size-adjust compatibility warning */
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
