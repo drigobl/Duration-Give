@@ -21,7 +21,7 @@ plugins:
 collections:
   docs:
     output: true
-    permalink: /:collection/:path/
+    permalink: /docs/:path/
 
 # Default layout for documentation pages
 defaults:
