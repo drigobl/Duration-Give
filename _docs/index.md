@@ -2,6 +2,7 @@
 title: Documentation
 description: Complete documentation for Give Protocol
 layout: default
+permalink: /docs/
 ---
 
 # Give Protocol Documentation

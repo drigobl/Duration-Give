@@ -1,6 +1,7 @@
 ---
 title: Help Center
 description: Get help with Give Protocol
+permalink: /docs/help-center/
 ---
 
 # Help Center

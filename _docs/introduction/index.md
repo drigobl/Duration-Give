@@ -1,6 +1,7 @@
 ---
 title: Introduction
 description: Learn about Give Protocol
+permalink: /docs/introduction/
 ---
 
 # Introduction
