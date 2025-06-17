@@ -5,6 +5,13 @@ title: Give Protocol Documentation
 
 # Welcome to Give Protocol Documentation
 
+<div class="search-callout">
+  <div class="search-callout-icon">🔍</div>
+  <div class="search-callout-content">
+    <strong>Need help finding something?</strong> Use the search bar at the top of this page to search for content.
+  </div>
+</div>
+
 Give Protocol is a blockchain-based charitable living platform that brings transparency and efficiency to charitable activity.
 
 ## Quick Links

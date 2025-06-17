@@ -18,10 +18,16 @@
         <img src="{{ "/assets/logo.svg" | relative_url }}" alt="" role="presentation" style="height: 2rem; width: 2rem;">
         <span>{{ site.title }}</span>
       </a>
-      <div class="site-search" role="search">
-        <label for="search-input" class="sr-only">Search documentation</label>
-        <input type="search" id="search-input" class="search-input" placeholder="Search docs..." aria-label="Search documentation" />
-        <div class="search-results" role="region" aria-live="polite" aria-label="Search results"></div>
+      <div class="header-right">
+        <div class="site-search" role="search">
+          <label for="search-input" class="sr-only">Search documentation</label>
+          <input type="search" id="search-input" class="search-input" placeholder="Search docs..." aria-label="Search documentation" />
+          <div class="search-results" role="region" aria-live="polite" aria-label="Search results"></div>
+        </div>
+        <a href="https://giveprotocol.io/login" class="btn btn-return-app" target="_blank" rel="noopener noreferrer">
+          <span class="return-icon">←</span>
+          <span class="return-text">Return to App</span>
+        </a>
       </div>
     </div>
   </header>

@@ -7,6 +7,13 @@ permalink: /docs/
 
 # Give Protocol Documentation
 
+<div class="search-callout">
+  <div class="search-callout-icon">🔍</div>
+  <div class="search-callout-content">
+    <strong>Need help finding something?</strong> Use the search bar at the top of this page to search for content.
+  </div>
+</div>
+
 Welcome to the Give Protocol documentation. Here you'll find comprehensive guides and documentation to help you start working with Give Protocol as quickly as possible.
 
 ## Getting Started
