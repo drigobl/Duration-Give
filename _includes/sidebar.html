@@ -1,17 +1,21 @@
-<nav class="docs-sidebar">
+<nav class="docs-sidebar" role="navigation" aria-label="Documentation navigation">
   <div class="sidebar-content">
     {% for section in site.navigation %}
       <div class="sidebar-section">
-        <h3 class="sidebar-heading">
-          <a href="{{ section.url | relative_url }}" class="sidebar-link {% if page.url == section.url %}active{% endif %}">
+        <h3 class="sidebar-heading" id="nav-{{ section.title | slugify }}">
+          <a href="{{ section.url | relative_url }}" 
+             class="sidebar-link {% if page.url == section.url %}active{% endif %}"
+             {% if page.url == section.url %}aria-current="page"{% endif %}>
             {{ section.title }}
           </a>
         </h3>
         {% if section.subnav %}
-          <ul class="sidebar-list">
+          <ul class="sidebar-list" role="list" aria-labelledby="nav-{{ section.title | slugify }}">
             {% for item in section.subnav %}
-              <li>
-                <a href="{{ item.url | relative_url }}" class="sidebar-sublink {% if page.url == item.url %}active{% endif %}">
+              <li role="listitem">
+                <a href="{{ item.url | relative_url }}" 
+                   class="sidebar-sublink {% if page.url == item.url %}active{% endif %}"
+                   {% if page.url == item.url %}aria-current="page"{% endif %}>
                   {{ item.title }}
                 </a>
               </li>

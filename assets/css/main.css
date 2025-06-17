@@ -1,6 +1,6 @@
 /* Give Protocol Documentation CSS - Matching main site styles */
 
-/* Color Variables */
+/* Color Variables with Enhanced Contrast for Accessibility */
 :root {
   --color-primary-50: #f8f9fa;
   --color-primary-100: #f1f3f5;
@@ -8,7 +8,7 @@
   --color-primary-300: #dee2e6;
   --color-primary-400: #ced4da;
   --color-primary-500: #adb5bd;
-  --color-primary-600: #868e96;
+  --color-primary-600: #6c757d; /* Improved contrast from #868e96 */
   --color-primary-700: #495057;
   --color-primary-800: #343a40;
   --color-primary-900: #212529;
@@ -18,12 +18,22 @@
   
   --color-text-primary: #212529;
   --color-text-secondary: #495057;
+  --color-text-muted: #6c757d; /* WCAG AA compliant */
   
   --color-indigo-600: #4F46E5;
   --color-indigo-700: #4338CA;
+  --color-indigo-800: #3730A3; /* Darker shade for better contrast */
+  
+  --color-success: #0F7938; /* WCAG AA compliant green */
+  --color-warning: #B45309; /* WCAG AA compliant amber */
+  --color-error: #DC2626; /* WCAG AA compliant red */
   
   --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
   --shadow-card-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  
+  /* Focus outline for keyboard navigation */
+  --focus-outline: 3px solid #4F46E5;
+  --focus-outline-offset: 2px;
 }
 
 /* Base Styles */
@@ -31,6 +41,12 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+html {
+  /* Enable smooth scrolling for anchor links */
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem; /* Account for sticky header */
 }
 
 body {
@@ -86,6 +102,12 @@ a:hover {
   position: sticky;
   top: 0;
   z-index: 100;
+  transition: all 0.3s ease;
+}
+
+/* Enhanced shadow when page is scrolled */
+.site-header.scrolled {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
 }
 
 .site-header .wrapper {
@@ -521,30 +543,381 @@ a:hover {
   margin-bottom: 0;
 }
 
-/* Responsive Design */
+/* Mobile Menu Toggle Button - Enhanced for better touch targets */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--color-primary-700);
+  cursor: pointer;
+  padding: 0.75rem; /* Increased from 0.5rem for better touch target */
+  margin-left: 1rem;
+  transition: all 0.2s ease;
+  min-width: 44px; /* iOS recommended touch target size */
+  min-height: 44px;
+  border-radius: 0.375rem;
+  position: relative;
+}
+
+.mobile-menu-toggle:hover {
+  color: var(--color-primary-900);
+  background-color: var(--color-primary-50);
+}
+
+.mobile-menu-toggle.active {
+  color: var(--color-indigo-600);
+  background-color: var(--color-primary-100);
+}
+
+/* Hamburger animation */
+.mobile-menu-toggle .hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+}
+
+.mobile-menu-toggle .hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background-color: currentColor;
+  margin: 3px 0;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+.mobile-menu-toggle.active .hamburger span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.mobile-menu-toggle.active .hamburger span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-toggle.active .hamburger span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Enhanced Mobile Touch Targets */
+@media (hover: none) and (pointer: coarse) {
+  /* Increase touch targets for navigation and standalone links */
+  nav a, 
+  .sidebar a,
+  button, 
+  [role="button"], 
+  .clickable,
+  .btn {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem;
+  }
+  
+  /* Inline content links should remain inline */
+  .doc-content a,
+  p a,
+  li a {
+    min-height: auto;
+    display: inline;
+    padding: 0.25rem 0.375rem;
+    margin: -0.25rem -0.375rem;
+  }
+  
+  /* Ensure sidebar links have proper touch targets */
+  .sidebar-sublink {
+    min-height: 48px;
+    padding: 0.875rem 1.5rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Larger touch targets for buttons */
+  .btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+    min-width: 120px;
+    justify-content: center;
+  }
+  
+  /* Better spacing for list items with links */
+  li {
+    padding: 0.25rem 0;
+  }
+}
+
+/* Responsive Design - Tablet and Mobile */
 @media (max-width: 768px) {
+  /* Mobile Typography Scaling */
+  html {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+  
+  body {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+  
+  /* Responsive Typography Scale */
+  h1 { 
+    font-size: 1.75rem;
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+  }
+  
+  h2 { 
+    font-size: 1.5rem;
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+  }
+  
+  h3 { 
+    font-size: 1.25rem;
+    line-height: 1.3;
+    margin-bottom: 0.5rem;
+  }
+  
+  h4 { font-size: 1.125rem; }
+  h5 { font-size: 1rem; }
+  h6 { font-size: 0.875rem; }
+  
+  p {
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  /* Mobile Header Adjustments */
+  .site-header {
+    position: fixed; /* Fixed instead of sticky for better mobile support */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .site-header .wrapper {
+    padding: 0 0.75rem;
+    height: 3.5rem; /* Slightly smaller on mobile */
+  }
+  
+  .site-title {
+    font-size: 1.25rem;
+    gap: 0.375rem;
+  }
+  
+  .site-title img {
+    height: 1.75rem !important;
+    width: 1.75rem !important;
+  }
+  
+  /* Mobile Search Optimization */
+  .site-search {
+    margin-left: auto;
+    margin-right: 0.5rem;
+  }
+  
   .site-search .search-input {
+    width: 150px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    -webkit-appearance: none; /* Remove iOS styling */
+    border-radius: 0.375rem;
+  }
+  
+  /* Expand search on focus for mobile */
+  .site-search .search-input:focus {
     width: 200px;
+  }
+  
+  /* Mobile search results */
+  .search-results {
+    width: calc(100vw - 2rem);
+    right: -0.5rem;
+    max-height: 60vh;
+  }
+  
+  /* Mobile Menu Toggle Display */
+  .mobile-menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Mobile Sidebar Enhancement */
+  .docs-sidebar {
+    position: fixed;
+    left: -100%;
+    top: 3.5rem; /* Match smaller header */
+    width: 85%; /* Take up most of screen */
+    max-width: 320px;
+    height: calc(100vh - 3.5rem);
+    background-color: white; /* White background for clarity */
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 99;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.15);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  }
+  
+  .docs-sidebar.mobile-open {
+    left: 0;
+  }
+  
+  /* Mobile Sidebar Content */
+  .sidebar-content {
+    padding: 1.5rem 0;
+  }
+  
+  .sidebar-heading {
+    font-size: 0.875rem;
+    padding: 0.5rem 1.5rem;
+    margin: 0 0 0.25rem;
+    background-color: var(--color-primary-50);
+    border-radius: 0;
+  }
+  
+  .sidebar-sublink {
+    font-size: 1rem;
+    padding: 0.875rem 1.5rem;
+    border-left-width: 3px;
+  }
+  
+  /* Mobile Content Adjustments */
+  .page-content {
+    padding-top: 4rem; /* Account for fixed header */
+    min-height: calc(100vh - 3.5rem);
   }
   
   .wrapper {
     padding: 0 1rem;
-  }
-  
-  .docs-sidebar {
-    display: none;
+    max-width: 100%;
   }
   
   .doc-container {
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
+    max-width: 100%;
   }
   
-  h1 { font-size: 2rem; }
-  h2 { font-size: 1.5rem; }
-  h3 { font-size: 1.25rem; }
-  
   .doc-title {
-    font-size: 2rem;
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .doc-description {
+    font-size: 1rem;
+  }
+  
+  /* Mobile Content Formatting */
+  .doc-content {
+    font-size: 1rem;
+  }
+  
+  .doc-content h2 {
+    font-size: 1.5rem;
+    margin-top: 2.5rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  .doc-content h3 {
+    font-size: 1.25rem;
+    margin-top: 2rem;
+  }
+  
+  .doc-content ul, .doc-content ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .doc-content li {
+    margin-bottom: 0.625rem;
+    line-height: 1.7;
+  }
+  
+  /* Mobile Code Blocks */
+  .doc-content code {
+    font-size: 0.875rem;
+    padding: 0.125rem 0.25rem;
+  }
+  
+  .doc-content pre {
+    padding: 1rem;
+    font-size: 0.875rem;
+    border-radius: 0.375rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Mobile Tables */
+  .doc-content table {
+    font-size: 0.875rem;
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+  
+  /* Mobile Cards */
+  .card {
+    padding: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Mobile Buttons */
+  .btn {
+    width: 100%;
+    padding: 0.875rem 1.25rem;
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Mobile Footer */
+  .site-footer {
+    padding: 1.5rem 0;
+    margin-top: 3rem;
+  }
+  
+  .site-footer p {
+    font-size: 0.875rem;
+  }
+  
+  /* Body state when menu is open */
+  body.menu-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+  
+  /* Mobile menu overlay */
+  body.menu-open::before {
+    content: '';
+    position: fixed;
+    top: 3.5rem;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 98;
+    animation: fadeIn 0.3s ease;
+  }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 375px) {
+  .site-search .search-input {
+    width: 120px;
+    font-size: 0.8125rem;
+  }
+  
+  .site-title {
+    font-size: 1.125rem;
+  }
+  
+  h1 { font-size: 1.625rem; }
+  h2 { font-size: 1.375rem; }
+  h3 { font-size: 1.125rem; }
+  
+  .doc-container {
+    padding: 1.25rem 0.75rem;
   }
 }
 
@@ -562,4 +935,551 @@ a:hover {
 
 .doc-main {
   animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Enhanced Hover States for Interactive Elements */
+
+/* All clickable elements get cursor pointer */
+a, button, [role="button"], .clickable {
+  cursor: pointer;
+}
+
+/* Enhanced link hover with underline animation */
+.doc-content a:not(.btn) {
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.doc-content a:not(.btn)::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-indigo-600);
+  transition: width 0.3s ease;
+}
+
+.doc-content a:not(.btn):hover::after {
+  width: 100%;
+}
+
+/* Enhanced card hover states */
+.card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Navigation link hover enhancements */
+.sidebar-sublink {
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-sublink::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(79, 70, 229, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.sidebar-sublink:hover::before {
+  left: 100%;
+}
+
+/* Button hover enhancements */
+.btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.5s ease, height 0.5s ease;
+}
+
+.btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Search input focus enhancement */
+.search-input {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-input:focus {
+  transform: translateY(-1px);
+}
+
+/* Code block hover states */
+.doc-content pre {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.doc-content pre:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Table row hover states */
+.doc-content table tr {
+  transition: background-color 0.2s ease;
+}
+
+.doc-content table tbody tr:hover {
+  background-color: var(--color-primary-50);
+}
+
+/* Smooth transitions for focus states */
+*:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+  transition: box-shadow 0.2s ease;
+}
+
+/* Skip keyboard focus styles for mouse users */
+:focus:not(:focus-visible) {
+  box-shadow: none;
+}
+
+/* Visible keyboard focus */
+:focus-visible {
+  outline: 2px solid var(--color-indigo-600);
+  outline-offset: 2px;
+}
+
+/* Accessibility Enhancements */
+
+/* Skip to main content link */
+.skip-to-main {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 999;
+  padding: 1rem 1.5rem;
+  background-color: var(--color-indigo-600);
+  color: white;
+  text-decoration: none;
+  border-radius: 0 0 0.5rem 0;
+}
+
+.skip-to-main:focus {
+  left: 0;
+}
+
+/* Screen reader only text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus visible for all interactive elements */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex="0"]:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+  border-radius: 0.25rem;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --color-text-secondary: #212529;
+    --color-text-muted: #495057;
+    --color-primary-600: #495057;
+  }
+  
+  .site-header {
+    border-bottom-width: 2px;
+  }
+  
+  .btn {
+    border-width: 2px;
+  }
+  
+  .card {
+    border-width: 2px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .mobile-menu-toggle .hamburger span {
+    transition: none !important;
+  }
+  
+  .docs-sidebar {
+    transition: none !important;
+  }
+}
+
+/* Enhanced link underlines for better visibility */
+.doc-content a:not(.btn) {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.125em;
+}
+
+.doc-content a:not(.btn):hover,
+.doc-content a:not(.btn):focus {
+  text-decoration-thickness: 2px;
+}
+
+/* Better form field labels */
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--color-text-primary);
+}
+
+/* Required field indicators */
+.required::after {
+  content: " *";
+  color: var(--color-error);
+  font-weight: 700;
+}
+
+/* Error messages */
+.error-message {
+  color: var(--color-error);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+/* Success messages */
+.success-message {
+  color: var(--color-success);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+/* Ensure sufficient contrast for placeholder text */
+::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1;
+}
+
+/* Focus indicators for custom controls */
+.custom-control:focus-within {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
+/* Improved table accessibility */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+table caption {
+  caption-side: top;
+  text-align: left;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-primary);
+}
+
+th {
+  background-color: var(--color-primary-100);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75rem;
+  border: 1px solid var(--color-primary-300);
+}
+
+td {
+  padding: 0.75rem;
+  border: 1px solid var(--color-primary-300);
+}
+
+/* Accessible loading states */
+.loading {
+  position: relative;
+  color: transparent;
+}
+
+.loading::after {
+  content: "";
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  top: 50%;
+  left: 50%;
+  margin-left: -0.5rem;
+  margin-top: -0.5rem;
+  border: 2px solid var(--color-primary-300);
+  border-top-color: var(--color-indigo-600);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Announce loading state to screen readers */
+.loading-announcement {
+  position: absolute;
+  left: -9999px;
+}
+
+/* Improved code block accessibility */
+.doc-content pre {
+  position: relative;
+  overflow: auto;
+  tab-size: 2;
+}
+
+.doc-content pre:focus {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
+/* Language indicator for code blocks */
+.doc-content pre[data-language]::before {
+  content: attr(data-language);
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.25rem 0.5rem;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  font-size: 0.75rem;
+  border-radius: 0 0.5rem 0 0.25rem;
+}
+
+/* Copy code button */
+.copy-code-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: var(--color-primary-800);
+  border: 1px solid var(--color-primary-300);
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.copy-code-button:hover,
+.copy-code-button:focus {
+  background-color: white;
+  border-color: var(--color-indigo-600);
+  color: var(--color-indigo-600);
+}
+
+/* Heading anchors */
+.heading-anchor {
+  margin-left: 0.5rem;
+  color: var(--color-primary-400);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  font-size: 0.875em;
+}
+
+h1:hover .heading-anchor,
+h2:hover .heading-anchor,
+h3:hover .heading-anchor,
+h4:hover .heading-anchor,
+h5:hover .heading-anchor,
+h6:hover .heading-anchor,
+.heading-anchor:focus {
+  opacity: 1;
+}
+
+/* Keyboard shortcuts guide */
+.keyboard-shortcuts-guide {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 2px solid var(--color-primary-300);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.keyboard-shortcuts-guide h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--color-primary-900);
+}
+
+.keyboard-shortcuts-guide dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1rem;
+}
+
+.keyboard-shortcuts-guide dt {
+  text-align: right;
+}
+
+.keyboard-shortcuts-guide dd {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.keyboard-shortcuts-guide kbd {
+  display: inline-block;
+  padding: 0.125rem 0.375rem;
+  background-color: var(--color-primary-100);
+  border: 1px solid var(--color-primary-300);
+  border-radius: 0.25rem;
+  font-family: monospace;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.close-shortcuts {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--color-primary-600);
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.close-shortcuts:hover,
+.close-shortcuts:focus {
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-900);
+}
+
+/* Improved contrast for links */
+a {
+  color: var(--color-indigo-700); /* Darker for better contrast */
+}
+
+a:hover,
+a:focus {
+  color: var(--color-indigo-800);
+}
+
+/* Sidebar active state with better contrast */
+.sidebar-sublink.active {
+  color: var(--color-indigo-700);
+  font-weight: 600; /* Bolder for better visibility */
+}
+
+/* Help text styling */
+.help-text {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
+/* Form field focus improvements */
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--color-indigo-600);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+/* Improved button contrast */
+.btn-primary {
+  background-color: var(--color-indigo-700);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--color-indigo-800);
+}
+
+/* Dark mode support (future enhancement) */
+@media (prefers-color-scheme: dark) {
+  /* Add dark mode styles here when ready */
+}
+
+/* Print styles for better accessibility */
+@media print {
+  .site-header,
+  .site-footer,
+  .docs-sidebar,
+  .mobile-menu-toggle,
+  .copy-code-button,
+  .heading-anchor,
+  .skip-to-main {
+    display: none !important;
+  }
+  
+  .doc-main {
+    width: 100%;
+    margin: 0;
+  }
+  
+  .doc-content a {
+    color: inherit;
+    text-decoration: underline;
+  }
+  
+  .doc-content a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.875em;
+    color: var(--color-text-muted);
+  }
 }
