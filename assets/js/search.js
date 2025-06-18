@@ -26,35 +26,82 @@ class DocumentationSearch {
   }
   
   createSearchResults() {
-    // Create search results container
-    this.searchResults = document.createElement('div');
-    this.searchResults.className = 'search-results';
-    this.searchResults.innerHTML = `
-      <div class="search-results-header">
-        <span class="search-results-count"></span>
-        <button class="search-results-close">&times;</button>
-      </div>
-      <div class="search-results-list"></div>
-    `;
+    // Check if search results already exists in HTML
+    this.searchResults = document.querySelector('.search-results');
     
-    // Insert after the search input
-    this.searchInput.parentElement.appendChild(this.searchResults);
+    if (!this.searchResults) {
+      // Create search results container if it doesn't exist
+      this.searchResults = document.createElement('div');
+      this.searchResults.className = 'search-results';
+      this.searchResults.innerHTML = `
+        <div class="search-results-header">
+          <span class="search-results-count"></span>
+          <button class="search-results-close">&times;</button>
+        </div>
+        <div class="search-results-list"></div>
+      `;
+      
+      // Insert after the search input
+      this.searchInput.parentElement.appendChild(this.searchResults);
+    } else {
+      // Add inner structure if container exists but is empty
+      if (!this.searchResults.querySelector('.search-results-header')) {
+        this.searchResults.innerHTML = `
+          <div class="search-results-header">
+            <span class="search-results-count"></span>
+            <button class="search-results-close">&times;</button>
+          </div>
+          <div class="search-results-list"></div>
+        `;
+      }
+    }
     
     // Close button functionality
-    this.searchResults.querySelector('.search-results-close').addEventListener('click', () => {
-      this.hideResults();
-    });
+    const closeBtn = this.searchResults.querySelector('.search-results-close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        this.hideResults();
+      });
+    }
   }
   
   async loadSearchIndex() {
     try {
       this.isLoading = true;
-      const response = await fetch('/Duration-Give/search.json');
-      this.searchIndex = await response.json();
+      // Get the base URL from the current page
+      const baseUrl = document.querySelector('base')?.href || window.location.origin;
+      const searchUrl = new URL('/search.json', baseUrl).href;
+      
+      console.log('Loading search index from:', searchUrl);
+      
+      const response = await fetch(searchUrl);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('Search index loaded:', data.length, 'items');
+      
+      this.searchIndex = data || [];
       this.isLoading = false;
     } catch (error) {
       console.error('Failed to load search index:', error);
       this.isLoading = false;
+      
+      // Try with relative URL as fallback
+      try {
+        const fallbackUrl = (window.location.pathname.includes('/Duration-Give/') 
+          ? '/Duration-Give/search.json' 
+          : '/search.json');
+          
+        console.log('Trying fallback URL:', fallbackUrl);
+        const response = await fetch(fallbackUrl);
+        const data = await response.json();
+        this.searchIndex = data || [];
+        console.log('Search index loaded from fallback:', this.searchIndex.length, 'items');
+      } catch (fallbackError) {
+        console.error('Fallback also failed:', fallbackError);
+      }
     }
   }
   

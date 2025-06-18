@@ -1,0 +1,4 @@
+# Favicon placeholder
+This is a placeholder for favicon.ico. 
+The actual favicon will be generated from the logo.svg file.
+For now, browsers will fall back to the SVG favicon specified in the HTML.
