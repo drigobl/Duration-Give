@@ -321,7 +321,11 @@ a:hover {
 }
 
 .sidebar-section {
-  margin-bottom: 1rem;
+  margin-bottom: 2rem; /* More space between sections */
+}
+
+.sidebar-section:last-child {
+  margin-bottom: 0; /* Remove bottom margin from last section */
 }
 
 .sidebar-heading {
@@ -330,7 +334,7 @@ a:hover {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--color-text-secondary);
-  margin: 0 1.5rem 0.25rem;
+  margin: 0 1.5rem 0; /* Remove bottom margin */
 }
 
 .sidebar-link {
@@ -348,7 +352,7 @@ a:hover {
 .sidebar-list {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0; /* Remove top margin to eliminate gap */
 }
 
 .sidebar-list li {
