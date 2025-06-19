@@ -3,9 +3,6 @@
     {% for section in site.navigation %}
       <div class="sidebar-section">
         <h3 class="sidebar-heading" id="nav-{{ section.title | slugify }}">
-          {% if section.icon %}
-            <i class="{{ section.icon }}" aria-hidden="true"></i>
-          {% endif %}
           {{ section.title }}
         </h3>
         <ul class="sidebar-list" role="list" aria-labelledby="nav-{{ section.title | slugify }}">
@@ -13,7 +10,6 @@
             <a href="{{ section.url | relative_url }}" 
                class="sidebar-sublink {% if page.url == section.url %}active{% endif %}"
                {% if page.url == section.url %}aria-current="page"{% endif %}>
-              <i class="fas fa-flag" aria-hidden="true"></i>
               Overview
             </a>
           </li>
@@ -23,9 +19,6 @@
                 <a href="{{ item.url | relative_url }}" 
                    class="sidebar-sublink {% if page.url == item.url %}active{% endif %}"
                    {% if page.url == item.url %}aria-current="page"{% endif %}>
-                  {% if item.icon %}
-                    <i class="{{ item.icon }}" aria-hidden="true"></i>
-                  {% endif %}
                   {{ item.title }}
                 </a>
               </li>

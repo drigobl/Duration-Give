@@ -24,9 +24,7 @@ layout: faq
           </svg>
         </button>
         <div class="faq-answer">
-          
-            <p>Give Protocol is a blockchain-based charitable giving platform that connects donors with organizations and volunteers. We use cryptocurrency technology to ensure transparent, secure, and efficient charitable transactions while providing tax receipts and tracking capabilities.</p>
-          </div>
+          <p>Give Protocol is a blockchain-based charitable giving platform that connects donors with organizations and volunteers. We use cryptocurrency technology to ensure transparent, secure, and efficient charitable transactions while providing tax receipts and tracking capabilities.</p>
         </div>
       </div>
 
@@ -38,13 +36,11 @@ layout: faq
           </svg>
         </button>
         <div class="faq-answer">
-          
-            <ol>
-              <li><strong>For Donors</strong>: Create an account, connect your wallet, search for verified organizations, and make donations using cryptocurrency</li>
-              <li><strong>For Organizations</strong>: Apply for verification, create campaigns, receive donations, and issue tax receipts</li>
-              <li><strong>For Volunteers</strong>: Offer your time and skills, track hours, and connect with organizations needing help</li>
-            </ol>
-          </div>
+          <ol>
+            <li><strong>For Donors</strong>: Create an account, connect your wallet, search for verified organizations, and make donations using cryptocurrency</li>
+            <li><strong>For Organizations</strong>: Apply for verification, create campaigns, receive donations, and issue tax receipts</li>
+            <li><strong>For Volunteers</strong>: Offer your time and skills, track hours, and connect with organizations needing help</li>
+          </ol>
         </div>
       </div>
 
@@ -56,14 +52,12 @@ layout: faq
           </svg>
         </button>
         <div class="faq-answer">
-          
-            <p>Give Protocol charges minimal platform fees to sustain operations:</p>
-            <ul>
-              <li><strong>Platform fee</strong>: 2.5% of donation amount</li>
-              <li><strong>Network fees</strong>: Variable based on blockchain network (usually $1-5)</li>
-              <li>No fees for browsing, searching, or creating accounts</li>
-            </ul>
-          </div>
+          <p>Give Protocol charges minimal platform fees to sustain operations:</p>
+          <ul>
+            <li><strong>Platform fee</strong>: 2.5% of donation amount</li>
+            <li><strong>Network fees</strong>: Variable based on blockchain network (usually $1-5)</li>
+            <li>No fees for browsing, searching, or creating accounts</li>
+          </ul>
         </div>
       </div>
     </div>
