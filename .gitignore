@@ -49,3 +49,6 @@ cache
 server.ts
 build-simple.js
 webpack.config.js
+
+# Claude AI configuration
+.claude/
