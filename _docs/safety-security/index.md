@@ -3,7 +3,6 @@ title: Safety & Security
 description: Stay safe on Give Protocol
 ---
 
-# Safety & Security
 
 Your safety and security are our top priorities. Learn how to protect yourself, your donations, and your personal information while using Give Protocol.
 

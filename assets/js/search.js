@@ -18,6 +18,9 @@ class DocumentationSearch {
     // Create search results container
     this.createSearchResults();
     
+    // Update shortcut display for current platform
+    this.updateShortcutDisplay();
+    
     // Load search index
     await this.loadSearchIndex();
     
@@ -108,6 +111,14 @@ class DocumentationSearch {
   setupEventListeners() {
     let searchTimeout;
     
+    // Global keyboard shortcut for search (Ctrl+K or Cmd+K)
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        this.focusSearch();
+      }
+    });
+    
     this.searchInput.addEventListener('input', (e) => {
       clearTimeout(searchTimeout);
       const query = e.target.value.trim();
@@ -127,6 +138,8 @@ class DocumentationSearch {
       if (e.target.value.trim().length >= 2) {
         this.showResults();
       }
+      // Update shortcut display based on platform
+      this.updateShortcutDisplay();
     });
     
     // Hide results when clicking outside
@@ -140,6 +153,7 @@ class DocumentationSearch {
     this.searchInput.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         this.hideResults();
+        this.searchInput.blur();
       } else if (e.key === 'ArrowDown') {
         e.preventDefault();
         this.navigateResults('down');
@@ -151,6 +165,25 @@ class DocumentationSearch {
         this.selectResult();
       }
     });
+  }
+  
+  focusSearch() {
+    this.searchInput.focus();
+    this.searchInput.select();
+    
+    // Show placeholder results if there's existing text
+    if (this.searchInput.value.trim().length >= 2) {
+      this.showResults();
+    }
+  }
+  
+  updateShortcutDisplay() {
+    const shortcutElement = document.querySelector('.search-shortcut');
+    if (shortcutElement) {
+      // Detect platform and show appropriate shortcut
+      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+      shortcutElement.textContent = isMac ? '⌘K' : 'Ctrl+K';
+    }
   }
   
   performSearch(query) {

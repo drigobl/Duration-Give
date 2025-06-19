@@ -3,7 +3,6 @@ title: Resources & Tools
 description: Helpful resources and tools
 ---
 
-# Resources & Tools
 
 Access helpful tools, calculators, and resources to maximize your impact on Give Protocol. From donation calculators to time tracking tools, we provide everything you need for effective charitable giving.
 

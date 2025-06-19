@@ -4,7 +4,6 @@ description: Get help with Give Protocol
 permalink: /docs/help-center/
 ---
 
-# Help Center
 
 Welcome to the Give Protocol Help Center. Find answers to common questions, get support, and learn how to make the most of our platform.
 

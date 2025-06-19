@@ -3,7 +3,6 @@ title: Technical Documentation
 description: Technical details and specifications
 ---
 
-# Technical Documentation
 
 Comprehensive technical documentation for developers, integrators, and those interested in the blockchain infrastructure powering Give Protocol.
 

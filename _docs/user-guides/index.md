@@ -3,8 +3,6 @@ title: User Guides
 description: Guides for all user types
 ---
 
-# User Guides
-
 Comprehensive guides tailored to your role in the Give Protocol ecosystem. Whether you're a donor, organization, or volunteer, we have detailed instructions to help you succeed.
 
 ## Choose Your Guide

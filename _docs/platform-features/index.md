@@ -3,7 +3,6 @@ title: Platform Features
 description: Explore platform capabilities
 ---
 
-# Platform Features
 
 Discover the powerful features that make Give Protocol the most transparent and efficient charitable giving platform. Our blockchain-based infrastructure ensures every donation creates maximum impact.
 

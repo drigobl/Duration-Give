@@ -4,7 +4,6 @@ description: Learn about Give Protocol
 permalink: /docs/introduction/
 ---
 
-# Introduction
 
 Welcome to Give Protocol - a revolutionary blockchain-based platform that transforms charitable giving through transparency, efficiency, and direct impact.
 

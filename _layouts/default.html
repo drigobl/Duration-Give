@@ -15,6 +15,8 @@
   <link rel="mask-icon" href="{{ "/assets/logo.svg" | relative_url }}" color="#4F46E5">
   <meta name="theme-color" content="#4F46E5">
   
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="{{ "/assets/css/main.css" | relative_url }}">
   <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
 </head>
@@ -30,7 +32,10 @@
       <div class="header-right">
         <div class="site-search" role="search">
           <label for="search-input" class="sr-only">Search documentation</label>
-          <input type="search" id="search-input" class="search-input" placeholder="Search docs..." aria-label="Search documentation" />
+          <div class="search-input-wrapper">
+            <input type="search" id="search-input" class="search-input" placeholder="Search docs..." aria-label="Search documentation" />
+            <kbd class="search-shortcut">⌘K</kbd>
+          </div>
           <div class="search-results" role="region" aria-live="polite" aria-label="Search results"></div>
         </div>
         <a href="https://giveprotocol.io/login" class="btn btn-return-app" target="_blank" rel="noopener noreferrer">
@@ -56,5 +61,6 @@
   <script src="{{ "/assets/js/search.js" | relative_url }}"></script>
   <script src="{{ "/assets/js/navigation.js" | relative_url }}"></script>
   <script src="{{ "/assets/js/accessibility.js" | relative_url }}"></script>
+  <script src="{{ "/assets/js/section-icons.js" | relative_url }}"></script>
 </body>
 </html>

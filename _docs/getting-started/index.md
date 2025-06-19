@@ -3,8 +3,6 @@ title: Getting Started
 description: Start using Give Protocol
 ---
 
-# Getting Started
-
 Welcome to Give Protocol! This guide will help you get up and running quickly, whether you're a donor, organization, or volunteer.
 
 ## Quick Start Guide

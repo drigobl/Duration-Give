@@ -3,7 +3,6 @@ title: Community & Support
 description: Connect with the Give Protocol community
 ---
 
-# Community & Support
 
 Join a global community of donors, organizations, and volunteers working together to create positive change through blockchain-powered charitable giving.
 

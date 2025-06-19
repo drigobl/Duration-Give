@@ -2,13 +2,21 @@
 title: How To Join
 description: Complete guide to joining Give Protocol and starting your charitable giving journey
 permalink: /docs/introduction/how-to-join/
+layout: guide
 ---
 
-# How To Join
+<div class="content-section">
+  <p>Welcome to Give Protocol! Join thousands of volunteers and donors who are making a real difference in their communities and around the world. This guide will walk you through everything you need to know to get started.</p>
+</div>
 
-Welcome to Give Protocol! Join thousands of volunteers and donors who are making a real difference in their communities and around the world. This guide will walk you through everything you need to know to get started.
-
-## Getting Started
+<div class="collapsible-section">
+  <button class="section-toggle" aria-expanded="false">
+    <span>Getting Started</span>
+    <svg class="section-icon" width="24" height="24" viewBox="0 0 20 20" fill="none">
+      <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <div class="section-content">
 
 ### Create Your Account
 
@@ -51,7 +59,14 @@ Welcome to Give Protocol! Join thousands of volunteers and donors who are making
 - Photo upload
 - Background check initiation (if volunteering)
 
-## Profile Creation
+<div class="collapsible-section">
+  <button class="section-toggle" aria-expanded="false">
+    <span>Profile Creation</span>
+    <svg class="section-icon" width="24" height="24" viewBox="0 0 20 20" fill="none">
+      <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <div class="section-content">
 
 ### Personal Information
 
@@ -164,7 +179,17 @@ Share your volunteering background:
 - **Skills-based**: Professional expertise volunteering
 - **Leadership**: Board service, committee participation
 
-## Verification and Background Checks
+  </div>
+</div>
+
+<div class="collapsible-section">
+  <button class="section-toggle" aria-expanded="false">
+    <span>Verification and Background Checks</span>
+    <svg class="section-icon" width="24" height="24" viewBox="0 0 20 20" fill="none">
+      <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <div class="section-content">
 
 ### Identity Verification
 
@@ -204,7 +229,17 @@ Share your volunteering background:
 - **Appeals**: Process for disputed results
 - **Renewal**: Periodic updates as required
 
-## Platform Orientation
+  </div>
+</div>
+
+<div class="collapsible-section">
+  <button class="section-toggle" aria-expanded="false">
+    <span>Platform Orientation</span>
+    <svg class="section-icon" width="24" height="24" viewBox="0 0 20 20" fill="none">
+      <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <div class="section-content">
 
 ### Take the Tour
 
@@ -245,7 +280,17 @@ Share your volunteering background:
 - **Certificates**: Download volunteer service records
 - **Social Sharing**: Celebrate achievements
 
-## Safety and Security Setup
+  </div>
+</div>
+
+<div class="collapsible-section">
+  <button class="section-toggle" aria-expanded="false">
+    <span>Safety and Security Setup</span>
+    <svg class="section-icon" width="24" height="24" viewBox="0 0 20 20" fill="none">
+      <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <div class="section-content">
 
 ### Security Settings
 
@@ -282,7 +327,17 @@ Share your volunteering background:
 - **Document Safety**: Keep records of all volunteer agreements
 - **Report Issues**: Use platform reporting tools for concerns
 
-## First Steps After Joining
+  </div>
+</div>
+
+<div class="collapsible-section">
+  <button class="section-toggle" aria-expanded="false">
+    <span>First Steps After Joining</span>
+    <svg class="section-icon" width="24" height="24" viewBox="0 0 20 20" fill="none">
+      <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <div class="section-content">
 
 ### Explore Opportunities
 
@@ -332,7 +387,17 @@ Share your volunteering background:
 - **Build Networks**: Develop lasting relationships
 - **Share Resources**: Help your local community
 
-## Special Considerations
+  </div>
+</div>
+
+<div class="collapsible-section">
+  <button class="section-toggle" aria-expanded="false">
+    <span>Special Considerations</span>
+    <svg class="section-icon" width="24" height="24" viewBox="0 0 20 20" fill="none">
+      <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <div class="section-content">
 
 ### Age Requirements
 
@@ -389,7 +454,17 @@ Share your volunteering background:
 - **Cultural Orientation**: Local customs and expectations
 - **Emergency Procedures**: Country-specific safety protocols
 
-## Troubleshooting Common Issues
+  </div>
+</div>
+
+<div class="collapsible-section">
+  <button class="section-toggle" aria-expanded="false">
+    <span>Troubleshooting Common Issues</span>
+    <svg class="section-icon" width="24" height="24" viewBox="0 0 20 20" fill="none">
+      <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <div class="section-content">
 
 ### Account Setup Problems
 
@@ -423,7 +498,17 @@ Share your volunteering background:
 - **Alternative Options**: Consider similar organizations
 - **Support Assistance**: Contact platform support team
 
-## Success Tips
+  </div>
+</div>
+
+<div class="collapsible-section">
+  <button class="section-toggle" aria-expanded="false">
+    <span>Success Tips</span>
+    <svg class="section-icon" width="24" height="24" viewBox="0 0 20 20" fill="none">
+      <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <div class="section-content">
 
 ### Making a Great First Impression
 
@@ -457,7 +542,17 @@ Share your volunteering background:
 - **Positive Attitude**: Maintain enthusiasm and optimism
 - **Appreciation**: Express gratitude for opportunities
 
-## Getting Help
+  </div>
+</div>
+
+<div class="collapsible-section">
+  <button class="section-toggle" aria-expanded="false">
+    <span>Getting Help</span>
+    <svg class="section-icon" width="24" height="24" viewBox="0 0 20 20" fill="none">
+      <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <div class="section-content">
 
 ### Support Resources
 
@@ -491,7 +586,17 @@ Share your volunteering background:
 - **Networking Events**: Connect with other volunteers
 - **Recognition Programs**: Celebrate your achievements
 
-## Welcome to the Community!
+  </div>
+</div>
+
+<div class="collapsible-section">
+  <button class="section-toggle" aria-expanded="false">
+    <span>Welcome to the Community!</span>
+    <svg class="section-icon" width="24" height="24" viewBox="0 0 20 20" fill="none">
+      <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <div class="section-content">
 
 Congratulations on taking the first step toward making a meaningful difference! Give Protocol connects you with opportunities to use your skills, time, and passion to create positive change in the world.
 
@@ -518,3 +623,6 @@ Welcome to Give Protocol – where your generosity meets real need, and together
 *Ready to get started? Create your account today at [giveprotocol.org](https://giveprotocol.org)*  
 *Questions? Contact our support team anytime*  
 *Join thousands of volunteers already making a difference*
+
+  </div>
+</div>
