@@ -4,8 +4,6 @@ description: Complete documentation for Give Protocol's search, discovery, and r
 permalink: /platform-features/search-discovery/
 ---
 
-# Search and Discovery System
-
 This comprehensive guide covers Give Protocol's advanced search and discovery features, helping users find relevant organizations, campaigns, and volunteer opportunities efficiently.
 
 ## Overview

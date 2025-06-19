@@ -4,8 +4,6 @@ description: Guide to making informed, impactful donations and avoiding charity 
 permalink: /docs/safety-security/smart-giving/
 ---
 
-# Smart Giving
-
 Make your charitable contributions count. This guide helps you donate wisely, maximize your impact, and protect yourself from fraudulent charities.
 
 ## Understanding Smart Giving

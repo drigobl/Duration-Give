@@ -4,8 +4,6 @@ description: Complete guide to connecting your cryptocurrency wallet to Give Pro
 permalink: /docs/getting-started/wallet-connection/
 ---
 
-# Wallet Connection
-
 Connecting your cryptocurrency wallet is essential for using Give Protocol. This guide covers everything you need to know about wallet connection, from setup to security best practices.
 
 ## Why Connect a Wallet?

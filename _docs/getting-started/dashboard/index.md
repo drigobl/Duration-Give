@@ -4,8 +4,6 @@ description: Complete guide to navigating and using your Give Protocol dashboard
 permalink: /docs/getting-started/dashboard/
 ---
 
-# Dashboard
-
 Your Give Protocol dashboard is your command center for charitable giving. This guide will help you understand every feature and make the most of your giving experience.
 
 ## Dashboard Overview

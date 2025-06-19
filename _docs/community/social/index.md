@@ -4,8 +4,6 @@ description: Share your charitable journey, connect on social media, and inspire
 permalink: /docs/community/social/
 ---
 
-# Social Impact & Sharing
-
 Amplify your charitable impact by sharing your giving journey on social media. Connect with fellow changemakers, inspire others to get involved, and build a community around the causes you care about.
 
 ## Social Media Integration

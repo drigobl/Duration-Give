@@ -4,8 +4,6 @@ description: Complete guide for volunteers using the Give Protocol platform to f
 permalink: /user-guides/volunteers/
 ---
 
-# Volunteers User Guide
-
 This guide helps volunteers effectively use the Give Protocol platform to discover opportunities, track their contributions, and maximize their impact in the charitable sector.
 
 ## Getting Started

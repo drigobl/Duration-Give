@@ -4,8 +4,6 @@ description: Comprehensive documentation of Give Protocol's fee structure, calcu
 permalink: /technical/fees/
 ---
 
-# Fee Structure and Technical Implementation
-
 This document provides detailed information about Give Protocol's fee structure, including calculation methods, technical implementation, and integration guidelines for developers.
 
 ## Overview

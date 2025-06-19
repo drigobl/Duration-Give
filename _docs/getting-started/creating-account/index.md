@@ -4,8 +4,6 @@ description: Step-by-step guide to creating your Give Protocol account
 permalink: /docs/getting-started/creating-account/
 ---
 
-# Creating Account
-
 Welcome to Give Protocol! Creating an account is your first step towards making a difference in the world of charitable giving. This guide will walk you through the entire process.
 
 ## Before You Begin

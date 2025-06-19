@@ -4,8 +4,6 @@ description: Complete technical guide for cryptocurrency donations, wallet integ
 permalink: /technical/cryptocurrencies/
 ---
 
-# Cryptocurrency Integration and Technical Documentation
-
 This comprehensive guide covers the technical implementation of cryptocurrency donations on the Give Protocol platform, including supported currencies, integration methods, and security considerations.
 
 ## Overview

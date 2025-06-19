@@ -4,8 +4,6 @@ description: Comprehensive guide to Give Protocol's verification system for orga
 permalink: /platform-features/verification/
 ---
 
-# Verification System Documentation
-
 This document provides detailed information about Give Protocol's multi-tier verification system, which ensures trust, transparency, and security across the platform.
 
 ## Overview

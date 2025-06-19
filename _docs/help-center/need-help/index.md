@@ -4,8 +4,6 @@ description: Comprehensive help and support resources for Give Protocol users
 permalink: /docs/help-center/need-help/
 ---
 
-# Need Help
-
 Get the support you need to make the most of your Give Protocol experience. Our comprehensive help resources are designed to resolve issues quickly and help you maximize your charitable impact.
 
 ## Quick Help Options
