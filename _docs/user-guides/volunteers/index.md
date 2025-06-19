@@ -1,7 +1,7 @@
 ---
 title: Volunteers User Guide
 description: Complete guide for volunteers using the Give Protocol platform to find opportunities and track their impact
-permalink: /user-guides/volunteers/
+permalink: /docs/user-guides/volunteers/
 ---
 
 This guide helps volunteers effectively use the Give Protocol platform to discover opportunities, track their contributions, and maximize their impact in the charitable sector.

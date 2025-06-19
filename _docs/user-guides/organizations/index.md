@@ -1,7 +1,7 @@
 ---
 title: Organizations User Guide
 description: Complete guide for organizations using the Give Protocol platform to receive donations and manage their presence
-permalink: /user-guides/organizations/
+permalink: /docs/user-guides/organizations/
 ---
 
 This comprehensive guide helps charitable organizations effectively use the Give Protocol platform to receive donations, manage their presence, and engage with donors.

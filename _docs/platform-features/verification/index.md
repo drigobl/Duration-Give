@@ -1,7 +1,7 @@
 ---
 title: Verification System Documentation
 description: Comprehensive guide to Give Protocol's verification system for organizations, donors, and volunteers
-permalink: /platform-features/verification/
+permalink: /docs/platform-features/verification/
 ---
 
 This document provides detailed information about Give Protocol's multi-tier verification system, which ensures trust, transparency, and security across the platform.

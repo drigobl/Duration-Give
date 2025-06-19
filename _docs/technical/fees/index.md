@@ -1,7 +1,7 @@
 ---
 title: Fee Structure and Technical Implementation
 description: Comprehensive documentation of Give Protocol's fee structure, calculation methods, and technical implementation details
-permalink: /technical/fees/
+permalink: /docs/technical/fees/
 ---
 
 This document provides detailed information about Give Protocol's fee structure, including calculation methods, technical implementation, and integration guidelines for developers.

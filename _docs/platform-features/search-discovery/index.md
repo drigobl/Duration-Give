@@ -1,7 +1,7 @@
 ---
 title: Search and Discovery System
 description: Complete documentation for Give Protocol's search, discovery, and recommendation features
-permalink: /platform-features/search-discovery/
+permalink: /docs/platform-features/search-discovery/
 ---
 
 This comprehensive guide covers Give Protocol's advanced search and discovery features, helping users find relevant organizations, campaigns, and volunteer opportunities efficiently.
