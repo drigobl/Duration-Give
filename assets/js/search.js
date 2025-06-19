@@ -178,11 +178,11 @@ class DocumentationSearch {
   }
   
   updateShortcutDisplay() {
-    const shortcutElement = document.querySelector('.search-shortcut');
-    if (shortcutElement) {
+    if (this.searchInput) {
       // Detect platform and show appropriate shortcut
       const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-      shortcutElement.textContent = isMac ? '⌘K' : 'Ctrl+K';
+      const shortcut = isMac ? '⌘K' : 'Ctrl+K';
+      this.searchInput.placeholder = `Search docs... ${shortcut}`;
     }
   }
   
