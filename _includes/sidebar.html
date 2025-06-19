@@ -3,14 +3,17 @@
     {% for section in site.navigation %}
       <div class="sidebar-section">
         <h3 class="sidebar-heading" id="nav-{{ section.title | slugify }}">
-          <a href="{{ section.url | relative_url }}" 
-             class="sidebar-link {% if page.url == section.url %}active{% endif %}"
-             {% if page.url == section.url %}aria-current="page"{% endif %}>
-            {{ section.title }}
-          </a>
+          {{ section.title }}
         </h3>
-        {% if section.subnav %}
-          <ul class="sidebar-list" role="list" aria-labelledby="nav-{{ section.title | slugify }}">
+        <ul class="sidebar-list" role="list" aria-labelledby="nav-{{ section.title | slugify }}">
+          <li role="listitem">
+            <a href="{{ section.url | relative_url }}" 
+               class="sidebar-sublink {% if page.url == section.url %}active{% endif %}"
+               {% if page.url == section.url %}aria-current="page"{% endif %}>
+              Overview
+            </a>
+          </li>
+          {% if section.subnav %}
             {% for item in section.subnav %}
               <li role="listitem">
                 <a href="{{ item.url | relative_url }}" 
@@ -20,8 +23,8 @@
                 </a>
               </li>
             {% endfor %}
-          </ul>
-        {% endif %}
+          {% endif %}
+        </ul>
       </div>
     {% endfor %}
   </div>
