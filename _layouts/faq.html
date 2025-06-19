@@ -1,0 +1,46 @@
+---
+layout: default
+---
+
+<article class="faq-page">
+  {{ content }}
+</article>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const faqButtons = document.querySelectorAll('.faq-question');
+  
+  faqButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const isExpanded = this.getAttribute('aria-expanded') === 'true';
+      const answer = this.nextElementSibling;
+      const icon = this.querySelector('.faq-icon');
+      
+      // Toggle expanded state
+      this.setAttribute('aria-expanded', !isExpanded);
+      
+      // Toggle answer visibility
+      if (!isExpanded) {
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+        answer.classList.add('expanded');
+        icon.classList.add('rotate');
+      } else {
+        answer.style.maxHeight = '0';
+        answer.classList.remove('expanded');
+        icon.classList.remove('rotate');
+      }
+    });
+  });
+  
+  // Expand items when navigating via hash
+  if (window.location.hash) {
+    const targetButton = document.querySelector(window.location.hash + ' .faq-question');
+    if (targetButton) {
+      targetButton.click();
+      setTimeout(() => {
+        targetButton.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
+  }
+});
+</script>
