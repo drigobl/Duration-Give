@@ -1,0 +1,57 @@
+---
+layout: default
+---
+
+<article class="guide-page">
+  <div class="guide-container">
+    <div class="guide-header">
+      <h1>{{ page.title }}</h1>
+      {% if page.description %}
+        <p class="guide-subtitle">{{ page.description }}</p>
+      {% endif %}
+    </div>
+
+    <div class="guide-content">
+      {{ content }}
+    </div>
+  </div>
+</article>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const sectionButtons = document.querySelectorAll('.section-toggle');
+  
+  sectionButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const isExpanded = this.getAttribute('aria-expanded') === 'true';
+      const content = this.nextElementSibling;
+      const icon = this.querySelector('.section-icon');
+      
+      // Toggle expanded state
+      this.setAttribute('aria-expanded', !isExpanded);
+      
+      // Toggle content visibility
+      if (!isExpanded) {
+        content.style.maxHeight = content.scrollHeight + 'px';
+        content.classList.add('expanded');
+        icon.classList.add('rotate');
+      } else {
+        content.style.maxHeight = '0';
+        content.classList.remove('expanded');
+        icon.classList.remove('rotate');
+      }
+    });
+  });
+  
+  // Expand sections when navigating via hash
+  if (window.location.hash) {
+    const targetButton = document.querySelector(window.location.hash + ' .section-toggle');
+    if (targetButton) {
+      targetButton.click();
+      setTimeout(() => {
+        targetButton.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
+  }
+});
+</script>

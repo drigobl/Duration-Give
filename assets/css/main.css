@@ -1145,31 +1145,35 @@ a, button, [role="button"], .clickable {
   outline-offset: 2px;
 }
 
-/* FAQ Accordion Styles - Braver Style */
+/* FAQ Accordion Styles - Give Protocol Style */
 .faq-page {
-  max-width: 900px;
-  margin: 0 auto;
+  background-color: var(--color-background-primary);
+  min-height: calc(100vh - 4rem);
 }
 
 .faq-container {
-  padding: 2rem 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
 }
 
 .faq-header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
 }
 
 .faq-header h1 {
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 700;
   color: var(--color-primary-900);
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .faq-subtitle {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   color: var(--color-text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .faq-sections {
@@ -1180,23 +1184,29 @@ a, button, [role="button"], .clickable {
 
 .faq-section {
   background-color: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-primary-100);
   overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.faq-section:hover {
+  box-shadow: var(--shadow-card-hover);
 }
 
 .faq-section-title {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: var(--color-primary-900);
-  padding: 1.5rem;
-  background-color: var(--color-sidebar-bg);
+  padding: 1.75rem 2rem;
+  background-color: var(--color-background-secondary);
   margin: 0;
-  border-bottom: 1px solid var(--color-sidebar-border);
+  border-bottom: 1px solid var(--color-primary-200);
 }
 
 .faq-item {
-  border-bottom: 1px solid var(--color-sidebar-border);
+  border-bottom: 1px solid var(--color-primary-100);
 }
 
 .faq-item:last-child {
@@ -1208,35 +1218,40 @@ a, button, [role="button"], .clickable {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.25rem 1.5rem;
+  padding: 1.5rem 2rem;
   background: none;
   border: none;
   cursor: pointer;
   text-align: left;
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 500;
   color: var(--color-primary-900);
-  transition: all 0.2s ease;
+  transition: all 0.2s ease-in-out;
+  position: relative;
 }
 
 .faq-question:hover {
-  background-color: var(--color-sidebar-bg);
+  background-color: var(--color-primary-50);
+  color: var(--color-indigo-600);
 }
 
 .faq-question:focus-visible {
-  outline: 2px solid var(--color-sidebar-active);
-  outline-offset: -2px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+  border-radius: 0.25rem;
 }
 
 .faq-question span {
   flex: 1;
-  padding-right: 1rem;
+  padding-right: 1.5rem;
 }
 
 .faq-icon {
   flex-shrink: 0;
-  transition: transform 0.3s ease;
-  color: var(--color-text-secondary);
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease-in-out;
+  color: var(--color-indigo-600);
 }
 
 .faq-icon.rotate {
@@ -1246,19 +1261,20 @@ a, button, [role="button"], .clickable {
 .faq-answer {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease;
-  padding: 0 1.5rem;
+  transition: max-height 0.4s ease-in-out;
+  background-color: var(--color-primary-50);
 }
 
 .faq-answer.expanded {
-  padding: 0 1.5rem 1.25rem;
+  border-top: 1px solid var(--color-primary-100);
+  padding: 1.5rem 2rem;
 }
 
 .faq-answer p,
 .faq-answer ul,
 .faq-answer ol {
   margin-bottom: 1rem;
-  line-height: 1.6;
+  line-height: 1.75;
   color: var(--color-text-secondary);
 }
 
@@ -1270,46 +1286,424 @@ a, button, [role="button"], .clickable {
 
 .faq-answer ul,
 .faq-answer ol {
-  padding-left: 1.5rem;
+  padding-left: 1.75rem;
 }
 
 .faq-answer li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.faq-answer li:last-child {
+  margin-bottom: 0;
 }
 
 .faq-answer a {
-  color: var(--color-sidebar-active);
+  color: var(--color-indigo-600);
+  font-weight: 500;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid transparent;
 }
 
 .faq-answer a:hover {
   color: var(--color-indigo-700);
-  text-decoration: underline;
+  border-bottom-color: var(--color-indigo-700);
+}
+
+.faq-answer strong {
+  color: var(--color-primary-900);
+  font-weight: 600;
+}
+
+/* Add subtle animation for expanded state */
+.faq-question[aria-expanded="true"] {
+  color: var(--color-indigo-600);
+  background-color: var(--color-primary-50);
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+  .faq-container {
+    padding: 2rem 1rem;
+  }
+  
   .faq-header h1 {
     font-size: 2rem;
   }
   
-  .faq-section-title {
+  .faq-subtitle {
     font-size: 1.125rem;
-    padding: 1.25rem;
+  }
+  
+  .faq-section-title {
+    font-size: 1.25rem;
+    padding: 1.5rem;
   }
   
   .faq-question {
-    padding: 1rem;
-    font-size: 0.9375rem;
+    padding: 1.25rem 1.5rem;
+    font-size: 1rem;
   }
   
-  .faq-answer {
-    padding: 0 1rem;
+  .faq-answer-content {
+    padding: 1.25rem 1.5rem;
   }
   
-  .faq-answer.expanded {
-    padding: 0 1rem 1rem;
+  .faq-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Guide Layout Styles - Give Protocol Style */
+.guide-page {
+  background-color: var(--color-background-primary);
+  min-height: calc(100vh - 4rem);
+}
+
+.guide-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.guide-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.guide-header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--color-primary-900);
+  margin-bottom: 1rem;
+}
+
+.guide-subtitle {
+  font-size: 1.25rem;
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.guide-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Collapsible Section Styles */
+.collapsible-section {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-primary-100);
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.collapsible-section:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+.section-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.75rem 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-primary-900);
+  transition: all 0.2s ease-in-out;
+  position: relative;
+}
+
+.section-toggle:hover {
+  background-color: var(--color-primary-50);
+  color: var(--color-indigo-600);
+}
+
+.section-toggle:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+  border-radius: 0.25rem;
+}
+
+.section-toggle span {
+  flex: 1;
+  padding-right: 1.5rem;
+}
+
+.section-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease-in-out;
+  color: var(--color-indigo-600);
+}
+
+.section-icon.rotate {
+  transform: rotate(180deg);
+}
+
+.section-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-in-out;
+  background-color: white;
+}
+
+.section-content.expanded {
+  border-top: 1px solid var(--color-primary-100);
+  padding: 2rem;
+}
+
+.section-content h3,
+.section-content h4,
+.section-content h5 {
+  color: var(--color-primary-900);
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.section-content h3:first-child,
+.section-content h4:first-child,
+.section-content h5:first-child {
+  margin-top: 0;
+}
+
+.section-content p,
+.section-content ul,
+.section-content ol {
+  margin-bottom: 1rem;
+  line-height: 1.75;
+  color: var(--color-text-secondary);
+}
+
+.section-content p:last-child,
+.section-content ul:last-child,
+.section-content ol:last-child {
+  margin-bottom: 0;
+}
+
+.section-content ul,
+.section-content ol {
+  padding-left: 1.75rem;
+}
+
+.section-content li {
+  margin-bottom: 0.5rem;
+}
+
+.section-content li:last-child {
+  margin-bottom: 0;
+}
+
+.section-content a {
+  color: var(--color-indigo-600);
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.section-content a:hover {
+  color: var(--color-indigo-700);
+  border-bottom-color: var(--color-indigo-700);
+}
+
+.section-content strong {
+  color: var(--color-primary-900);
+  font-weight: 600;
+}
+
+.section-content code {
+  background-color: var(--color-primary-50);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--color-primary-800);
+}
+
+.section-content pre {
+  background-color: var(--color-primary-50);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.section-content pre code {
+  background: none;
+  padding: 0;
+}
+
+/* Active section styling */
+.section-toggle[aria-expanded="true"] {
+  color: var(--color-indigo-600);
+  background-color: var(--color-primary-50);
+}
+
+/* Overview Layout Styles */
+.overview-page {
+  background-color: var(--color-background-primary);
+  min-height: calc(100vh - 4rem);
+}
+
+.overview-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.overview-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.overview-header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--color-primary-900);
+  margin-bottom: 1rem;
+}
+
+.overview-subtitle {
+  font-size: 1.25rem;
+  color: var(--color-text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.overview-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Card Components for Overview Pages */
+.feature-cards,
+.guide-cards,
+.resource-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.feature-card,
+.guide-card,
+.resource-card {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-primary-100);
+  padding: 2rem;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  color: inherit;
+}
+
+.feature-card:hover,
+.guide-card:hover,
+.resource-card:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+  text-decoration: none;
+  color: inherit;
+}
+
+.card-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  color: var(--color-indigo-600);
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-primary-900);
+  margin-bottom: 0.75rem;
+}
+
+.card-description {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+/* Section Styling for Non-Collapsible Content */
+.content-section {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-primary-100);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.content-section h2 {
+  color: var(--color-primary-900);
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-primary-100);
+}
+
+.content-section h3 {
+  color: var(--color-primary-800);
+  font-size: 1.25rem;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.content-section h3:first-of-type {
+  margin-top: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .guide-container,
+  .overview-container {
+    padding: 2rem 1rem;
+  }
+  
+  .guide-header h1,
+  .overview-header h1 {
+    font-size: 2rem;
+  }
+  
+  .guide-subtitle,
+  .overview-subtitle {
+    font-size: 1.125rem;
+  }
+  
+  .section-toggle {
+    padding: 1.5rem;
+    font-size: 1.25rem;
+  }
+  
+  .section-content.expanded {
+    padding: 1.5rem;
+  }
+  
+  .section-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .feature-cards,
+  .guide-cards,
+  .resource-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .content-section {
+    padding: 1.5rem;
   }
 }
 

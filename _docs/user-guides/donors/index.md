@@ -2,13 +2,21 @@
 title: Donors
 description: Complete guide for donors using Give Protocol to make charitable donations
 permalink: /docs/user-guides/donors/
+layout: guide
 ---
 
-# Donor Guide
+<div class="content-section">
+  <p>Welcome to the comprehensive guide for donors on Give Protocol. Whether you're new to cryptocurrency giving or an experienced philanthropist, this guide will help you maximize your impact while giving securely and efficiently.</p>
+</div>
 
-Welcome to the comprehensive guide for donors on Give Protocol. Whether you're new to cryptocurrency giving or an experienced philanthropist, this guide will help you maximize your impact while giving securely and efficiently.
-
-## Getting Started as a Donor
+<div class="collapsible-section">
+  <button class="section-toggle" aria-expanded="false">
+    <span>Getting Started as a Donor</span>
+    <svg class="section-icon" width="24" height="24" viewBox="0 0 20 20" fill="none">
+      <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <div class="section-content">
 
 ### Your Donor Journey
 1. **Create Account** - Set up your donor profile
