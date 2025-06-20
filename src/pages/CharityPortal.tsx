@@ -13,11 +13,12 @@ import { CurrencyDisplay } from '@/components/CurrencyDisplay';
 import { supabase } from '@/lib/supabase';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { Logger } from '@/utils/logger';
+import { ProfileUpdateRequest } from '@/components/charity/ProfileUpdateRequest';
 
 export const CharityPortal: React.FC = () => {
   const { user, userType } = useAuth();
   const { profile, loading: profileLoading } = useProfile();
-  const [activeTab, setActiveTab] = useState<'transactions' | 'volunteers' | 'applications' | 'opportunities'>('transactions');
+  const [activeTab, setActiveTab] = useState<'transactions' | 'volunteers' | 'applications' | 'opportunities' | 'profile'>('transactions');
   const [showExportModal, setShowExportModal] = useState(false);
   const { t } = useTranslation();
   
@@ -472,6 +473,16 @@ export const CharityPortal: React.FC = () => {
             >
               {t('volunteer.opportunities')}
             </button>
+            <button
+              onClick={() => setActiveTab('profile')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'profile'
+                  ? 'border-indigo-500 text-indigo-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Profile Update
+            </button>
           </nav>
         </div>
       </div>
@@ -691,6 +702,11 @@ export const CharityPortal: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Profile Update Section */}
+      {activeTab === 'profile' && (
+        <ProfileUpdateRequest />
       )}
 
       {/* Export Modal */}

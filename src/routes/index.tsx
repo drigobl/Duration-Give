@@ -33,6 +33,7 @@ const VerifyContribution = lazy(() => import('@/pages/volunteer/VerifyContributi
 
 // Admin routes
 const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
+const ReactAdminApp = lazy(() => import('@/pages/admin/ReactAdmin').then(m => ({ default: m.ReactAdminApp })));
 
 // Lazy load cause pages
 const CleanWaterInitiative = lazy(() => import('@/pages/causes/CleanWaterInitiative'));
@@ -70,6 +71,18 @@ export function AppRoutes() {
                   <AdminDashboard />
                 </Suspense>
               </RouteTransition>
+            </ProtectedRoute>
+          }
+        />
+        
+        {/* React-Admin Routes */}
+        <Route
+          path="/react-admin/*"
+          element={
+            <ProtectedRoute requiredRoles={['admin']}>
+              <Suspense fallback={<LoadingFallback />}>
+                <ReactAdminApp />
+              </Suspense>
             </ProtectedRoute>
           }
         />

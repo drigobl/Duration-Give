@@ -12,6 +12,8 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { CurrencyDisplay } from '@/components/CurrencyDisplay';
 import { WalletAliasSettings } from '@/components/settings/WalletAliasSettings';
 import { ScheduledDonations } from '@/components/donor/ScheduledDonations';
+import { VolunteerProfile } from '@/components/volunteer/VolunteerProfile';
+import { VolunteerActivity } from '@/components/volunteer/VolunteerActivity';
 
 type View = 'select' | 'donor' | 'charity' | 'forgotPassword' | 'forgotUsername';
 
@@ -26,6 +28,7 @@ export const GiveDashboard: React.FC = () => {
   const [showExportModal, setShowExportModal] = useState(false);
   const [showWalletSettings, setShowWalletSettings] = useState(false);
   const [showScheduledDonations, setShowScheduledDonations] = useState(false);
+  const [activeSection, setActiveSection] = useState<'overview' | 'volunteer-profile' | 'volunteer-activity'>('overview');
   const { t } = useTranslation();
   
   // Check if we should show wallet settings from location state
@@ -220,8 +223,47 @@ export const GiveDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* Metrics Grid */}
-      <div className="grid gap-6 mb-8 md:grid-cols-3">
+      {/* Navigation Tabs */}
+      <div className="mb-8">
+        <nav className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+          <button
+            onClick={() => setActiveSection('overview')}
+            className={`flex-1 py-2 px-4 text-sm font-medium rounded-md transition-colors ${
+              activeSection === 'overview'
+                ? 'bg-white text-gray-900 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Overview
+          </button>
+          <button
+            onClick={() => setActiveSection('volunteer-profile')}
+            className={`flex-1 py-2 px-4 text-sm font-medium rounded-md transition-colors ${
+              activeSection === 'volunteer-profile'
+                ? 'bg-white text-gray-900 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Volunteer Profile
+          </button>
+          <button
+            onClick={() => setActiveSection('volunteer-activity')}
+            className={`flex-1 py-2 px-4 text-sm font-medium rounded-md transition-colors ${
+              activeSection === 'volunteer-activity'
+                ? 'bg-white text-gray-900 shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Volunteer Activity
+          </button>
+        </nav>
+      </div>
+
+      {/* Section Content */}
+      {activeSection === 'overview' && (
+        <>
+          {/* Metrics Grid */}
+          <div className="grid gap-6 mb-8 md:grid-cols-3">
         <Card className="p-6">
           <div className="flex items-center">
             <div className="p-3 rounded-full bg-indigo-100 text-indigo-600">
@@ -412,6 +454,18 @@ export const GiveDashboard: React.FC = () => {
           </div>
         </div>
       </div>
+        </>
+      )}
+
+      {/* Volunteer Profile Section */}
+      {activeSection === 'volunteer-profile' && (
+        <VolunteerProfile />
+      )}
+
+      {/* Volunteer Activity Section */}
+      {activeSection === 'volunteer-activity' && (
+        <VolunteerActivity />
+      )}
 
       {/* Export Modal */}
       {showExportModal && (
