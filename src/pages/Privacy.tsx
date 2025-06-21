@@ -243,7 +243,7 @@ export const Privacy: React.FC = () => {
         <div className="card">
           <p>
             Please note that blockchain data cannot be deleted due to the immutable nature of blockchain technology. Consider this limitation before posting information to the blockchain.
-          </strong></p>
+          </p>
         </div>
       </section>
 
