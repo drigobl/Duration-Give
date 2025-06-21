@@ -55,9 +55,14 @@ const DocumentationSidebar: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/docs" className="sidebar-sublink">
+                <a 
+                  href="https://giveprotocol.github.io/Duration-Give/" 
+                  className="sidebar-sublink"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Documentation
-                </Link>
+                </a>
               </li>
             </ul>
           </div>
