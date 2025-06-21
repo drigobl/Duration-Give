@@ -1,7 +1,7 @@
 import { Admin, Resource, ListGuesser, EditGuesser, ShowGuesser } from 'react-admin';
-import { authProvider } from '../../lib/react-admin/authProvider';
-import { supabaseDataProvider } from 'ra-supabase';
+import { supabaseDataProvider, supabaseAuthProvider } from 'ra-supabase';
 import { supabase } from '../../lib/supabase';
+import { ENV } from '../../config/env';
 import { 
   Users, 
   Building2, 
@@ -22,7 +22,22 @@ import { VolunteerApplicationList, VolunteerApplicationShow } from './resources/
 import { DonationList, DonationShow } from './resources/donations';
 import { UserList, UserEdit, UserShow } from './resources/users';
 
-const dataProvider = supabaseDataProvider(supabase);
+const dataProvider = supabaseDataProvider({
+  instanceUrl: ENV.SUPABASE_URL,
+  apiKey: ENV.SUPABASE_ANON_KEY,
+  supabaseClient: supabase
+});
+
+const authProvider = supabaseAuthProvider(supabase, {
+  getPermissions: async (params) => {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('type')
+      .eq('id', params.id)
+      .single();
+    return profile?.type || 'donor';
+  }
+});
 
 export const ReactAdminApp = () => {
   return (
