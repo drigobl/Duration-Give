@@ -14,7 +14,6 @@ export default defineConfig(({ mode }) => ({
   define: {
     global: 'globalThis',
     'process.env': {},
-    Buffer: ['buffer', 'Buffer'],
   },
   build: {
     target: 'es2020',

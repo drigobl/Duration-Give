@@ -14,6 +14,7 @@ import { WalletAliasSettings } from '@/components/settings/WalletAliasSettings';
 import { ScheduledDonations } from '@/components/donor/ScheduledDonations';
 import { VolunteerProfile } from '@/components/volunteer/VolunteerProfile';
 import { VolunteerActivity } from '@/components/volunteer/VolunteerActivity';
+import { WalletConnectionDebug } from '@/components/debug/WalletConnectionDebug';
 
 type View = 'select' | 'donor' | 'charity' | 'forgotPassword' | 'forgotUsername';
 
@@ -171,13 +172,16 @@ export const GiveDashboard: React.FC = () => {
   if (!isConnected) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white p-8 rounded-lg shadow-md text-center">
+        <div className="bg-white p-8 rounded-lg shadow-md text-center mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Connect Your Wallet</h2>
           <p className="text-gray-600 mb-6">
             To view your dashboard and make donations, please connect your wallet.
           </p>
           <Button onClick={connect}>Connect Wallet</Button>
         </div>
+        
+        {/* Debug Component - Remove after fixing */}
+        <WalletConnectionDebug />
       </div>
     );
   }

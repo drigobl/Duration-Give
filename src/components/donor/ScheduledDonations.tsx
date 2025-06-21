@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useScheduledDonation } from '@/hooks/web3/useScheduledDonation';
+// Temporarily using mock for development - switch back when contracts are deployed
+import { useScheduledDonationMock as useScheduledDonation } from '@/hooks/web3/useScheduledDonationMock';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';

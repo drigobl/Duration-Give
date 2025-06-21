@@ -100,6 +100,8 @@ export function ConnectButton() {
       setConnectionError(null);
       setIsRetrying(false);
       
+      Logger.info('Attempting wallet connection', { walletName });
+      
       const timeoutId = setTimeout(() => {
         setConnectionError('Connection timeout. Please try again.');
         setShowWalletSelect(false);

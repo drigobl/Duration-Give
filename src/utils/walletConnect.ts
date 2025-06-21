@@ -22,8 +22,9 @@ export class WalletConnectManager {
   async connect(): Promise<{ provider: ethers.Provider; address: string }> {
     try {
       // Create WalletConnect provider
-      // Temporarily disabled for Buffer compatibility
-      throw new Error('WalletConnect temporarily disabled for compatibility');
+      // Note: WalletConnect v2 implementation would go here
+      // For now, throw a more descriptive error
+      throw new Error('WalletConnect integration is currently being updated. Please use MetaMask or another browser wallet.');
 
       // Enable the provider (triggers QR code modal)
       await this.provider.enable();

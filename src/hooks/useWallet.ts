@@ -256,7 +256,8 @@ export function useWallet() {
       new TalismanWallet(),
       new NovaWallet(),
       new CoinbaseWallet(),
-      new RabbyWallet()
+      new RabbyWallet(),
+      new WalletConnectWallet()
     ];
   };
 
