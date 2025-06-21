@@ -1,18 +1,16 @@
 import React from 'react';
 import { Shield, Users, Vote, Scale, Clock, AlertTriangle } from 'lucide-react';
+import DocumentationLayout from '../components/layouts/DocumentationLayout';
 
 export const Governance: React.FC = () => {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">Protocol Governance</h1>
-        <p className="text-xl text-gray-600">
-          Empowering our community through transparent and decentralized decision-making
-        </p>
-      </div>
+    <DocumentationLayout 
+      title="Protocol Governance"
+      description="Empowering our community through transparent and decentralized decision-making"
+    >
 
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-12">
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="card">
           <div className="flex items-center mb-4">
             <Vote className="h-6 w-6 text-indigo-600 mr-2" />
             <h3 className="text-lg font-semibold">Voting Power</h3>
@@ -36,7 +34,7 @@ export const Governance: React.FC = () => {
           </ul>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="card">
           <div className="flex items-center mb-4">
             <Shield className="h-6 w-6 text-indigo-600 mr-2" />
             <h3 className="text-lg font-semibold">Proposal Thresholds</h3>
@@ -86,7 +84,7 @@ export const Governance: React.FC = () => {
       </div>
 
       <div className="space-y-8">
-        <div className="bg-white p-8 rounded-lg shadow-md">
+        <div className="card">
           <div className="flex items-center mb-6">
             <Scale className="h-8 w-8 text-indigo-600 mr-3" />
             <h2 className="text-2xl font-semibold">Proposal Process</h2>
@@ -156,6 +154,6 @@ export const Governance: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </DocumentationLayout>
   );
 };

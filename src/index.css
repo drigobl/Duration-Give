@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import documentation CSS for styled pages */
+@import '../assets/css/main.css';
+
 @layer base {
   html,
   :host {
