@@ -1,6 +1,7 @@
 import { Admin, Resource, ListGuesser, EditGuesser, ShowGuesser } from 'react-admin';
 import { authProvider } from '../../lib/react-admin/authProvider';
-import { supabaseDataProvider } from '../../lib/react-admin/supabaseDataProvider';
+import { supabaseDataProvider } from 'ra-supabase';
+import { supabase } from '../../lib/supabase';
 import { 
   Users, 
   Building2, 
@@ -21,10 +22,12 @@ import { VolunteerApplicationList, VolunteerApplicationShow } from './resources/
 import { DonationList, DonationShow } from './resources/donations';
 import { UserList, UserEdit, UserShow } from './resources/users';
 
+const dataProvider = supabaseDataProvider(supabase);
+
 export const ReactAdminApp = () => {
   return (
     <Admin 
-      dataProvider={supabaseDataProvider} 
+      dataProvider={dataProvider} 
       authProvider={authProvider}
       requireAuth
     >
