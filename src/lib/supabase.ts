@@ -23,9 +23,9 @@ const authConfig = {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
-    storage: window.localStorage,
+    storage: typeof window !== 'undefined' ? window.localStorage : undefined,
     storageKey: 'give-protocol-auth',
-    flowType: 'pkce',
+    flowType: 'pkce' as const,
     debug: import.meta.env.DEV,
     // OTP settings
     otpExpiryTime: 900, // 15 minutes in seconds
@@ -42,7 +42,9 @@ export const supabase = createClient<Database>(
 supabase.auth.onAuthStateChange((event, session) => {
   if (event === 'SIGNED_OUT') {
     // Clear any cached data
-    window.localStorage.removeItem('give-protocol-auth');
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem('give-protocol-auth');
+    }
   }
 
   if (event === 'TOKEN_REFRESHED') {

@@ -25,6 +25,10 @@ export default defineConfig(({ mode }) => ({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
+            // React-Admin should be in its own chunk to avoid initialization issues
+            if (id.includes('react-admin') || id.includes('ra-')) {
+              return 'vendor-admin';
+            }
             if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
               return 'vendor-react';
             }
@@ -85,8 +89,11 @@ export default defineConfig(({ mode }) => ({
       'buffer',
       'readable-stream',
       'util',
-      'events'
+      'events',
+      'react-admin',
+      'ra-supabase'
     ],
+    exclude: ['@polkadot/api'],
     force: true
   }
 }));

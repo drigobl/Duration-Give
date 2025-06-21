@@ -22,24 +22,33 @@ import { VolunteerApplicationList, VolunteerApplicationShow } from './resources/
 import { DonationList, DonationShow } from './resources/donations';
 import { UserList, UserEdit, UserShow } from './resources/users';
 
-const dataProvider = supabaseDataProvider({
-  instanceUrl: ENV.SUPABASE_URL,
-  apiKey: ENV.SUPABASE_ANON_KEY,
-  supabaseClient: supabase
-});
+// Initialize providers inside component to avoid initialization order issues
+const createDataProvider = () => {
+  return supabaseDataProvider({
+    instanceUrl: ENV.SUPABASE_URL,
+    apiKey: ENV.SUPABASE_ANON_KEY,
+    supabaseClient: supabase
+  });
+};
 
-const authProvider = supabaseAuthProvider(supabase, {
-  getPermissions: async (params) => {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('type')
-      .eq('id', params.id)
-      .single();
-    return profile?.type || 'donor';
-  }
-});
+const createAuthProvider = () => {
+  return supabaseAuthProvider(supabase, {
+    getPermissions: async (params) => {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('type')
+        .eq('id', params.id)
+        .single();
+      return profile?.type || 'donor';
+    }
+  });
+};
 
 export const ReactAdminApp = () => {
+  // Create providers inside component to ensure proper initialization
+  const dataProvider = createDataProvider();
+  const authProvider = createAuthProvider();
+  
   return (
     <Admin 
       dataProvider={dataProvider} 

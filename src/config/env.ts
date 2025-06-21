@@ -10,15 +10,15 @@ const parseStringArray = (value: string | string[]): string[] => {
 // Create and validate environment configuration
 export const ENV = {
   // Required variables
-  SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL,
-  SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY,
+  SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL || '',
+  SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY || '',
   APP_DOMAIN: import.meta.env.VITE_APP_DOMAIN || 'localhost',
 
-  // Contract addresses
-  DONATION_CONTRACT_ADDRESS: import.meta.env.VITE_DONATION_CONTRACT_ADDRESS,
-  TOKEN_CONTRACT_ADDRESS: import.meta.env.VITE_TOKEN_CONTRACT_ADDRESS,
-  VERIFICATION_CONTRACT_ADDRESS: import.meta.env.VITE_VERIFICATION_CONTRACT_ADDRESS,
-  DISTRIBUTION_CONTRACT_ADDRESS: import.meta.env.VITE_DISTRIBUTION_CONTRACT_ADDRESS,
+  // Contract addresses with fallbacks
+  DONATION_CONTRACT_ADDRESS: import.meta.env.VITE_DONATION_CONTRACT_ADDRESS || '0x1234567890123456789012345678901234567890',
+  TOKEN_CONTRACT_ADDRESS: import.meta.env.VITE_TOKEN_CONTRACT_ADDRESS || '0x4567890123456789012345678901234567890123',
+  VERIFICATION_CONTRACT_ADDRESS: import.meta.env.VITE_VERIFICATION_CONTRACT_ADDRESS || '0x2345678901234567890123456789012345678901',
+  DISTRIBUTION_CONTRACT_ADDRESS: import.meta.env.VITE_DISTRIBUTION_CONTRACT_ADDRESS || '0x3456789012345678901234567890123456789012',
 
   // Optional variables with defaults
   NETWORK: import.meta.env.VITE_NETWORK || 'moonbase',
@@ -51,32 +51,28 @@ export const ENV = {
 } as const;
 
 // Validate required environment variables
-if (!ENV.SUPABASE_URL || !ENV.SUPABASE_ANON_KEY) {
+if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
   console.error('Missing required Supabase environment variables:', {
-    SUPABASE_URL: ENV.SUPABASE_URL ? 'defined' : 'undefined',
-    SUPABASE_ANON_KEY: ENV.SUPABASE_ANON_KEY ? 'defined' : 'undefined'
+    SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL ? 'defined' : 'undefined',
+    SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY ? 'defined' : 'undefined'
   });
 }
 
-// Validate contract addresses
-if (!ENV.DONATION_CONTRACT_ADDRESS) {
+// Log warnings for missing contract addresses
+if (!import.meta.env.VITE_DONATION_CONTRACT_ADDRESS) {
   console.warn('Donation contract address not found in environment variables. Using development address.');
-  ENV.DONATION_CONTRACT_ADDRESS = '0x1234567890123456789012345678901234567890';
 }
 
-if (!ENV.VERIFICATION_CONTRACT_ADDRESS) {
+if (!import.meta.env.VITE_VERIFICATION_CONTRACT_ADDRESS) {
   console.warn('Verification contract address not found in environment variables. Using development address.');
-  ENV.VERIFICATION_CONTRACT_ADDRESS = '0x2345678901234567890123456789012345678901';
 }
 
-if (!ENV.DISTRIBUTION_CONTRACT_ADDRESS) {
+if (!import.meta.env.VITE_DISTRIBUTION_CONTRACT_ADDRESS) {
   console.warn('Distribution contract address not found in environment variables. Using development address.');
-  ENV.DISTRIBUTION_CONTRACT_ADDRESS = '0x3456789012345678901234567890123456789012';
 }
 
-if (!ENV.TOKEN_CONTRACT_ADDRESS) {
+if (!import.meta.env.VITE_TOKEN_CONTRACT_ADDRESS) {
   console.warn('Token contract address not found in environment variables. Using development address.');
-  ENV.TOKEN_CONTRACT_ADDRESS = '0x4567890123456789012345678901234567890123';
 }
 
 export type EnvVars = typeof ENV;
