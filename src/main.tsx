@@ -1,6 +1,11 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Buffer } from 'buffer';
+
+// Initialize Emotion polyfill early to prevent initialization issues
+import { ensureEmotionInitialized } from './lib/react-admin/emotion-polyfill';
+ensureEmotionInitialized();
+
 import App from './App';
 import './index.css';
 import './i18n';

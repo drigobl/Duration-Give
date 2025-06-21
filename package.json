@@ -50,6 +50,12 @@
         "react-window": "^1.8.10",
         "react-admin": "^4.16.15",
         "ra-supabase": "^3.5.0",
+        "@emotion/react": "^11.11.1",
+        "@emotion/styled": "^11.11.0",
+        "@emotion/cache": "^11.11.0",
+        "@mui/material": "^5.14.20",
+        "@mui/icons-material": "^5.14.19",
+        "react-is": "^18.2.0",
         "tailwind-merge": "^2.2.1",
         "viem": "^2.7.9"
     },

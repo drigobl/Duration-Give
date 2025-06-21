@@ -1,7 +1,13 @@
+// Ensure Emotion is initialized before importing React-Admin
+import { ensureEmotionInitialized } from '../../lib/react-admin/emotion-polyfill';
+ensureEmotionInitialized();
+
+import React from 'react';
 import { Admin, Resource, ListGuesser, EditGuesser, ShowGuesser } from 'react-admin';
 import { supabaseDataProvider, supabaseAuthProvider } from 'ra-supabase';
 import { supabase } from '../../lib/supabase';
 import { ENV } from '../../config/env';
+import { MuiProvider } from '../../lib/react-admin/MuiProvider';
 import { 
   Users, 
   Building2, 
@@ -50,11 +56,12 @@ export const ReactAdminApp = () => {
   const authProvider = createAuthProvider();
   
   return (
-    <Admin 
-      dataProvider={dataProvider} 
-      authProvider={authProvider}
-      requireAuth
-    >
+    <MuiProvider>
+      <Admin 
+        dataProvider={dataProvider} 
+        authProvider={authProvider}
+        requireAuth
+      >
       {/* User Management */}
       <Resource
         name="profiles"
@@ -126,6 +133,7 @@ export const ReactAdminApp = () => {
         icon={Heart}
         options={{ label: 'Donations' }}
       />
-    </Admin>
+      </Admin>
+    </MuiProvider>
   );
 };

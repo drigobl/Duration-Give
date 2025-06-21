@@ -14,6 +14,8 @@ export default defineConfig(({ mode }) => ({
   define: {
     global: 'globalThis',
     'process.env': {},
+    // Fix for Emotion useInsertionEffect compatibility
+    'process.env.NODE_ENV': JSON.stringify(mode),
   },
   build: {
     target: 'es2020',
@@ -25,7 +27,11 @@ export default defineConfig(({ mode }) => ({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            // React-Admin should be in its own chunk to avoid initialization issues
+            // Emotion and MUI must be in the same chunk to avoid initialization issues
+            if (id.includes('@emotion') || id.includes('@mui')) {
+              return 'vendor-emotion';
+            }
+            // React-Admin should be in its own chunk but load after emotion
             if (id.includes('react-admin') || id.includes('ra-')) {
               return 'vendor-admin';
             }
@@ -59,7 +65,12 @@ export default defineConfig(({ mode }) => ({
       buffer: 'buffer',
       stream: 'readable-stream',
       util: 'util',
-      events: 'events'
+      events: 'events',
+      // Fix for Emotion package resolution
+      '@emotion/use-insertion-effect-with-fallbacks': path.resolve(
+        __dirname,
+        'node_modules/@emotion/use-insertion-effect-with-fallbacks'
+      )
     }
   },
   server: {
@@ -91,9 +102,22 @@ export default defineConfig(({ mode }) => ({
       'util',
       'events',
       'react-admin',
-      'ra-supabase'
+      'ra-supabase',
+      '@emotion/react',
+      '@emotion/styled',
+      '@emotion/cache',
+      '@emotion/use-insertion-effect-with-fallbacks',
+      '@mui/material',
+      '@mui/system',
+      '@mui/styled-engine'
     ],
     exclude: ['@polkadot/api'],
-    force: true
+    force: true,
+    esbuildOptions: {
+      target: 'es2020',
+      // Fix for emotion circular dependency issues
+      mainFields: ['module', 'main'],
+      conditions: ['import', 'module', 'browser', 'default']
+    }
   }
 }));
