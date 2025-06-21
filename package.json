@@ -48,6 +48,8 @@
         "react-i18next": "^14.0.5",
         "react-router-dom": "^6.22.3",
         "react-window": "^1.8.10",
+        "react-admin": "^4.16.15",
+        "ra-data-supabase": "^1.4.3",
         "tailwind-merge": "^2.2.1",
         "viem": "^2.7.9"
     },
