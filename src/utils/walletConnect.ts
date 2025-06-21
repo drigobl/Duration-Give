@@ -2,6 +2,7 @@
 import { ethers } from 'ethers';
 import { CHAIN_IDS } from '@/config/contracts';
 import { Logger } from '@/utils/logger';
+import type { EthereumProvider } from '@/types/ethereum';
 
 export interface WalletConnectConfig {
   projectId?: string; // For WalletConnect v2
@@ -14,7 +15,7 @@ export interface WalletConnectConfig {
 }
 
 export class WalletConnectManager {
-  private provider: any | null = null;
+  private provider: EthereumProvider | null = null;
   private ethersProvider: ethers.Provider | null = null;
 
   constructor(private config: WalletConnectConfig) {}
@@ -84,7 +85,7 @@ export class WalletConnectManager {
     }
   }
 
-  getProvider(): any | null {
+  getProvider(): EthereumProvider | null {
     return this.provider;
   }
 

@@ -230,9 +230,10 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
       if (currentChainId !== CHAIN_IDS.MOONBASE && targetWalletName !== 'WalletConnect') {
         try {
           await switchChain(CHAIN_IDS.MOONBASE);
-        } catch (switchError: any) {
+        } catch (switchError: unknown) {
           // If user rejected the switch, throw error
-          if (switchError?.code === 4001) {
+          const error = switchError as { code?: number; message?: string };
+          if (error?.code === 4001) {
             throw new Error('Please switch to Moonbase Alpha (TestNet)');
           }
           // For other errors, log warning but continue
@@ -257,16 +258,17 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
         chainId: Number(finalNetwork.chainId)
       });
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       // Handle user rejected request
-      if (err?.code === 4001) {
+      const errorObj = err as { code?: number; message?: string };
+      if (errorObj?.code === 4001) {
         const error = new Error('User rejected wallet connection');
         setError(error);
         throw error;
       }
 
       // Handle other errors
-      const message = err?.message || 'Failed to connect wallet';
+      const message = errorObj?.message || 'Failed to connect wallet';
       const error = new Error(message);
       Logger.error('Wallet connection failed', { error, walletName });
       setError(error);
@@ -322,7 +324,7 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
       // The handleChainChanged callback will update our state
       Logger.info('Network switch requested', { chainId: targetChainId, wallet: connectedWallet });
       
-    } catch (error: any) {
+    } catch (error: unknown) {
       Logger.error('Failed to switch network', { error, wallet: connectedWallet });
       throw error;
     }

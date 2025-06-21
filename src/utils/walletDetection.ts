@@ -24,18 +24,18 @@ export function detectInstalledWallets(): WalletInfo[] {
   const getProvider = (path: string): EthereumProvider | null => {
     try {
       const parts = path.split('.');
-      let obj: any = window;
+      let obj: unknown = window;
       for (const part of parts) {
-        obj = obj?.[part];
+        obj = (obj as Record<string, unknown>)?.[part];
       }
-      return obj || null;
+      return (obj as EthereumProvider) || null;
     } catch {
       return null;
     }
   };
 
   // Helper function to check if a provider is available and not conflicting
-  const isWalletProvider = (provider: any, walletType: string): boolean => {
+  const isWalletProvider = (provider: EthereumProvider, walletType: string): boolean => {
     if (!provider) return false;
     
     switch (walletType) {

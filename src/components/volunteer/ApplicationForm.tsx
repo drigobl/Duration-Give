@@ -48,7 +48,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
     workSamples: ''
   });
 
-  const validateField = (name: string, value: any): string => {
+  const validateField = (name: string, value: string | string[]): string => {
     switch (name) {
       case 'fullName':
         return validateName(value) ? '' : 'Please enter a valid name (2-100 characters)';

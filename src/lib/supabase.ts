@@ -55,21 +55,22 @@ supabase.auth.onAuthStateChange((event, session) => {
 });
 
 // Add response interceptor for error handling
-supabase.handleError = (error: any) => {
-  if (error?.message?.includes('JWT')) {
+supabase.handleError = (error: unknown) => {
+  const errorObj = error as { message?: string };
+  if (errorObj?.message?.includes('JWT')) {
     Logger.warn('JWT token expired or invalid', { error });
     // Handle token expiration
     window.location.href = '/login';
     return;
   }
 
-  if (error?.message?.includes('Failed to fetch')) {
+  if (errorObj?.message?.includes('Failed to fetch')) {
     Logger.error('Network error occurred', { error });
     // Handle network errors
     return new Error('Network error. Please check your connection and try again.');
   }
 
-  if (error?.message?.includes('AuthRetryableFetchError')) {
+  if (errorObj?.message?.includes('AuthRetryableFetchError')) {
     Logger.warn('Retryable auth error occurred', { error });
     // These errors are automatically retried by Supabase
     return;

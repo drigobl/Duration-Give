@@ -55,7 +55,7 @@ export class ApiClient {
 
   async post<T>(
     endpoint: string,
-    data: any,
+    data: Record<string, unknown>,
     options: QueryOptions = {}
   ): Promise<ApiResponse<T>> {
     return this.request<T>('POST', endpoint, data, options);
@@ -63,7 +63,7 @@ export class ApiClient {
 
   async put<T>(
     endpoint: string,
-    data: any,
+    data: Record<string, unknown>,
     options: QueryOptions = {}
   ): Promise<ApiResponse<T>> {
     return this.request<T>('PUT', endpoint, data, options);
@@ -79,7 +79,7 @@ export class ApiClient {
   private async request<T>(
     method: string,
     endpoint: string,
-    data?: any,
+    data?: Record<string, unknown>,
     options: QueryOptions = {},
     retryCount = 0
   ): Promise<ApiResponse<T>> {

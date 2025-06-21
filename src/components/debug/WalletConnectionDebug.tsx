@@ -16,20 +16,31 @@ export const WalletConnectionDebug: React.FC = () => {
     connectedWallet 
   } = useWeb3();
   
-  const [debugInfo, setDebugInfo] = useState<any>({});
+  const [debugInfo, setDebugInfo] = useState<Record<string, unknown>>({});
 
   useEffect(() => {
     // Check what's available in the window object
     const checkWalletProviders = () => {
-      const info: any = {
+      const info: Record<string, unknown> = {
         hasWindow: typeof window !== 'undefined',
-        hasEthereum: typeof (window as any)?.ethereum !== 'undefined',
+        hasEthereum: typeof (window as Record<string, unknown>)?.ethereum !== 'undefined',
         ethereumProviders: {},
         installedWallets: availableWallets,
       };
 
       if (typeof window !== 'undefined') {
-        const w = window as any;
+        const w = window as Record<string, unknown> & {
+          ethereum?: {
+            isMetaMask?: boolean;
+            isCoinbaseWallet?: boolean;
+            isSubWallet?: boolean;
+            isTalisman?: boolean;
+            isRabby?: boolean;
+            request?: (args: { method: string }) => Promise<unknown>;
+            enable?: () => Promise<unknown>;
+            on?: (event: string, callback: () => void) => void;
+          };
+        };
         
         // Check for common wallet providers
         info.ethereumProviders = {

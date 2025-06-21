@@ -129,7 +129,7 @@ export const CharityApprovalList = () => (
       <DateField source="reviewed_at" label="Reviewed" />
       <FunctionField
         label="Documents"
-        render={(record: any) => (
+        render={(record: { registration_document_url?: string; tax_certificate_url?: string }) => (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             {record.registration_document_url && (
               <a href={record.registration_document_url} target="_blank" rel="noopener noreferrer">

@@ -44,7 +44,7 @@ const ApprovalActions = () => {
       });
       
       // Apply the updates to charity_details
-      const updates: any = {};
+      const updates: Record<string, string> = {};
       if (record.new_name) updates.name = record.new_name;
       if (record.new_description) updates.description = record.new_description;
       if (record.new_category) updates.category = record.new_category;
@@ -112,7 +112,7 @@ const ListActions = () => (
   </TopToolbar>
 );
 
-const FieldComparison = ({ label, currentValue, newValue }: { label: string; currentValue: any; newValue: any }) => {
+const FieldComparison = ({ label, currentValue, newValue }: { label: string; currentValue: string; newValue: string }) => {
   if (!newValue || currentValue === newValue) return null;
   
   return (
@@ -139,11 +139,16 @@ export const ProfileUpdateApprovalList = () => (
     <Datagrid>
       <FunctionField
         label="Charity"
-        render={(record: any) => record.current_name || 'Unknown'}
+        render={(record: { current_name?: string }) => record.current_name || 'Unknown'}
       />
       <FunctionField
         label="Changes Requested"
-        render={(record: any) => {
+        render={(record: {
+          new_name?: string; current_name?: string;
+          new_description?: string; current_description?: string;
+          new_category?: string; current_category?: string;
+          new_image_url?: string; current_image_url?: string;
+        }) => {
           const changes = [];
           if (record.new_name && record.new_name !== record.current_name) changes.push('Name');
           if (record.new_description && record.new_description !== record.current_description) changes.push('Description');
@@ -167,7 +172,12 @@ export const ProfileUpdateApprovalShow = () => (
     <SimpleShowLayout>
       <FunctionField
         label="Requested Changes"
-        render={(record: any) => (
+        render={(record: {
+          current_name?: string; new_name?: string;
+          current_description?: string; new_description?: string;
+          current_category?: string; new_category?: string;
+          current_image_url?: string; new_image_url?: string;
+        }) => (
           <div>
             <FieldComparison
               label="Name"
