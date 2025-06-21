@@ -18,7 +18,7 @@ export const Legal: React.FC = () => {
         </p>
         <p><strong>
           PLEASE READ THESE TERMS CAREFULLY. They cover important information about Services provided to you and any charges we bill you. These Terms include information about future changes to these Terms, limitations of liability, a class action waiver, and resolution of disputes by arbitration instead of in court.
-        </p>
+        </strong></p>
         <div className="card">
           <p><strong>
             ARBITRATION NOTICE AND CLASS ACTION WAIVER: EXCEPT FOR CERTAIN TYPES OF DISPUTES DESCRIBED IN THE ARBITRATION SECTION BELOW, YOU AGREE THAT DISPUTES BETWEEN YOU AND US WILL BE RESOLVED BY BINDING, INDIVIDUAL ARBITRATION AND YOU WAIVE YOUR RIGHT TO PARTICIPATE IN A CLASS ACTION LAWSUIT OR CLASS-WIDE ARBITRATION.
@@ -333,12 +333,12 @@ export const Legal: React.FC = () => {
         <h3>14.2 Accuracy Disclaimer</h3>
         <p><strong>
           WE DO NOT GUARANTEE THE ACCURACY, COMPLETENESS, OR USEFULNESS OF ANY INFORMATION ON THE PLATFORM. ANY RELIANCE YOU PLACE ON SUCH INFORMATION IS STRICTLY AT YOUR OWN RISK.
-        </p>
+        </strong></p>
 
         <h3>14.3 Technical Disclaimer</h3>
         <p><strong>
           WE DO NOT WARRANT THAT THE PLATFORM WILL BE UNINTERRUPTED, TIMELY, SECURE, OR ERROR-FREE, OR THAT DEFECTS WILL BE CORRECTED.
-        </p>
+        </strong></p>
 
         <h3>14.4 Content Responsibility</h3>
         <p>
