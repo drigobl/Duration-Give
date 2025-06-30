@@ -10,7 +10,7 @@ interface AuthState {
   user: User | null;
   loading: boolean;
   error: Error | null;
-  userType: 'donor' | 'charity' | null;
+  userType: 'donor' | 'charity' | 'admin' | null;
 }
 
 interface AuthContextType extends AuthState {
@@ -103,7 +103,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         if (mounted) {
-          const userType = session?.user?.user_metadata?.type as 'donor' | 'charity' | null;
+          let userType = session?.user?.user_metadata?.type as 'donor' | 'charity' | 'admin' | null;
+          
+          // If type not in metadata, fetch from profile
+          if (!userType && session?.user) {
+            const { data: profile } = await supabase
+              .from('profiles')
+              .select('type')
+              .eq('user_id', session.user.id)
+              .single();
+              
+            if (profile) {
+              userType = profile.type as 'donor' | 'charity' | 'admin';
+            }
+          }
           
           setState(prev => ({
             ...prev,
@@ -135,7 +148,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           
           Logger.info('Auth state changed', { event });
           
-          const userType = session?.user?.user_metadata?.type as 'donor' | 'charity' | null;
+          let userType = session?.user?.user_metadata?.type as 'donor' | 'charity' | 'admin' | null;
+          
+          // If type not in metadata, fetch from profile
+          if (!userType && session?.user) {
+            const { data: profile } = await supabase
+              .from('profiles')
+              .select('type')
+              .eq('user_id', session.user.id)
+              .single();
+              
+            if (profile) {
+              userType = profile.type as 'donor' | 'charity' | 'admin';
+            }
+          }
 
           if (event === 'SIGNED_IN') {
             showToast('success', 'Signed in successfully');
@@ -219,29 +245,45 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
       
       // Verify the user has the correct account type
-      const userType = user?.user_metadata?.type;
+      // First check user metadata
+      let userType = user?.user_metadata?.type;
       
-      if (userType !== accountType) {
-        if (accountType === 'donor') {
-          throw new Error(`This email is registered as a ${userType || 'charity'} account. Please use the correct login portal.`);
-        } else {
-          throw new Error(`This email is registered as a ${userType || 'donor'} account. Please use the correct login portal.`);
+      // If not in metadata, check the profile table
+      if (!userType && user) {
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('type')
+          .eq('user_id', user.id)
+          .single();
+          
+        if (!profileError && profile) {
+          userType = profile.type;
         }
       }
+      
+      // Check account type compatibility
+      // - Donor login: only allows 'donor' users
+      // - Charity login: allows both 'charity' and 'admin' users
+      const isValidLogin = (accountType === 'donor' && userType === 'donor') || 
+                          (accountType === 'charity' && (userType === 'charity' || userType === 'admin'));
+      
+      if (!isValidLogin) {
+        // Sign out the user immediately to prevent session creation
+        await supabase.auth.signOut();
+        throw new Error('Account not found. Please check your email and password.');
+      }
 
-      // Determine redirect path based on user type
+      // Determine redirect path based on actual user type (not login type)
       let redirectPath = '/give-dashboard'; // Default for donor
       
-      if (accountType === 'charity') {
+      if (userType === 'admin') {
+        redirectPath = '/admin';
+      } else if (userType === 'charity') {
         redirectPath = '/charity-portal';
       }
       
-      // Redirect based on domain and user type
-      if (ENV.APP_DOMAIN === 'localhost') {
-        window.location.href = `http://localhost:5173${redirectPath}`;
-      } else {
-        window.location.href = `https://app.${ENV.APP_DOMAIN}${redirectPath}`;
-      }
+      // Redirect to the appropriate dashboard on current domain
+      window.location.href = `${window.location.origin}${redirectPath}`;
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to sign in';
       showToast('error', 'Authentication Error', message);
@@ -310,12 +352,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         error: null
       });
       
-      // Redirect to main domain
-      if (ENV.APP_DOMAIN === 'localhost') {
-        window.location.href = 'http://localhost:5173';
-      } else {
-        window.location.href = `https://${ENV.APP_DOMAIN}`;
-      }
+      // Stay on current domain instead of redirecting
+      window.location.href = `${window.location.origin}/`;
       
       showToast('success', 'Logged out successfully');
     } catch (err) {

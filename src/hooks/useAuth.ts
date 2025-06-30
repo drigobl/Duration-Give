@@ -146,8 +146,8 @@ export function useAuth() {
       // Then logout from auth
       await authContext.logout();
       
-      // Navigate to home page
-      navigate('/');
+      // Use window.location to stay on the same domain
+      window.location.href = `${window.location.origin}/`;
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to log out';
       showToast('error', 'Logout Error', message);

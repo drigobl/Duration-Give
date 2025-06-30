@@ -17,7 +17,7 @@ const MAX_RETRIES = 3;
 export function ConnectButton() {
   const { isConnected, isConnecting, connect, disconnect, address, error, chainId, switchChain } = useWeb3();
   const { getInstalledWallets } = useWallet();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const { alias } = useWalletAlias();
   const navigate = useNavigate();
   
@@ -93,18 +93,41 @@ export function ConnectButton() {
 
   const handleDisconnect = useCallback(async () => {
     try {
+      // Always disconnect wallet first
       await disconnect();
-      await logout();
+      
       setShowAccountMenu(false);
       setConnectionError(null);
       setRetryCount(0);
       setIsRetrying(false);
-      navigate('/login');
+      
+      // Only try to logout if user is actually logged in
+      if (user) {
+        try {
+          await logout();
+          // Use window.location to stay on the same domain
+          window.location.href = `${window.location.origin}/login`;
+        } catch (logoutError) {
+          // If logout fails, redirect anyway
+          Logger.warn('Logout failed during wallet disconnect, redirecting anyway', { error: logoutError });
+          window.location.href = `${window.location.origin}/login`;
+        }
+      } else {
+        // If not logged in, just refresh to clear any stale state
+        Logger.info('Wallet disconnected while not logged in, refreshing page');
+        window.location.reload();
+      }
     } catch (err) {
       Logger.error('Wallet disconnection failed', { error: err });
       setShowAccountMenu(false);
+      // Even if disconnect fails, reset the UI state and refresh
+      setConnectionError(null);
+      setRetryCount(0);
+      setIsRetrying(false);
+      // Force refresh to clear any stale state
+      window.location.reload();
     }
-  }, [disconnect, logout, navigate]);
+  }, [disconnect, logout, user]);
 
   const handleManageAlias = useCallback(() => {
     setShowAccountMenu(false);

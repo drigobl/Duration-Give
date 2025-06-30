@@ -165,6 +165,23 @@ export const GiveDashboard: React.FC = () => {
     return <Navigate to="/charity-portal" />;
   }
 
+  // Show blank page for admin users - they should use /admin instead
+  if (userType === 'admin') {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="bg-white p-8 rounded-lg shadow-md text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Admin Dashboard</h2>
+          <p className="text-gray-600 mb-6">
+            Please use the admin panel to manage the platform.
+          </p>
+          <Button onClick={() => window.location.href = `${window.location.origin}/admin`}>
+            Go to Admin Panel
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   if (!isConnected) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

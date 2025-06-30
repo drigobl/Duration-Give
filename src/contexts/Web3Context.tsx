@@ -199,22 +199,41 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
 
   const disconnect = useCallback(async () => {
     try {
-      // Clear state
+      // Clear state immediately
       setProvider(null);
       setAddress(null);
       setChainId(null);
       setError(null);
       
-      // If provider has a disconnect method, call it
-      if (window.ethereum && typeof window.ethereum.disconnect === 'function') {
-        await window.ethereum.disconnect();
+      // Most wallets don't have a disconnect method, but we can try various approaches
+      if (window.ethereum) {
+        try {
+          // Try the WalletConnect disconnect method if available
+          if (typeof window.ethereum.disconnect === 'function') {
+            await window.ethereum.disconnect();
+          } 
+          // Try to clear permissions (MetaMask)
+          else if (typeof window.ethereum.request === 'function') {
+            try {
+              await window.ethereum.request({
+                method: 'wallet_revokePermissions',
+                params: [{ eth_accounts: {} }]
+              });
+            } catch (revokeError) {
+              // Silently ignore if method doesn't exist
+              Logger.info('Revoke permissions not supported', { error: revokeError });
+            }
+          }
+        } catch (walletError) {
+          // Log but don't throw - state is already cleared
+          Logger.info('Wallet-specific disconnect failed, but state cleared', { error: walletError });
+        }
       }
       
-      Logger.info('Wallet disconnected');
-      return true;
+      Logger.info('Wallet disconnected successfully');
     } catch (err) {
-      Logger.error('Error disconnecting wallet', { error: err });
-      return false;
+      Logger.error('Error during wallet disconnect', { error: err });
+      // Don't throw error - we still want to clear the state
     }
   }, []);
 

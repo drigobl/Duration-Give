@@ -40,7 +40,9 @@ export const AppNavbar: React.FC = () => {
   // Handle dashboard navigation based on user type
   const handleDashboardClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (userType === 'charity') {
+    if (userType === 'admin') {
+      navigate('/admin');
+    } else if (userType === 'charity') {
       navigate('/charity-portal');
     } else {
       navigate('/give-dashboard');
