@@ -54,8 +54,8 @@ supabase.auth.onAuthStateChange((event, session) => {
   }
 });
 
-// Add response interceptor for error handling
-supabase.handleError = (error: any) => {
+// Create a helper function for error handling
+export const handleSupabaseError = (error: any) => {
   if (error?.message?.includes('JWT')) {
     Logger.warn('JWT token expired or invalid', { error });
     // Handle token expiration
@@ -79,23 +79,27 @@ supabase.handleError = (error: any) => {
   throw error;
 };
 
-// Add automatic retry for failed requests
-const maxRetries = 3;
-const retryDelay = 1000; // 1 second
-
-supabase.rpc = new Proxy(supabase.rpc, {
-  apply: async (target, thisArg, args) => {
-    for (let attempt = 1; attempt <= maxRetries; attempt++) {
-      try {
-        return await target.apply(thisArg, args);
-      } catch (error) {
-        if (attempt === maxRetries) throw error;
-        
-        Logger.warn(`Request failed, attempt ${attempt} of ${maxRetries}`, { error });
-        await new Promise(resolve => setTimeout(resolve, retryDelay * attempt));
+// Create a wrapper function for RPC calls with retry logic
+export const supabaseRpcWithRetry = async (fn: string, params?: any) => {
+  const maxRetries = 3;
+  const retryDelay = 1000; // 1 second
+  
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const { data, error } = await supabase.rpc(fn, params);
+      if (error) throw error;
+      return { data, error: null };
+    } catch (error) {
+      if (attempt === maxRetries) {
+        return { data: null, error };
       }
+      
+      Logger.warn(`RPC request failed, attempt ${attempt} of ${maxRetries}`, { error, fn });
+      await new Promise(resolve => setTimeout(resolve, retryDelay * attempt));
     }
   }
-});
+  
+  return { data: null, error: new Error('Max retries exceeded') };
+};
 
 export default supabase;

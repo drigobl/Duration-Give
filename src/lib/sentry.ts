@@ -1,5 +1,4 @@
 import * as Sentry from '@sentry/react';
-import { BrowserTracing } from '@sentry/react';
 
 export function initSentry() {
   // Only initialize in production
@@ -19,15 +18,8 @@ export function initSentry() {
     dsn,
     environment: import.meta.env.MODE,
     integrations: [
-      new Sentry.BrowserTracing({
-        // Set sampling rates
-        tracingOrigins: ['localhost', 'giveprotocol.io', /^\//],
-        // Track React Router
-        routingInstrumentation: Sentry.reactRouterV6Instrumentation(
-          window.history
-        ),
-      }),
-      new Sentry.Replay({
+      Sentry.browserTracingIntegration(),
+      Sentry.replayIntegration({
         // Mask all text content for privacy
         maskAllText: false,
         // Don't record when users are idle
@@ -148,20 +140,24 @@ export function trackTransaction(
     error?: string;
   }
 ) {
-  if (!import.meta.env.PROD) return;
+  if (!import.meta.env.PROD) return { finish: () => {} };
   
-  const transaction = Sentry.startTransaction({
-    name,
-    op: 'donation',
-    data,
-  });
-  
-  Sentry.getCurrentHub().configureScope(scope => scope.setSpan(transaction));
+  // Sentry v9 doesn't expose startTransaction directly
+  // Use spans or performance monitoring instead
+  const startTime = Date.now();
   
   return {
     finish: (status: 'ok' | 'error' = 'ok') => {
-      transaction.setStatus(status);
-      transaction.finish();
+      const duration = Date.now() - startTime;
+      Sentry.captureMessage(`Transaction: ${name}`, {
+        level: status === 'ok' ? 'info' : 'error',
+        tags: {
+          transaction: name,
+          status,
+          duration: `${duration}ms`
+        },
+        extra: data
+      });
     },
   };
 }
